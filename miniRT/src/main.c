@@ -52,6 +52,9 @@ void draw_frame(t_mlx_data *data)
                      (100 + 50 * sin(time))) {
                 my_pixel_put(&(data->image), x, y, RED);
             }
+			else if (x % 20 == 0 || y % 20 == 0) {
+                my_pixel_put(&(data->image), x, y, WHITE);
+            }
             else {
                 my_pixel_put(&(data->image), x, y, BLACK);
             }
