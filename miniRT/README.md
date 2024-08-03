@@ -12,4 +12,5 @@ This is a simple ray tracing project.
 
 ## Authors
 
-[Add author names here]
+- aezzahir
+- iben-haj
