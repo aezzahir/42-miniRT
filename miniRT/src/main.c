@@ -10,6 +10,11 @@
 #define HEIGHT 600
 #define MAX_DEPTH 100
 
+void ft_print_vector(t_vector *vector)
+{
+    printf("(%.2f, %.2f, %.2f)\n", vector->x, vector->y, vector->z);
+}
+
 // Function prototypes
 void my_pixel_put(t_img *img, int x, int y, int color);
 void draw_frame(t_mlx_data *data);
@@ -37,6 +42,7 @@ int main(void) {
     ft_setup_camera(&scene.camera);
     
     //mlx_loop_hook(data.mlx_connection, animation_loop, &data);
+    render_scene(data.scene, &data);
     mlx_put_image_to_window(data.mlx_connection, data.mlx_window, data.image.img_ptr, 0, 0);
     mlx_key_hook(data.mlx_window, key_hook, &data);
 
@@ -104,7 +110,7 @@ void ft_scene_init(t_scene *scene) {
     scene->ambient = (t_ambient){{255, 255, 255}, 0.2};
     scene->light = (t_light){{-40, 50, 0}, 0.6, {10, 0, 255}};
     scene->camera = (t_camera){{-50, 0, 20}, {0, 0, 1}, 70};
-    scene->sphere = (t_sphere){{0, 0, 20.6}, 12.6, {10, 0, 255}};
+    scene->sphere = (t_sphere){{0, 0, 20.6}, 24.6, {10, 0, 255}};
 }
 
 void ft_setup_camera(t_camera *camera) {
