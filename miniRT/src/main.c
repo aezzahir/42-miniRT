@@ -109,7 +109,7 @@ int mlx_data_init(t_mlx_data *data) {
 void ft_scene_init(t_scene *scene) {
     scene->ambient = (t_ambient){{255, 255, 255}, 0.2};
     scene->light = (t_light){{-40, 50, 0}, 0.6, {10, 0, 255}};
-    scene->camera = (t_camera){{-50, 0, 20}, {0, 0, 1}, 70};
+    scene->camera = (t_camera){{-50, 0, 20}, {1, 0, 0}, 70};
     scene->sphere = (t_sphere){{0, 0, 20.6}, 24.6, {10, 0, 255}};
 }
 
