@@ -8,7 +8,8 @@ MLX_DYLIB = $(MLX_DIR)/libmlx.dylib
 
 SRC_DIR = src
 SRC_FILES = main.c \
-            # Add other source files here
+            geometry/vector.c \
+			geometry/sphere.c \
 
 SRC = $(addprefix $(SRC_DIR)/, $(SRC_FILES))
 OBJ = $(SRC:.c=.o)

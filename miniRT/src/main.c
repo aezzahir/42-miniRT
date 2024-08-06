@@ -1,112 +1,159 @@
-#include <mlx.h>
+/**
+ * @file main.c
+ * @brief Main file for the miniRT ray tracing project.
+ */
+
+#include "./miniRT.h"
 #include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
 
-#define RED 0xFF0000
-#define GREEN 0x00FF00
-#define BLUE 0x0000FF
-#define BLACK 0x000000
-#define WHITE 0xFFFFFF
-#define WIDTH 640
-#define HEIGHT 480
+#define WIDTH 800
+#define HEIGHT 600
+#define MAX_DEPTH 100
 
-typedef struct s_image {
-    void *img_ptr;
-    char *img_pixel_ptr;
-    int bits_per_pixel;
-    int endian;
-    int line_len;
-} t_img;
+// Function prototypes
+void my_pixel_put(t_img *img, int x, int y, int color);
+void draw_frame(t_mlx_data *data);
+int animation_loop(t_mlx_data *data);
+int key_hook(int keycode, t_mlx_data *data);
+int mlx_data_init(t_mlx_data *data);
+void ft_scene_init(t_scene *scene);
+void ft_setup_camera(t_camera *camera);
+t_ray ft_generate_ray(int x, int y, t_scene *scene);
+t_color trace_ray(t_ray *ray, t_scene *scene, int depth);
+int color_to_int(t_color color);
+void render_scene(t_scene *scene, t_mlx_data *data);
 
-typedef struct s_mlx_data {
-    void *mlx_connection;
-    void *mlx_window;
-    t_img image;
-    int frame;
-} t_mlx_data;
+int main(void) {
+    t_mlx_data data;
+    t_scene scene;
 
-void my_pixel_put(t_img *img, int x, int y, int color)
-{
-    int offset;
+    ft_scene_init(&scene);
+    data.scene = &scene;
+    if (!mlx_data_init(&data)) {
+        fprintf(stderr, "Failed to initialize MLX data\n");
+        return 1;
+    }
+    
+    ft_setup_camera(&scene.camera);
+    
+    //mlx_loop_hook(data.mlx_connection, animation_loop, &data);
+    mlx_put_image_to_window(data.mlx_connection, data.mlx_window, data.image.img_ptr, 0, 0);
+    mlx_key_hook(data.mlx_window, key_hook, &data);
 
-    offset = (img->line_len * y) + (x * (img->bits_per_pixel / 8));
-    *((unsigned int *)(offset + img->img_pixel_ptr)) = color;
+    mlx_loop(data.mlx_connection);
+
+    return 0;
 }
 
-void draw_frame(t_mlx_data *data)
-{
-    int x, y;
-    float time = data->frame * 0.1; // Use frame count for smooth animation
+void my_pixel_put(t_img *img, int x, int y, int color) {
+    if (x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT) return;
+    int offset = (img->line_len * y) + (x * (img->bits_per_pixel / 8));
+    *((unsigned int *)(img->img_pixel_ptr + offset)) = color;
+}
 
-    for (y = 0; y < HEIGHT; y++) {
-        for (x = 0; x < WIDTH; x++) {
-            // Animated square
-            if (fabs(x - (WIDTH/2 + sin(time) * 100)) < 20 && 
-                fabs(y - (HEIGHT/2 + cos(time) * 100)) < 20) {
-                my_pixel_put(&(data->image), x, y, GREEN);
-            }
-            // Animated circle
-            else if (((x - WIDTH/2) * (x - WIDTH/2) + 
-                      (y - HEIGHT/2) * (y - HEIGHT/2)) < 
-                     (100 + 50 * sin(time))) {
-                my_pixel_put(&(data->image), x, y, RED);
-            }
-			else if (x % 20 == 0 || y % 20 == 0) {
-                my_pixel_put(&(data->image), x, y, WHITE);
-            }
-            else {
-                my_pixel_put(&(data->image), x, y, BLACK);
-            }
+void draw_frame(t_mlx_data *data) {
+    for (int y = 0; y < HEIGHT; y++) {
+        for (int x = 0; x < WIDTH; x++) {
+            my_pixel_put(&(data->image), x, y, 0);  // Clear with black
         }
     }
+    render_scene(data->scene, data);
 }
 
-int animation_loop(t_mlx_data *data)
-{
+int animation_loop(t_mlx_data *data) {
     data->frame++;
     draw_frame(data);
     mlx_put_image_to_window(data->mlx_connection, data->mlx_window, data->image.img_ptr, 0, 0);
     return 0;
 }
 
-int key_hook(int keycode, t_mlx_data *data)
-{
-    if (keycode == 53) // ESC key
-    {
+int key_hook(int keycode, t_mlx_data *data) {
+    if (keycode == 53) {  // ESC key
         mlx_destroy_window(data->mlx_connection, data->mlx_window);
         exit(0);
     }
     return 0;
 }
 
-int main(void)
-{
-    t_mlx_data data;
+int mlx_data_init(t_mlx_data *data) {
+    data->mlx_connection = mlx_init();
+    if (!data->mlx_connection) return 0;
 
-    data.mlx_connection = mlx_init();
-    if (!data.mlx_connection)
-        return -1;
-
-    data.mlx_window = mlx_new_window(data.mlx_connection, WIDTH, HEIGHT, "Animated Mini Ray Tracer");
-    if (!data.mlx_window)
-    {
-        free(data.mlx_connection);
-        return -1;
+    data->mlx_window = mlx_new_window(data->mlx_connection, WIDTH, HEIGHT, "Ray Tracer");
+    if (!data->mlx_window) {
+        free(data->mlx_connection);
+        return 0;
     }
 
-    data.image.img_ptr = mlx_new_image(data.mlx_connection, WIDTH, HEIGHT);
-    data.image.img_pixel_ptr = mlx_get_data_addr(data.image.img_ptr, 
-                                                 &data.image.bits_per_pixel, 
-                                                 &data.image.line_len, 
-                                                 &data.image.endian);
+    data->image.img_ptr = mlx_new_image(data->mlx_connection, WIDTH, HEIGHT);
+    if (!data->image.img_ptr) {
+        mlx_destroy_window(data->mlx_connection, data->mlx_window);
+        free(data->mlx_connection);
+        return 0;
+    }
 
-    data.frame = 0;
+    data->image.img_pixel_ptr = mlx_get_data_addr(data->image.img_ptr,
+                                                 &data->image.bits_per_pixel,
+                                                 &data->image.line_len,
+                                                 &data->image.endian);
+    data->frame = 0;
+    return 1;
+}
 
-    mlx_loop_hook(data.mlx_connection, animation_loop, &data);
-    mlx_key_hook(data.mlx_window, key_hook, &data);
+void ft_scene_init(t_scene *scene) {
+    scene->ambient = (t_ambient){{255, 255, 255}, 0.2};
+    scene->light = (t_light){{-40, 50, 0}, 0.6, {10, 0, 255}};
+    scene->camera = (t_camera){{-50, 0, 20}, {0, 0, 1}, 70};
+    scene->sphere = (t_sphere){{0, 0, 20.6}, 12.6, {10, 0, 255}};
+}
 
-    mlx_loop(data.mlx_connection);
+void ft_setup_camera(t_camera *camera) {
+    camera->forward = vector_normalize(camera->orientation);
+    camera->right = vector_cross_product(camera->forward, (t_vector){0, 1, 0});
+    camera->up = vector_cross_product(camera->right, camera->forward);
 
-    return 0;
+    camera->aspect_ratio = (double)WIDTH / HEIGHT;
+    camera->viewport_height = 2 * tan((camera->fov * M_PI / 180) / 2);
+    camera->viewport_width = camera->aspect_ratio * camera->viewport_height;
+}
+
+t_ray ft_generate_ray(int x, int y, t_scene *scene) {
+    double pixel_x = (2.0 * x / WIDTH - 1) * scene->camera.viewport_width / 2;
+    double pixel_y = (1 - 2.0 * y / HEIGHT) * scene->camera.viewport_height / 2;
+    
+    t_vector direction = vector_normalize(
+        vector_add(
+            vector_add(
+                vector_multiply(scene->camera.right, pixel_x),
+                vector_multiply(scene->camera.up, pixel_y)
+            ),
+            scene->camera.forward
+        )
+    );
+    t_vector origin = vector_add(scene->camera.position, vector_multiply(scene->camera.forward, 0.001));
+    
+    return (t_ray){origin, direction};
+}
+
+t_color trace_ray(t_ray *ray, t_scene *scene, int depth) {
+    if (depth <= 0) return scene->ambient.color;
+    t_intersection *intersection = intersect_sphere(ray, &(scene->sphere));
+    if (!intersection) return scene->ambient.color;
+    t_color color = intersection->color;
+    free(intersection);
+    return color;
+}
+
+int color_to_int(t_color color) {
+    return ((int)color.r << 16) | ((int)color.g << 8) | (int)color.b;
+}
+
+void render_scene(t_scene *scene, t_mlx_data *data) {
+    for (int y = 0; y < HEIGHT; y++) {
+        for (int x = 0; x < WIDTH; x++) {
+            t_ray ray = ft_generate_ray(x, y, scene);
+            t_color color = trace_ray(&ray, scene, MAX_DEPTH);
+            my_pixel_put(&(data->image), x, y, color_to_int(color));
+        }
+    }
 }
