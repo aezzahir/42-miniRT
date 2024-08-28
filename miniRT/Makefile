@@ -10,6 +10,7 @@ SRC_DIR = src
 SRC_FILES = main.c \
             geometry/vector.c \
 			geometry/sphere.c \
+			render/cmaera.c \
 
 SRC = $(addprefix $(SRC_DIR)/, $(SRC_FILES))
 OBJ = $(SRC:.c=.o)

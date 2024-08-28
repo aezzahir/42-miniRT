@@ -3,9 +3,7 @@
  * @brief Defines vector operations
  */
 
-#include "../include/vector.h"
-#include <math.h>
-#include <stdlib.h>
+#include "../../include/miniRT.h"
 
 t_vector vector_create(double x, double y, double z) {
     return (t_vector){x, y, z};

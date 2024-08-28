@@ -2,7 +2,7 @@
  * cylinder.c
  * Implements cylinder intersection and normal calculations
  */
-#include "./miniRT.h"
+#include "../../include/miniRT.h"
 
 
 /*

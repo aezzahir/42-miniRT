@@ -24,3 +24,5 @@ t_vector vector_multiply(t_vector v, double scalar);
 double vector_distance(t_vector v1, t_vector v2);
 
 #endif /* VECTOR_H */
+
+

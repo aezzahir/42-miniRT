@@ -10,9 +10,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include "../include/vector.h"
+#include "vector.h"
+#include "render.h"
+#include "parser.h"
+#include "geometry.h"
+#include "utils.h"
 
+
+#define WIDTH 800
+#define HEIGHT 600
+#define MAX_DEPTH 100
 // Color structure
+
+typedef t_vector t_point;
 typedef struct s_color {
     int r;
     int g;
@@ -21,13 +31,13 @@ typedef struct s_color {
 
 // Ray structure
 typedef struct s_ray {
-    t_vector origin;
-    t_vector direction;
+    t_point origin;  // origin of ray is a point on the 3D space
+    t_vector direction; // direction of ray is   a vector on the 3D space
 } t_ray;
 
 // Ambient light structure
 typedef struct s_ambient {
-    double ratio;
+    double ratio;  // ratio of   diffuse light to ambient light
     t_color color;
 } t_ambient;
 
@@ -39,17 +49,6 @@ typedef struct s_light {
 } t_light;
 
 // Camera structure
-typedef struct s_camera {
-    t_vector position;
-    t_vector orientation;
-    double fov;
-    double aspect_ratio;
-    double viewport_height;
-    double viewport_width;
-    t_vector forward;
-    t_vector up;
-    t_vector right;
-} t_camera;
 
 // Sphere structure
 typedef struct s_sphere {

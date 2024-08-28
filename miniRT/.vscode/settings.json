@@ -3,6 +3,7 @@
         "mlx_int.h": "c",
         "complex": "c",
         "cmath": "c",
-        "ios": "c"
+        "ios": "c",
+        "minirt.h": "c"
     }
 }

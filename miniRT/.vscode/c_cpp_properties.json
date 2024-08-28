@@ -4,7 +4,8 @@
             "name": "Mac",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/lib/minilibx-linux"
+                "${workspaceFolder}/lib/minilibx-linux",
+                "${workspaceFolder}/lib/minilibx_mms_20200219"
             ],
             "defines": [],
             "macFrameworkPath": [

@@ -3,3 +3,4 @@
  * Core raytracing logic
  * Implements the main raytracing algorithm
  */
+#include "../../include/miniRT.h"

@@ -3,12 +3,9 @@
  * @brief Main file for the miniRT ray tracing project.
  */
 
-#include "./miniRT.h"
-#include <stdio.h>
+#include "../include/miniRT.h"
 
-#define WIDTH 800
-#define HEIGHT 600
-#define MAX_DEPTH 100
+
 
 void ft_print_vector(t_vector *vector)
 {
@@ -113,15 +110,7 @@ void ft_scene_init(t_scene *scene) {
     scene->sphere = (t_sphere){{0, 0, 20.6}, 24.6, {10, 0, 255}};
 }
 
-void ft_setup_camera(t_camera *camera) {
-    camera->forward = vector_normalize(camera->orientation);
-    camera->right = vector_cross_product(camera->forward, (t_vector){0, 1, 0});
-    camera->up = vector_cross_product(camera->right, camera->forward);
 
-    camera->aspect_ratio = (double)WIDTH / HEIGHT;
-    camera->viewport_height = 2 * tan((camera->fov * M_PI / 180) / 2);
-    camera->viewport_width = camera->aspect_ratio * camera->viewport_height;
-}
 
 t_ray ft_generate_ray(int x, int y, t_scene *scene) {
     double pixel_x = (2.0 * x / WIDTH - 1) * scene->camera.viewport_width / 2;

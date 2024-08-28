@@ -3,9 +3,7 @@
  * @brief Implements sphere intersection calculations
  */
 
-#include "../miniRT.h"
-#include <math.h>
-#include <stdlib.h>
+#include "../../include/miniRT.h"
 
 t_intersection *intersect_sphere(t_ray *ray, t_sphere *sphere) {
     t_vector oc = vector_subtract(ray->origin, sphere->center);
