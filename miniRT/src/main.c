@@ -113,8 +113,8 @@ void ft_scene_init(t_scene *scene) {
 
 
 t_ray ft_generate_ray(int x, int y, t_scene *scene) {
-    double pixel_x = (2.0 * x / WIDTH - 1) * scene->camera.viewport_width / 2;
-    double pixel_y = (1 - 2.0 * y / HEIGHT) * scene->camera.viewport_height / 2;
+    float pixel_x = (2.0 * x / WIDTH - 1) * scene->camera.viewport_width / 2;
+    float pixel_y = (1 - 2.0 * y / HEIGHT) * scene->camera.viewport_height / 2;
     
     t_vector direction = vector_normalize(
         vector_add(

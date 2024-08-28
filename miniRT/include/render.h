@@ -10,10 +10,10 @@
 typedef struct s_camera {
     t_vector position;
     t_vector orientation;
-    double fov;
-    double aspect_ratio;
-    double viewport_height;
-    double viewport_width;
+    float fov;
+    float aspect_ratio;
+    float viewport_height;
+    float viewport_width;
     t_vector forward;
     t_vector up;
     t_vector right;

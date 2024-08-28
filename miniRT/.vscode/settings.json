@@ -4,6 +4,7 @@
         "complex": "c",
         "cmath": "c",
         "ios": "c",
-        "minirt.h": "c"
+        "minirt.h": "c",
+        "vector.h": "c"
     }
 }

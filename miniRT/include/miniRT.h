@@ -16,13 +16,13 @@
 #include "geometry.h"
 #include "utils.h"
 
-
 #define WIDTH 800
 #define HEIGHT 600
 #define MAX_DEPTH 100
 // Color structure
 
-typedef t_vector t_point;
+typedef t_vector t_point; // the point and vector have the same representation but different meaning a point is as specific location in the 3D space P(x, y, z)
+                            // but a vector is not he indicate a direction and a magnitude V(x, y, z)
 typedef struct s_color {
     int r;
     int g;
@@ -37,14 +37,14 @@ typedef struct s_ray {
 
 // Ambient light structure
 typedef struct s_ambient {
-    double ratio;  // ratio of   diffuse light to ambient light
+    float ratio;  // ratio of   diffuse light to ambient light
     t_color color;
 } t_ambient;
 
 // Light structure
 typedef struct s_light {
     t_vector position;
-    double brightness;
+    float brightness;
     t_color color;
 } t_light;
 
@@ -53,13 +53,13 @@ typedef struct s_light {
 // Sphere structure
 typedef struct s_sphere {
     t_vector center;
-    double diameter;
+    float diameter;
     t_color color;
 } t_sphere;
 
 // Intersection structure
 typedef struct s_intersection {
-    double t;
+    float t;
     t_color color;
     t_vector normal;
     t_vector point;
