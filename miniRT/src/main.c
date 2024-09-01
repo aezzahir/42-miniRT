@@ -105,9 +105,9 @@ int mlx_data_init(t_mlx_data *data) {
 
 void ft_scene_init(t_scene *scene) {
     scene->ambient = (t_ambient){{255, 255, 255}, 0.2};
-    scene->light = (t_light){{-40, 50, 0}, 0.6, {10, 0, 255}};
+    scene->light = (t_light){{-40, 50, 0}, 0.6, {255, 255, 255}};
     scene->camera = (t_camera){{-50, 0, 20}, {1, 0, 0}, 70};
-    scene->sphere = (t_sphere){{0, 0, 20.6}, 24.6, {10, 0, 255}};
+    scene->sphere = (t_sphere){{0, 0, 20.6}, 24.6, {95, 205, 150}};
 }
 
 
@@ -130,18 +130,32 @@ t_ray ft_generate_ray(int x, int y, t_scene *scene) {
     return (t_ray){origin, direction};
 }
 
+
+// This the rayTracing Logic
 t_color trace_ray(t_ray *ray, t_scene *scene, int depth) {
     if (depth <= 0) return scene->ambient.color;
+    
     t_intersection *intersection = intersect_sphere(ray, &(scene->sphere));
     if (!intersection) return scene->ambient.color;
-    t_color color = intersection->color;
+    
+    t_vector normal = vector_normalize(vector_subtract(intersection->point, scene->sphere.center));
+    t_vector light_dir = vector_normalize(vector_subtract(scene->light.position, intersection->point));
+    
+    // Ambient component
+    t_color ambient = color_scale(scene->ambient.color, scene->ambient.ratio);
+    
+    // Diffuse component
+    float diff = fmaxf(vector_dot_product(normal, light_dir), 0.0);
+    t_color diffuse = color_scale(scene->light.color, diff * scene->light.brightness);
+    
+    // Combine colors
+    t_color final_color = color_add(ambient, diffuse);
+    final_color = color_multiply(final_color, intersection->color);
+    
     free(intersection);
-    return color;
+    return final_color;
 }
 
-int color_to_int(t_color color) {
-    return ((int)color.r << 16) | ((int)color.g << 8) | (int)color.b;
-}
 
 void render_scene(t_scene *scene, t_mlx_data *data) {
     for (int y = 0; y < HEIGHT; y++) {

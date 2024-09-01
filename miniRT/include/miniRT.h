@@ -15,6 +15,7 @@
 #include "parser.h"
 #include "geometry.h"
 #include "utils.h"
+#include "color.h"
 
 #define WIDTH 800
 #define HEIGHT 600
@@ -23,11 +24,7 @@
 
 typedef t_vector t_point; // the point and vector have the same representation but different meaning a point is as specific location in the 3D space P(x, y, z)
                             // but a vector is not he indicate a direction and a magnitude V(x, y, z)
-typedef struct s_color {
-    int r;
-    int g;
-    int b;
-} t_color;
+
 
 // Ray structure
 typedef struct s_ray {
