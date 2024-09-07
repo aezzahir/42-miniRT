@@ -6,18 +6,18 @@
 /*   By: aezzahir <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 11:00:15 by aezzahir          #+#    #+#             */
-/*   Updated: 2024/01/16 23:00:59 by aezzahir         ###   ########.fr       */
+/*   Updated: 2023/11/15 18:22:51 by aezzahir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-long int	ft_atoi(const char *str)
+int	ft_atoi(const char *str)
 {
-	int			digit;
-	int			sign;
-	long int	result;
-	int			i;
+	int	digit;
+	int	sign;
+	int	result;
+	int	i;
 
 	sign = 1;
 	result = 0;

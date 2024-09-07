@@ -23,7 +23,7 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 	i = 0;
 	while (src[i] != '\0' && i < max_to_copy)
 	{
-		dst[i] = src [i];
+		dst[i] = src[i];
 		i++;
 	}
 	dst[i] = '\0';
