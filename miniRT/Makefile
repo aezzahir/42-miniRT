@@ -7,9 +7,12 @@ MLX = $(MLX_DIR)/libmlx.a
 
 SRC_DIR = src
 SRC_FILES = main.c \
+			parse/scene_parser.c \
             geometry/vector.c   \
+			geometry/plane.c \
             geometry/sphere.c   \
 			geometry/cylinder.c \
+			render/raytracer.c   \
             render/camera.c     \
 			render/color.c
 

@@ -46,3 +46,23 @@ t_vector vector_multiply(t_vector v, float scalar) {
 float vector_distance(t_vector v1, t_vector v2) {
     return vector_magnitude(vector_subtract(v2, v1));
 }
+
+
+t_vector vector_negate(t_vector v) {
+    return vector_create(-v.x, -v.y, -v.z);
+}
+
+t_vector vector_reflect(t_vector incident, t_vector normal) {
+    float dot = vector_dot_product(incident, normal);
+    t_vector scaled_normal = vector_multiply(normal, 2 * dot);
+    return vector_subtract(incident, scaled_normal);
+}
+
+float vector_length(t_vector v) {
+    return vector_magnitude(v);
+}
+
+// Optional: You might find this useful for debugging
+void vector_print(t_vector v) {
+    printf("Vector: (%.2f, %.2f, %.2f)\n", v.x, v.y, v.z);
+}

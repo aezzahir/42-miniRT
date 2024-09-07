@@ -9,6 +9,7 @@
 #include <mlx.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <math.h>
 #include "../lib/libft/libft.h"
 #include "color.h"
@@ -76,6 +77,7 @@ typedef struct s_mlx_data {
 
 // Function prototypes
 void ft_setup_camera(t_camera *camera);
-t_intersection *intersect_sphere(t_ray *ray, t_sphere *sphere);
-char *ft_strndup(const char *s, size_t n);
+t_color trace_ray(t_ray *ray, t_scene *scene, int depth);
+
+void ft_scene_init(t_scene *scene);
 #endif /* MINIRT_H */

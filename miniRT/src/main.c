@@ -21,7 +21,6 @@ int mlx_data_init(t_mlx_data *data);
 void ft_scene_init(t_scene *scene);
 void ft_setup_camera(t_camera *camera);
 t_ray ft_generate_ray(int x, int y, t_scene *scene);
-t_color trace_ray(t_ray *ray, t_scene *scene, int depth);
 int color_to_int(t_color color);
 void render_scene(t_scene *scene, t_mlx_data *data);
 
@@ -103,30 +102,6 @@ int mlx_data_init(t_mlx_data *data) {
     return 1;
 }
 
-void ft_scene_init(t_scene *scene) {
-    scene->ambient = (t_ambient){0.2, (t_color){0, 0, 0}};
-    scene->light = (t_light){{-40, 50, 0}, 0.9, (t_color){255, 255, 255}};
-
-    scene->camera.position = (t_point){-50, 0, 20};
-    scene->camera.orientation = (t_vector){1, 0, 0};
-    scene->camera.fov = 70;
-
-    scene->spheres = malloc(sizeof(t_list *));
-    *(scene->spheres) = NULL;  // Initialize the list itself to NULL
-    ft_lstadd_back(scene->spheres,ft_lstnew(create_sphere((t_point){0, 0, 0}, 20, (t_color){255, 134, 0})));
-    ft_lstiter(*(scene->spheres), ft_print_sphere);
-
-
-    scene->cylinders = malloc(sizeof(t_list *));
-    *(scene->cylinders) = NULL;
-
-    // Example cylinder: center at (50.0, 0.0, 20.6), axis (0.0, 0.0, 1.0), diameter 14.2, height 21.42, color (10, 0, 255)
-    t_cylinder *cyl = create_cylinder((t_point){50.0, 0.0, 20.6}, (t_vector){0.0, 0.1, 0.0}, 23, 56, (t_color){10, 0, 255});
-    ft_lstadd_back(scene->cylinders, ft_lstnew(cyl));
-}
-
-
-
 t_ray ft_generate_ray(int x, int y, t_scene *scene) {
     float pixel_x = (2.0 * x / WIDTH - 1) * scene->camera.viewport_width / 2;
     float pixel_y = (1 - 2.0 * y / HEIGHT) * scene->camera.viewport_height / 2;
@@ -146,46 +121,8 @@ t_ray ft_generate_ray(int x, int y, t_scene *scene) {
 }
 
 
-// This the rayTracing Logic
-
-t_color trace_ray(t_ray *ray, t_scene *scene, int depth) {
-    if (depth <= 0) return scene->ambient.color;
-
-    t_intersection *sphere_intersection = intersect_lst_spheres(ray, scene);
-    t_intersection *cylinder_intersection = intersect_lst_cylinders(ray, scene);
-
-    t_intersection *nearest_intersection = NULL;
-
-    if (sphere_intersection && cylinder_intersection) {
-        nearest_intersection = sphere_intersection->t < cylinder_intersection->t ? sphere_intersection : cylinder_intersection;
-        free(sphere_intersection->t < cylinder_intersection->t ? cylinder_intersection : sphere_intersection);
-    } else if (sphere_intersection) {
-        nearest_intersection = sphere_intersection;
-    } else if (cylinder_intersection) {
-        nearest_intersection = cylinder_intersection;
-    }
-
-    if (!nearest_intersection) return scene->ambient.color;
-    
-    t_vector normal = vector_normalize(vector_subtract(nearest_intersection->point, ((t_sphere *)nearest_intersection->object)->center));
-    t_vector light_dir = vector_normalize(vector_subtract(scene->light.position, nearest_intersection->point));
-
-    // Ambient component
-    t_color ambient = color_scale(scene->ambient.color, scene->ambient.ratio);
-    
-    // Diffuse component
-    float diff = fmaxf(vector_dot_product(normal, light_dir), 0.0);
-    t_color diffuse = color_scale(scene->light.color, diff * scene->light.brightness);
-    
-    // Combine colors
-    t_color final_color = color_add(ambient, diffuse);
-    final_color = color_multiply(final_color, nearest_intersection->color);
-    return final_color;
-}
-
-
 void render_scene(t_scene *scene, t_mlx_data *data) {
-    printf("render_scene--- > Done! \n");
+
    
     for (int y = 0; y < HEIGHT; y++) {
         for (int x = 0; x < WIDTH; x++) {
@@ -194,5 +131,4 @@ void render_scene(t_scene *scene, t_mlx_data *data) {
             my_pixel_put(&(data->image), x, y, color_to_int(color));
         }
     }
-     printf("--- > Done! \n");
 }

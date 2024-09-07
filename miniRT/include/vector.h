@@ -24,6 +24,11 @@ t_vector vector_normalize(t_vector v);
 t_vector vector_multiply(t_vector v, float scalar);
 float vector_distance(t_vector v1, t_vector v2);
 
+t_vector vector_negate(t_vector v);
+t_vector vector_reflect(t_vector incident, t_vector normal);
+float vector_length(t_vector v);
+void vector_print(t_vector v);
+
 #endif /* VECTOR_H */
 
 

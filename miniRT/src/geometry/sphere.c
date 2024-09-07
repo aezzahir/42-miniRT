@@ -59,6 +59,8 @@ t_intersection *intersect_sphere(t_ray *ray, t_sphere *sphere) {
     intersection->object = sphere;
     intersection->t = t;
     intersection->color = sphere->color;
+    intersection->object_type = SPH;
+
 
     return intersection;
 }
@@ -79,7 +81,6 @@ t_intersection *intersect_lst_spheres(t_ray *ray, t_scene *scene)
         intersection = intersect_sphere(ray, sphere);
         if (intersection && (!nearest_intersection || (nearest_intersection  && intersection->t < nearest_intersection->t)))
         {
-            printf("nearest intersection: (%2f, %2f, %2f)", intersection->point.x, intersection->point.y, intersection->point.z);
             nearest_intersection = intersection;
         }
         current = current->next;
