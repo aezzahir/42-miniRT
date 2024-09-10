@@ -6,29 +6,31 @@
 #include "../include/miniRT.h"
 
 
-
-void ft_print_vector(t_vector *vector)
-{
-    printf("(%.2f, %.2f, %.2f)\n", vector->x, vector->y, vector->z);
-}
-
-// Function prototypes
-void my_pixel_put(t_img *img, int x, int y, int color);
-void draw_frame(t_mlx_data *data);
-int animation_loop(t_mlx_data *data);
-int key_hook(int keycode, t_mlx_data *data);
-int mlx_data_init(t_mlx_data *data);
-void ft_scene_init(t_scene *scene);
-void ft_setup_camera(t_camera *camera);
-t_ray ft_generate_ray(int x, int y, t_scene *scene);
-int color_to_int(t_color color);
-void render_scene(t_scene *scene, t_mlx_data *data);
-
-int main(void) {
+int main(int argc, char *argv[]) {
     t_mlx_data data;
     t_scene scene;
 
-    ft_scene_init(&scene);
+     if (argc != 2)
+    {
+        ft_putstr_fd("Error\nUsage: ./miniRT scene_file.rt\n", 2);
+        return (1);
+    }
+
+    // Initialize scene
+    scene.spheres = malloc(sizeof(t_list *));
+    scene.planes = malloc(sizeof(t_list *));
+    scene.cylinders = malloc(sizeof(t_list *));
+    *(scene.spheres) = NULL;
+    *(scene.planes) = NULL;
+    *(scene.cylinders) = NULL;
+
+    if (!parse_scene(argv[1], &scene))
+    {
+        ft_putstr_fd("Error\nInvalid scene file\n", 2);
+        // Free any allocated memory in scene
+        return (1);
+    }
+    //ft_scene_init(&scene);
     data.scene = &scene;
     if (!mlx_data_init(&data)) {
         fprintf(stderr, "Failed to initialize MLX data\n");
@@ -37,10 +39,8 @@ int main(void) {
     
     ft_setup_camera(&(scene.camera));
     
-    //mlx_loop_hook(data.mlx_connection, animation_loop, &data);
     render_scene(&scene, &data);
     mlx_put_image_to_window(data.mlx_connection, data.mlx_window, data.image.img_ptr, 0, 0);
-    mlx_key_hook(data.mlx_window, key_hook, &data);
 
     mlx_loop(data.mlx_connection);
 
@@ -53,23 +53,11 @@ void my_pixel_put(t_img *img, int x, int y, int color) {
     *((unsigned int *)(img->img_pixel_ptr + offset)) = color;
 }
 
-void draw_frame(t_mlx_data *data) {
-    for (int y = 0; y < HEIGHT; y++) {
-        for (int x = 0; x < WIDTH; x++) {
-            my_pixel_put(&(data->image), x, y, 0);  // Clear with black
-        }
-    }
-    render_scene(data->scene, data);
-}
 
-int animation_loop(t_mlx_data *data) {
-    data->frame++;
-    draw_frame(data);
-    mlx_put_image_to_window(data->mlx_connection, data->mlx_window, data->image.img_ptr, 0, 0);
-    return 0;
-}
 
-int key_hook(int keycode, t_mlx_data *data) {
+
+int key_hook(int keycode, t_mlx_data *data)
+{
     if (keycode == 53) {  // ESC key
         mlx_destroy_window(data->mlx_connection, data->mlx_window);
         exit(0);
@@ -77,7 +65,8 @@ int key_hook(int keycode, t_mlx_data *data) {
     return 0;
 }
 
-int mlx_data_init(t_mlx_data *data) {
+int mlx_data_init(t_mlx_data *data)
+{
     data->mlx_connection = mlx_init();
     if (!data->mlx_connection) return 0;
 
@@ -102,28 +91,11 @@ int mlx_data_init(t_mlx_data *data) {
     return 1;
 }
 
-t_ray ft_generate_ray(int x, int y, t_scene *scene) {
-    float pixel_x = (2.0 * x / WIDTH - 1) * scene->camera.viewport_width / 2;
-    float pixel_y = (1 - 2.0 * y / HEIGHT) * scene->camera.viewport_height / 2;
-    
-    t_vector direction = vector_normalize(
-        vector_add(
-            vector_add(
-                vector_multiply(scene->camera.right, pixel_x),
-                vector_multiply(scene->camera.up, pixel_y)
-            ),
-            scene->camera.forward
-        )
-    );
-    t_vector origin = vector_add(scene->camera.position, vector_multiply(scene->camera.forward, 0.001));
-    
-    return (t_ray){origin, direction};
-}
 
 
-void render_scene(t_scene *scene, t_mlx_data *data) {
 
-   
+void render_scene(t_scene *scene, t_mlx_data *data)
+{
     for (int y = 0; y < HEIGHT; y++) {
         for (int x = 0; x < WIDTH; x++) {
             t_ray ray = ft_generate_ray(x, y, scene);

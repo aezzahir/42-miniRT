@@ -25,6 +25,7 @@ t_color color_multiply(t_color c1, t_color c2) {
     };
 }
 
-int color_to_int(t_color color) {
+int color_to_int(t_color color)
+{
     return ((int)color.r << 16) | ((int)color.g << 8) | (int)color.b;
 }

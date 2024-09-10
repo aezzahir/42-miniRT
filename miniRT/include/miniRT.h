@@ -76,8 +76,8 @@ typedef struct s_mlx_data {
 } t_mlx_data;
 
 // Function prototypes
-void ft_setup_camera(t_camera *camera);
-t_color trace_ray(t_ray *ray, t_scene *scene, int depth);
-
+int parse_scene(char *filename, t_scene *scene);
+int mlx_data_init(t_mlx_data *data);
 void ft_scene_init(t_scene *scene);
+void render_scene(t_scene *scene, t_mlx_data *data);
 #endif /* MINIRT_H */

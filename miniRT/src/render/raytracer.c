@@ -5,6 +5,24 @@
  */
 #include "../../include/miniRT.h"
 
+t_ray ft_generate_ray(int x, int y, t_scene *scene) {
+    float pixel_x = (2.0 * x / WIDTH - 1) * scene->camera.viewport_width / 2;
+    float pixel_y = (1 - 2.0 * y / HEIGHT) * scene->camera.viewport_height / 2;
+    
+    t_vector direction = vector_normalize(
+        vector_add(
+            vector_add(
+                vector_multiply(scene->camera.right, pixel_x),
+                vector_multiply(scene->camera.up, pixel_y)
+            ),
+            scene->camera.forward
+        )
+    );
+    t_vector origin = vector_add(scene->camera.position, vector_multiply(scene->camera.forward, 0.0001));
+    
+    return (t_ray){origin, direction};
+}
+
 t_color trace_ray(t_ray *ray, t_scene *scene, int depth)
 {
     if (depth <= 0) return scene->ambient.color;

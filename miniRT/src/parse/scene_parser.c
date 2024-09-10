@@ -3,7 +3,7 @@
  * Functions to parse the .rt scene description files
  * Reads and interprets scene elements (objects, lights, camera)
  */
-#include "../../include/miniRT.h"\
+#include "../../include/miniRT.h"
 
 void ft_scene_init(t_scene *scene) {
     // Ambient light and main light source
@@ -25,10 +25,10 @@ void ft_scene_init(t_scene *scene) {
     // Cylinders
     scene->cylinders = malloc(sizeof(t_list *));
     *(scene->cylinders) = NULL;
-    ft_lstadd_back(scene->cylinders, ft_lstnew(create_cylinder((t_point){-30, 0, -20}, (t_vector){0, 1, 0}, 8, 30, (t_color){255, 255, 0})));    // Yellow cylinder (vertical)
-    ft_lstadd_back(scene->cylinders, ft_lstnew(create_cylinder((t_point){-10, 0, -20}, (t_vector){1, 0, 0}, 8, 30, (t_color){255, 0, 255})));    // Magenta cylinder (horizontal)
-    ft_lstadd_back(scene->cylinders, ft_lstnew(create_cylinder((t_point){10, 0, -20}, (t_vector){0, 0, 1}, 15, 30, (t_color){0, 255, 255})));     // Cyan cylinder (depth-oriented)
-    ft_lstadd_back(scene->cylinders, ft_lstnew(create_cylinder((t_point){30, 0, -20}, (t_vector){1, 1, 1}, 8, 30, (t_color){128, 128, 128})));   // Gray cylinder (diagonal)
+    ft_lstadd_back(scene->cylinders, ft_lstnew(create_cylinder((t_point){-30, 0, -20}, (t_vector){2, 1, 0}, 18, 30, (t_color){255, 255, 0})));    // Yellow cylinder (vertical)
+    ft_lstadd_back(scene->cylinders, ft_lstnew(create_cylinder((t_point){-10, 0, -20}, (t_vector){1, 0, 0}, 18, 30, (t_color){255, 0, 255})));    // Magenta cylinder (horizontal)
+    ft_lstadd_back(scene->cylinders, ft_lstnew(create_cylinder((t_point){10, 0, -20}, (t_vector){0, 3, 1}, 15, 30, (t_color){0, 255, 255})));     // Cyan cylinder (depth-oriented)
+    ft_lstadd_back(scene->cylinders, ft_lstnew(create_cylinder((t_point){30, 0, -20}, (t_vector){1, 1, 1}, 18, 30, (t_color){128, 128, 128})));   // Gray cylinder (diagonal)
 
     // Planes
     scene->planes = malloc(sizeof(t_list *));
