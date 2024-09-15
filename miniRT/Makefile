@@ -15,7 +15,9 @@ SRC_FILES = main.c \
 			geometry/cylinder.c \
 			render/raytracer.c   \
             render/camera.c     \
-			render/color.c
+			render/transformations.c \
+			render/color.c \
+			render/window_management.c
 
 SRC = $(addprefix $(SRC_DIR)/, $(SRC_FILES))
 OBJ = $(SRC:.c=.o)

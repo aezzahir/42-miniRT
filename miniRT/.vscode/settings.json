@@ -6,7 +6,9 @@
         "ios": "c",
         "minirt.h": "c",
         "vector.h": "c",
-        "render.h": "c"
+        "render.h": "c",
+        "geometry.h": "c",
+        "libft.h": "c"
     },
     "files.exclude": {
         "**/.svn": false

@@ -9,6 +9,30 @@
  * render.h
  * Declarations for rendering and raytracing functions
  */
+
+// MLX data structure
+// Image structure
+typedef struct s_img {
+    void *img_ptr;
+    char *img_pixel_ptr;
+    int bits_per_pixel;
+    int endian;
+    int line_len;
+} t_img;
+
+typedef struct s_mlx_data {
+    int width;
+    int height;
+    void *mlx_connection;
+    void *mlx_window;
+    t_img image;
+    t_scene *scene;
+    int frame;
+    int redraw_needed;
+} t_mlx_data;
+
+
+
 typedef struct s_camera {
     t_vector position;
     t_vector orientation;
@@ -24,4 +48,20 @@ typedef struct s_camera {
 void ft_setup_camera(t_camera *camera);
 t_ray ft_generate_ray(int x, int y, t_scene *scene);
 t_color trace_ray(t_ray *ray, t_scene *scene, int depth);
+void render_scene(t_scene *scene, t_mlx_data *data);
+bool is_in_shadow(t_ray *shadow_ray, t_scene *scene, float light_distance);
+void transform_scene(t_scene *scene, t_vector rotation, t_vector translation);
+void ft_resize_unique_property(t_scene *scene, float d_r, float d_h);
+
+
+// WINDOW MANAGEMENT 
+
+void my_pixel_put(t_img *img, int x, int y, int color);
+int expose_hook(t_mlx_data *data);
+int key_hook(int keycode, t_mlx_data *data);
+void handle_user_input(t_scene *scene, int key);
+int mouse_hook(int button, int x, int y, t_mlx_data *data);
+int loop_hook(t_mlx_data *data);
+int ft_close(t_mlx_data *data);
+
 #endif  // RENDER_H

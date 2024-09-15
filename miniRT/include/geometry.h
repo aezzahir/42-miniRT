@@ -9,13 +9,23 @@ typedef enum s_object_type {
     CYL,
     PLN,
     SPH,
-    CON
+    CON,
+    CAM,
+    LIGHT
 } t_object_type;
+
+typedef struct s_material {
+    float reflectivity;     // 0.0 to 1.0
+    float transparency;     // 0.0 to 1.0
+    float refraction_index; // Typically 1.0 (air) to 2.4 (diamond)
+    float specularity;      // Controls the size of specular highlights          // Base color of the object
+} t_material;
 
 typedef struct s_sphere {
     t_vector center;
     float diameter;
     t_color color;
+    t_material *material;
 } t_sphere;
 
 //
@@ -49,6 +59,7 @@ typedef struct s_cylinder {
     float diameter;
     float height;
     t_color color;
+    t_material *material;
 } t_cylinder;
 
 
@@ -66,9 +77,11 @@ typedef struct s_plane {
     t_point point;
     t_vector normal;
     t_color color;
+    t_material *material;
 } t_plane;
 
 t_plane *create_plane(t_point point, t_vector normal, t_color color);
 t_intersection *intersect_plane(t_ray *ray, t_plane *plane);
 t_intersection *intersect_lst_planes(t_ray *ray, t_scene *scene);
+t_intersection *ft_find_nearest_intersection(t_ray *ray, t_scene *scene);
 #endif

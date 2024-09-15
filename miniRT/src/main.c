@@ -1,17 +1,17 @@
 /**
  * @file main.c
- * @brief Main file for the miniRT ray tracing project.
+ * @brief Main file for the miniRT ray tracing project with redraw functionality.
  */
 
 #include "../include/miniRT.h"
+
 
 
 int main(int argc, char *argv[]) {
     t_mlx_data data;
     t_scene scene;
 
-     if (argc != 2)
-    {
+    if (argc != 2) {
         ft_putstr_fd("Error\nUsage: ./miniRT scene_file.rt\n", 2);
         return (1);
     }
@@ -24,13 +24,12 @@ int main(int argc, char *argv[]) {
     *(scene.planes) = NULL;
     *(scene.cylinders) = NULL;
 
-    if (!parse_scene(argv[1], &scene))
-    {
+    if (!parse_scene(argv[1], &scene)) {
         ft_putstr_fd("Error\nInvalid scene file\n", 2);
         // Free any allocated memory in scene
         return (1);
     }
-    //ft_scene_init(&scene);
+
     data.scene = &scene;
     if (!mlx_data_init(&data)) {
         fprintf(stderr, "Failed to initialize MLX data\n");
@@ -38,45 +37,38 @@ int main(int argc, char *argv[]) {
     }
     
     ft_setup_camera(&(scene.camera));
-    
+
+   // Set up MiniLibX hooks
+    mlx_expose_hook(data.mlx_window, expose_hook, &data);
+    mlx_key_hook(data.mlx_window, key_hook, &data);
+    mlx_mouse_hook(data.mlx_window, mouse_hook, &data);
+    mlx_hook(data.mlx_window, 17, 1L<<17, ft_close, &data);
+    mlx_loop_hook(data.mlx_connection, loop_hook, &data);
+    //mlx_hook(data.mlx_window, 04,1L<<2, key_hook, &data);
+
+    // Initial render
     render_scene(&scene, &data);
     mlx_put_image_to_window(data.mlx_connection, data.mlx_window, data.image.img_ptr, 0, 0);
 
     mlx_loop(data.mlx_connection);
-
     return 0;
 }
 
-void my_pixel_put(t_img *img, int x, int y, int color) {
-    if (x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT) return;
-    int offset = (img->line_len * y) + (x * (img->bits_per_pixel / 8));
-    *((unsigned int *)(img->img_pixel_ptr + offset)) = color;
-}
 
 
-
-
-int key_hook(int keycode, t_mlx_data *data)
-{
-    if (keycode == 53) {  // ESC key
-        mlx_destroy_window(data->mlx_connection, data->mlx_window);
-        exit(0);
-    }
-    return 0;
-}
-
-int mlx_data_init(t_mlx_data *data)
-{
+int mlx_data_init(t_mlx_data *data) {
+    data->width = WIDTH;
+    data->height = HEIGHT;
     data->mlx_connection = mlx_init();
     if (!data->mlx_connection) return 0;
 
-    data->mlx_window = mlx_new_window(data->mlx_connection, WIDTH, HEIGHT, "Ray Tracer");
+    data->mlx_window = mlx_new_window(data->mlx_connection, data->width, data->height, "Ray Tracer");
     if (!data->mlx_window) {
         free(data->mlx_connection);
         return 0;
     }
 
-    data->image.img_ptr = mlx_new_image(data->mlx_connection, WIDTH, HEIGHT);
+    data->image.img_ptr = mlx_new_image(data->mlx_connection, data->width, data->height);
     if (!data->image.img_ptr) {
         mlx_destroy_window(data->mlx_connection, data->mlx_window);
         free(data->mlx_connection);
@@ -87,20 +79,6 @@ int mlx_data_init(t_mlx_data *data)
                                                  &data->image.bits_per_pixel,
                                                  &data->image.line_len,
                                                  &data->image.endian);
-    data->frame = 0;
+    data->redraw_needed = 1;  // Set initial redraw flag
     return 1;
-}
-
-
-
-
-void render_scene(t_scene *scene, t_mlx_data *data)
-{
-    for (int y = 0; y < HEIGHT; y++) {
-        for (int x = 0; x < WIDTH; x++) {
-            t_ray ray = ft_generate_ray(x, y, scene);
-            t_color color = trace_ray(&ray, scene, MAX_DEPTH);
-            my_pixel_put(&(data->image), x, y, color_to_int(color));
-        }
-    }
 }

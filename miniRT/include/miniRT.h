@@ -7,6 +7,7 @@
 #define MINIRT_H
 
 #include <mlx.h>
+#include <X11/keysym.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -20,14 +21,18 @@
 #include "utils.h"
 
 
-#define WIDTH 800
+#define WIDTH 920
 #define HEIGHT 600
 #define MAX_DEPTH 100
 // Color structure
 
 
 // Ray structure
-
+typedef struct s_object {
+    t_object_type type;
+    void *shape;
+    //t_material material;
+} t_object;
 
 // Ambient light structure
 typedef struct s_ambient {
@@ -49,6 +54,7 @@ typedef struct s_light {
 
 // Scene structure
 typedef struct s_scene {
+    t_object  selected_object;
     t_ambient ambient;
     t_camera camera;
     t_light light;
@@ -57,23 +63,9 @@ typedef struct s_scene {
     t_list **cylinders;
 } t_scene;
 
-// Image structure
-typedef struct s_img {
-    void *img_ptr;
-    char *img_pixel_ptr;
-    int bits_per_pixel;
-    int endian;
-    int line_len;
-} t_img;
 
-// MLX data structure
-typedef struct s_mlx_data {
-    void *mlx_connection;
-    void *mlx_window;
-    t_img image;
-    t_scene *scene;
-    int frame;
-} t_mlx_data;
+
+
 
 // Function prototypes
 int parse_scene(char *filename, t_scene *scene);

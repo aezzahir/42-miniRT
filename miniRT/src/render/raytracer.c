@@ -116,3 +116,43 @@ t_color trace_ray(t_ray *ray, t_scene *scene, int depth)
     free(nearest_intersection);
     return final_color;
 }
+
+
+
+void render_scene(t_scene *scene, t_mlx_data *data) {
+    for (int y = 0; y < HEIGHT; y++) {
+        for (int x = 0; x < WIDTH; x++) {
+            t_ray ray = ft_generate_ray(x, y, scene);
+            t_color color = trace_ray(&ray, scene, MAX_DEPTH);
+            my_pixel_put(&(data->image), x, y, color_to_int(color));
+        }
+    }
+}
+
+
+t_intersection *ft_find_nearest_intersection(t_ray *ray, t_scene *scene)
+{
+    t_intersection *sphere_intersection = intersect_lst_spheres(ray, scene);
+    t_intersection *cylinder_intersection = intersect_lst_cylinders(ray, scene);
+    t_intersection *plane_intersection = intersect_lst_planes(ray, scene);
+
+    t_intersection *nearest_intersection = NULL;
+    float nearest_t = INFINITY;
+
+    if (sphere_intersection && sphere_intersection->t < nearest_t) {
+        nearest_intersection = sphere_intersection;
+        nearest_t = sphere_intersection->t;
+    }
+    if (cylinder_intersection && cylinder_intersection->t < nearest_t) {
+        if (nearest_intersection) free(nearest_intersection);
+        nearest_intersection = cylinder_intersection;
+        nearest_t = cylinder_intersection->t;
+    }
+    if (plane_intersection && plane_intersection->t < nearest_t) {
+        if (nearest_intersection) free(nearest_intersection);
+        nearest_intersection = plane_intersection;
+        nearest_t = plane_intersection->t;
+    }
+
+    return (nearest_intersection);// have to be freed later 
+}
