@@ -12,6 +12,14 @@
 
 // MLX data structure
 // Image structure
+
+typedef struct s_mouse_state {
+    int is_left_pressed;
+    int is_right_pressed;
+    int last_x;
+    int last_y;
+} t_mouse_state;
+
 typedef struct s_img {
     void *img_ptr;
     char *img_pixel_ptr;
@@ -27,7 +35,7 @@ typedef struct s_mlx_data {
     void *mlx_window;
     t_img image;
     t_scene *scene;
-    int frame;
+    t_mouse_state mouse;
     int redraw_needed;
 } t_mlx_data;
 
@@ -59,9 +67,18 @@ void ft_resize_unique_property(t_scene *scene, float d_r, float d_h);
 void my_pixel_put(t_img *img, int x, int y, int color);
 int expose_hook(t_mlx_data *data);
 int key_hook(int keycode, t_mlx_data *data);
-void handle_user_input(t_scene *scene, int key);
+int key_press(int keycode, t_mlx_data *data);
+int handle_user_input(int key, t_scene *scene);
 int mouse_hook(int button, int x, int y, t_mlx_data *data);
 int loop_hook(t_mlx_data *data);
 int ft_close(t_mlx_data *data);
+
+
+
+
+// --- transformation using the mouse 
+int mouse_press(int button, int x, int y, t_mlx_data *data);
+int mouse_release(int button, int x, int y, t_mlx_data *data);
+int mouse_move(int x, int y, t_mlx_data *data);
 
 #endif  // RENDER_H

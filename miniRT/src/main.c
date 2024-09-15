@@ -44,8 +44,13 @@ int main(int argc, char *argv[]) {
     mlx_mouse_hook(data.mlx_window, mouse_hook, &data);
     mlx_hook(data.mlx_window, 17, 1L<<17, ft_close, &data);
     mlx_loop_hook(data.mlx_connection, loop_hook, &data);
-    //mlx_hook(data.mlx_window, 04,1L<<2, key_hook, &data);
+    mlx_hook(data.mlx_window, 2, 1L<<0, key_press, &data);
 
+
+
+     // Set up MiniLibX hooks
+    mlx_hook(data.mlx_window, 5, 1L<<3, mouse_release, &data); // Mouse release
+    mlx_hook(data.mlx_window, 6, 1L<<6, mouse_move, &data);
     // Initial render
     render_scene(&scene, &data);
     mlx_put_image_to_window(data.mlx_connection, data.mlx_window, data.image.img_ptr, 0, 0);

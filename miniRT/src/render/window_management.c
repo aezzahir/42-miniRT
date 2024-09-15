@@ -31,7 +31,7 @@ int key_hook(int keycode, t_mlx_data *data) {
     }
     
     // Handle transformations
-    handle_user_input(data->scene, keycode);
+    handle_user_input(keycode, data->scene);
     
     // Set redraw flag after any transformation
     data->redraw_needed = 1;
@@ -39,12 +39,17 @@ int key_hook(int keycode, t_mlx_data *data) {
     return 0;
 }
 
-void handle_user_input(t_scene *scene, int key) {
+int key_press(int keycode, t_mlx_data *data) {
+    printf("Key pressed: %d\n", keycode);
+    handle_user_input(keycode, data->scene);
+    return (0);
+}
+
+int handle_user_input(int key, t_scene *scene) {
     t_vector rotation = {0, 0, 0};
     t_vector translation = {0, 0, 0};
     float rot_speed = 0.1;
     float trans_speed = 0.5;
-    float d_r = 0;
     float d_h = 0;
     switch (key) {
         // Rotation
@@ -63,21 +68,32 @@ void handle_user_input(t_scene *scene, int key) {
         case 122: translation.y = trans_speed; break;  // 'z' key
         case 120: translation.y = -trans_speed; break; // 'x' key
 
-        // Resizing 
-        case 61: d_r = 0.5; break;
-        case '-': d_r = -0.5; break;
-        case 'h': d_h = 0.5; break;
-        case 'j': d_h = -0.5; break;
+        case 61: d_h = 0.5; break;
+        case '-': d_h = -0.5; break;
     }
-    if (d_r != 0 || d_h != 0)
-        ft_resize_unique_property(scene, d_r, d_h);
+    if (d_h != 0)
+        ft_resize_unique_property(scene, 0, d_h);
     if (rotation.x != 0 || rotation.y != 0 || rotation.z != 0 ||
         translation.x != 0 || translation.y != 0 || translation.z != 0) {
         transform_scene(scene, rotation, translation);
     }
+    return (0);
 }
 int mouse_hook(int button, int x, int y, t_mlx_data *data) {
+    float d_r = 0;
     printf("Mouse button %d clicked at (%d, %d)\n", button, x, y);
+    if (button == 1) data->mouse.is_left_pressed = 1;
+    if (button == 3) data->mouse.is_right_pressed = 1;
+    if (button == 4 || button == 5)
+    {
+        if (button == 4)
+            d_r = 0.5;
+        else
+            d_r = -0.5;
+        ft_resize_unique_property(data->scene, d_r, 0);
+    }
+    data->mouse.last_x = x;
+    data->mouse.last_y = y;
     if (button == 1)
     {
         t_ray ray = ft_generate_ray(x, y, data->scene);
@@ -91,6 +107,14 @@ int mouse_hook(int button, int x, int y, t_mlx_data *data) {
             printf("Wahoooh you selected a SPHERE\n");
     }
     data->redraw_needed = 1;
+    return 0;
+}
+
+int mouse_release(int button, int x, int y, t_mlx_data *data) {
+    (void)x;
+    (void)y;
+    if (button == 1) data->mouse.is_left_pressed = 0;
+    if (button == 3) data->mouse.is_right_pressed = 0;
     return 0;
 }
 
@@ -112,4 +136,41 @@ int ft_close(t_mlx_data *data)
     mlx_destroy_window(data->mlx_connection, data->mlx_window);
     exit(0);
     return (0);
+}
+
+t_vector get_world_space_translation(t_camera *camera, int dx, int dy, float sensitivity) {
+    // Get the camera's right vector (perpendicular to up and direction)
+    t_vector right = vector_cross_product(camera->orientation, camera->up);
+    right = vector_normalize(right);
+
+    // Scale the movement based on sensitivity
+    float scaled_dx = dx * sensitivity;
+    float scaled_dy = dy * sensitivity;
+
+    // Calculate the world space movement
+    t_vector horizontal_movement = vector_multiply(right, scaled_dx);
+    t_vector vertical_movement = vector_multiply(camera->up, -scaled_dy);
+
+    // Combine the movements
+    return vector_add(horizontal_movement, vertical_movement);
+}
+
+int mouse_move(int x, int y, t_mlx_data *data) {
+    if (data->mouse.is_left_pressed || data->mouse.is_right_pressed) {
+        int dx = x - data->mouse.last_x;
+        int dy = y - data->mouse.last_y;
+        
+        float sensitivity = 0.11f; // Adjust this value to change movement speed
+        
+        t_vector translation = get_world_space_translation(&data->scene->camera, dx, dy, sensitivity);
+        
+        // Apply translation to the selected object or camera
+        if (data->mouse.is_left_pressed)
+            transform_scene(data->scene, (t_vector){0, 0, 0}, translation);
+        data->redraw_needed = 1;
+    }
+    
+    data->mouse.last_x = x;
+    data->mouse.last_y = y;
+    return 0;
 }

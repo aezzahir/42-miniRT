@@ -54,6 +54,7 @@ typedef struct s_light {
 
 // Scene structure
 typedef struct s_scene {
+    
     t_object  selected_object;
     t_ambient ambient;
     t_camera camera;
