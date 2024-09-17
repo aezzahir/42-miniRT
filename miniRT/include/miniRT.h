@@ -13,8 +13,8 @@
 #include <stdbool.h>
 #include <math.h>
 #include "../lib/libft/libft.h"
-#include "color.h"
 #include "vector.h"
+#include "color.h"
 #include "render.h"
 #include "parser.h"
 #include "geometry.h"
@@ -74,4 +74,14 @@ int parse_scene(char *filename, t_scene *scene);
 int mlx_data_init(t_mlx_data *data);
 void ft_scene_init(t_scene *scene);
 void render_scene(t_scene *scene, t_mlx_data *data);
+void render_scene_with_aa(t_scene *scene, t_mlx_data *data);
+
+
+t_color calculate_ambient(t_scene *scene, t_color object_color);
+t_color calculate_diffuse(t_scene *scene, t_vector normal, t_vector light_dir, t_color object_color);
+t_color calculate_specular(t_scene *scene, t_vector normal, t_vector light_dir, t_vector view_dir);
+float calculate_shadow(t_scene *scene, t_point hit_point, t_vector light_dir);
+t_color calculate_reflection(t_ray *ray, t_intersection *intersection, t_scene *scene, int depth);
+t_color calculate_refraction(t_ray *ray, t_intersection *intersection, t_scene *scene, int depth);
+int vector_refract(t_vector incident, t_vector normal, float eta, t_vector *refracted);
 #endif /* MINIRT_H */

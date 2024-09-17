@@ -122,9 +122,29 @@ void ft_resize_unique_property(t_scene *scene, float d_r, float d_h) {
 
     }
 }
-
+void change_color(t_object *object, t_color color) {
+    switch (object->type) {
+        case SPH:
+            color_add_ptr(&(((t_sphere *)(object->shape))->color), color);
+            break;
+        case PLN:
+            color_add_ptr(&(((t_plane *)(object->shape))->color), color);
+            break;
+        case CYL:
+            color_add_ptr(&(((t_cylinder *)(object->shape))->color), color);
+            break;
+        case CONE:
+            color_add_ptr(&(((t_cone *)(object->shape))->color), color);
+            break;
+        case LIGHT:
+            color_add_ptr(&(((t_light *)(object->shape))->color), color);
+            break;
+        default:
+            break;
+    }
+}
 // Scene transformation function
-void transform_scene(t_scene *scene, t_vector rotation, t_vector translation) {
+void transform_scene(t_scene *scene, t_vector rotation, t_vector translation, t_color color) {
     // Transform camera
     if (scene->selected_object.type == CAM)
     {
@@ -135,6 +155,7 @@ void transform_scene(t_scene *scene, t_vector rotation, t_vector translation) {
     {
         object_rotate(&(scene->selected_object), rotation);
         object_translate(&(scene->selected_object), translation);
+        change_color(&(scene->selected_object), color);
     }
 }
 

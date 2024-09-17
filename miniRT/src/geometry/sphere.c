@@ -40,7 +40,9 @@ t_intersection *intersect_sphere(t_ray *ray, t_sphere *sphere) {
     float b = 2.0 * vector_dot_product(oc, ray->direction);
     float c = vector_dot_product(oc, oc) - (sphere->diameter * sphere->diameter / 4.0);
     float discriminant = b * b - 4 * a * c;
-
+    
+    if (sphere->enable_intersection != 1)
+        return (NULL);
     if (discriminant < 0)
         return NULL;
 

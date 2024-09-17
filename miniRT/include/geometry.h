@@ -26,6 +26,7 @@ typedef struct s_sphere {
     float diameter;
     t_color color;
     t_material *material;
+    int enable_intersection;
 } t_sphere;
 
 //
@@ -60,6 +61,7 @@ typedef struct s_cylinder {
     float height;
     t_color color;
     t_material *material;
+    int enable_intersection;
 } t_cylinder;
 
 
@@ -78,6 +80,7 @@ typedef struct s_plane {
     t_vector normal;
     t_color color;
     t_material *material;
+    int enable_intersection;
 } t_plane;
 
 t_plane *create_plane(t_point point, t_vector normal, t_color color);
@@ -93,6 +96,7 @@ typedef struct s_cone
     float diameter;  // Base diameter of the cone
     float height;    // Height of the cone
     t_color color;    // Color of the cone
+    int enable_intersection;
 } t_cone;
 
 void ft_print_cone(void *content);

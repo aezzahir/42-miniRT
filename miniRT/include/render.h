@@ -54,11 +54,11 @@ typedef struct s_camera {
 } t_camera;
 
 void ft_setup_camera(t_camera *camera);
-t_ray ft_generate_ray(int x, int y, t_scene *scene);
+t_ray ft_generate_ray(float x, float y, t_scene *scene);
 t_color trace_ray(t_ray *ray, t_scene *scene, int depth);
 void render_scene(t_scene *scene, t_mlx_data *data);
 bool is_in_shadow(t_ray *shadow_ray, t_scene *scene, float light_distance);
-void transform_scene(t_scene *scene, t_vector rotation, t_vector translation);
+void transform_scene(t_scene *scene, t_vector rotation, t_vector translation, t_color color);
 void ft_resize_unique_property(t_scene *scene, float d_r, float d_h);
 
 

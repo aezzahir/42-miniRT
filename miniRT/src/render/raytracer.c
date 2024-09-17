@@ -68,7 +68,38 @@ t_vector ft_get_surface_normal_vector(t_intersection *inter)
     }
     return (normal);
 }
-t_ray ft_generate_ray(int x, int y, t_scene *scene) {
+void ft_enable_intersecton(t_intersection *inter, int value)
+{
+    if (!inter)
+         return;
+    switch (inter->object_type) {
+        case SPH: {
+            t_sphere *sphere = (t_sphere *)inter->object;
+            sphere->enable_intersection = value;
+            break;
+        }
+        case CYL: {
+            t_cylinder *cylinder = (t_cylinder *)inter->object;
+            cylinder->enable_intersection = value;
+            break;
+        }
+        case PLN: {
+            t_plane *plane = (t_plane *)inter->object;
+            plane->enable_intersection = value;
+            break;
+        }
+        case CONE:
+        {
+            t_cone *cone = (t_cone *)inter->object;
+            cone->enable_intersection = value;
+            break;
+        }
+        default:
+           break;;
+    }
+    return ;
+}
+t_ray ft_generate_ray(float x, float y, t_scene *scene) {
     float pixel_x = (2.0 * x / WIDTH - 1) * scene->camera.viewport_width / 2;
     float pixel_y = (1 - 2.0 * y / HEIGHT) * scene->camera.viewport_height / 2;
     
@@ -86,62 +117,85 @@ t_ray ft_generate_ray(int x, int y, t_scene *scene) {
     return (t_ray){origin, direction};
 }
 
-t_color trace_ray(t_ray *ray, t_scene *scene, int depth)
-{
-    t_vector normal;
-    t_intersection *nearest_intersection;
-    if (depth < 0) return scene->ambient.color;
-    nearest_intersection = ft_get_nearest_intersection(ray, scene);
-    normal = ft_get_surface_normal_vector(nearest_intersection);
 
+t_color trace_ray(t_ray *ray, t_scene *scene, int depth) {
+    if (depth <= 0) return scene->ambient.color;
 
-    if (!nearest_intersection) return scene->ambient.color;
+    t_intersection *intersection = ft_get_nearest_intersection(ray, scene);
+    if (!intersection) return color_scale(scene->ambient.color, scene->ambient.ratio);
 
-   
-
-    t_vector light_dir = vector_normalize(vector_subtract(scene->light.position, nearest_intersection->point));
-
-    // Ambient component
-    t_color ambient = color_scale(scene->ambient.color, scene->ambient.ratio);
-
-    // Diffuse component
-    float diff = fmaxf(vector_dot_product(normal, light_dir), 0.0);
-    t_color diffuse = color_scale(scene->light.color, diff * scene->light.brightness);
-
-    // Specular component (Phong reflection model)
+    t_vector normal = ft_get_surface_normal_vector(intersection);
+    t_vector light_dir = vector_normalize(vector_subtract(scene->light.position, intersection->point));
     t_vector view_dir = vector_normalize(vector_negate(ray->direction));
-    t_vector reflect_dir = vector_reflect(vector_negate(light_dir), normal);
-    float spec = pow(fmaxf(vector_dot_product(view_dir, reflect_dir), 0.0), 32);
-    t_color specular = color_scale(scene->light.color, 0.5 * spec * scene->light.brightness);
 
-    // Combine colors
-    t_color final_color = color_add(ambient, color_add(diffuse, specular));
-    final_color = color_multiply(final_color, nearest_intersection->color);
+    // Basic lighting components
+    t_color ambient = calculate_ambient(scene, intersection->color);
+    t_color diffuse = calculate_diffuse(scene, normal, light_dir, intersection->color);
+    t_color specular = calculate_specular(scene, normal, light_dir, view_dir);
 
-    // // Check for shadows
-    // t_ray shadow_ray = {nearest_intersection->point, light_dir};
-    // t_intersection *shadow_intersection = intersect_lst_spheres(&shadow_ray, scene);
-    // if (!shadow_intersection) 
-    //     shadow_intersection = intersect_lst_cylinders(&shadow_ray, scene);
-    // if (!shadow_intersection) 
-    //     shadow_intersection = intersect_lst_planes(&shadow_ray, scene);
-    
-    // if (shadow_intersection) {
-    //     float light_distance = vector_length(vector_subtract(scene->light.position, nearest_intersection->point));
-    //     if (shadow_intersection->t < light_distance) {
-    //         // Point is in shadow, only use ambient light
-    //         final_color = ambient;
-    //     }
-    //     free(shadow_intersection);
+    // Shadow calculation
+    ft_enable_intersecton(intersection, 0);
+    float shadow_factor = calculate_shadow(scene, intersection->point, light_dir);
+    ft_enable_intersecton(intersection, 1);
+
+    // Combine basic lighting
+    t_color local_color = color_add(ambient, color_scale(color_add(diffuse, specular), shadow_factor));
+
+    // // Reflection and refraction for water-like materials
+    // t_color reflection_color = {0, 0, 0};
+    // t_color refraction_color = {0, 0, 0};
+
+    // if (intersection->object_type == SPH || intersection->object_type == CYL) {  // Assume these are water-like
+    //     reflection_color = calculate_reflection(ray, intersection, scene, depth);
+    //     refraction_color = calculate_refraction(ray, intersection, scene, depth);
+
+    //     local_color = color_scale(local_color, 1 - WATER_TRANSPARENCY - WATER_REFLECTIVITY);
+    //     local_color = color_add(local_color, color_scale(reflection_color, WATER_REFLECTIVITY));
+    //     local_color = color_add(local_color, color_scale(refraction_color, WATER_TRANSPARENCY));
     // }
 
-    free(nearest_intersection);
-    return final_color;
+    free(intersection);
+    return local_color;
 }
 
+#define AA_SAMPLES 2  // 4x4 supersampling
 
+t_color anti_alias_pixel(t_scene *scene, int x, int y) {
+    t_color color_sum = {0, 0, 0};
+    float r_sum = 0, g_sum = 0, b_sum = 0;
+
+    for (int dx = 0; dx < AA_SAMPLES; dx++) {
+        for (int dy = 0; dy < AA_SAMPLES; dy++) {
+            float subpixel_x = x + (dx + 0.5f) / AA_SAMPLES;
+            float subpixel_y = y + (dy + 0.5f) / AA_SAMPLES;
+
+            t_ray ray = ft_generate_ray(subpixel_x, subpixel_y, scene);
+            t_color subpixel_color = trace_ray(&ray, scene, MAX_DEPTH);
+
+            r_sum += subpixel_color.r;
+            g_sum += subpixel_color.g;
+            b_sum += subpixel_color.b;
+        }
+    }
+
+    int total_samples = AA_SAMPLES * AA_SAMPLES;
+    color_sum.r = r_sum / total_samples;
+    color_sum.g = g_sum / total_samples;
+    color_sum.b = b_sum / total_samples;
+
+    return color_sum;
+}
 
 void render_scene(t_scene *scene, t_mlx_data *data) {
+    for (int y = 0; y < HEIGHT; y++) {
+        for (int x = 0; x < WIDTH; x++) {
+            t_color anti_aliased_color = anti_alias_pixel(scene, x, y);
+            my_pixel_put(&(data->image), x, y, color_to_int(anti_aliased_color));
+        }
+    }
+}
+
+void xrender_scene(t_scene *scene, t_mlx_data *data) {
     for (int y = 0; y < HEIGHT; y++) {
         for (int x = 0; x < WIDTH; x++) {
             t_ray ray = ft_generate_ray(x, y, scene);

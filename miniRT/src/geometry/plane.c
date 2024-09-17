@@ -17,6 +17,9 @@ t_plane *create_plane(t_point point, t_vector normal, t_color color) {
 
 t_intersection *intersect_plane(t_ray *ray, t_plane *plane) {
     float denom = vector_dot_product(plane->normal, ray->direction);
+
+    if (plane->enable_intersection != 1)
+        return (NULL);
     if (fabs(denom) > 1e-6) {
         t_vector v = vector_subtract(plane->point, ray->origin);
         float t = vector_dot_product(v, plane->normal) / denom;

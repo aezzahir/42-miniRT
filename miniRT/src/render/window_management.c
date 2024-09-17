@@ -48,6 +48,7 @@ int key_press(int keycode, t_mlx_data *data) {
 int handle_user_input(int key, t_scene *scene) {
     t_vector rotation = {0, 0, 0};
     t_vector translation = {0, 0, 0};
+    t_color   color = {0,0,0};
     float rot_speed = 0.1;
     float trans_speed = 0.5;
     float d_h = 0;
@@ -68,14 +69,18 @@ int handle_user_input(int key, t_scene *scene) {
         case 122: translation.y = trans_speed; break;  // 'z' key
         case 120: translation.y = -trans_speed; break; // 'x' key
 
+        case 'r': color.r++; break; // 'r' key
+        case 'g': color.g++; break; // 'g' key
+        case 'b': color.b++; break; // 'b' key
+
         case 61: d_h = 0.5; break;
         case '-': d_h = -0.5; break;
     }
     if (d_h != 0)
         ft_resize_unique_property(scene, 0, d_h);
     if (rotation.x != 0 || rotation.y != 0 || rotation.z != 0 ||
-        translation.x != 0 || translation.y != 0 || translation.z != 0) {
-        transform_scene(scene, rotation, translation);
+        translation.x != 0 || translation.y != 0 || translation.z != 0 || color.r || color.g || color.b) {
+        transform_scene(scene, rotation, translation, color);
     }
     return (0);
 }
@@ -104,7 +109,19 @@ int mouse_hook(int button, int x, int y, t_mlx_data *data) {
             (data->scene->selected_object).shape = inter->object;
         }
         if ((data->scene->selected_object).type == SPH)
-            printf("Wahoooh you selected a SPHERE\n");
+        {
+            printf("You selected a SPHERE\n");ft_print_sphere((data->scene->selected_object).shape);
+        }
+        if ((data->scene->selected_object).type == CYL)
+        {
+            printf("You selected a CYLINDER\n");ft_print_cylinder((data->scene->selected_object).shape);
+        }
+        if ((data->scene->selected_object).type == PLN)
+            printf("You selected a PLANE\n");
+        if ((data->scene->selected_object).type == CONE)
+        {
+            printf("You selected a CONE\n");ft_print_cone((data->scene->selected_object).shape);
+        }
     }
     data->redraw_needed = 1;
     return 0;
@@ -166,7 +183,7 @@ int mouse_move(int x, int y, t_mlx_data *data) {
         
         // Apply translation to the selected object or camera
         if (data->mouse.is_left_pressed)
-            transform_scene(data->scene, (t_vector){0, 0, 0}, translation);
+            transform_scene(data->scene, (t_vector){0, 0, 0}, translation, (t_color){0, 0, 0});
         data->redraw_needed = 1;
     }
     

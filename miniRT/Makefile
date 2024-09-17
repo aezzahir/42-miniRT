@@ -16,6 +16,7 @@ SRC_FILES = main.c \
 			geometry/cylinder.c \
 			render/raytracer.c   \
             render/camera.c     \
+			render/lighting.c \
 			render/transformations.c \
 			render/color.c \
 			render/window_management.c

@@ -8,7 +8,8 @@
         "vector.h": "c",
         "render.h": "c",
         "geometry.h": "c",
-        "libft.h": "c"
+        "libft.h": "c",
+        "utils.h": "c"
     },
     "files.exclude": {
         "**/.svn": false

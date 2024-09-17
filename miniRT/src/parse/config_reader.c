@@ -244,6 +244,7 @@ static int parse_sphere(char *line, t_scene *scene)
     }
     ft_lstadd_back(scene->spheres, ft_lstnew(sphere));
     ft_free_split(parts);
+    sphere->enable_intersection = 1;
     return (1);
 }
 
@@ -271,6 +272,7 @@ static int parse_plane(char *line, t_scene *scene)
     }
     ft_lstadd_back(scene->planes, ft_lstnew(plane));
     ft_free_split(parts);
+    plane->enable_intersection = 1;
     return (1);
 }
 
@@ -300,6 +302,7 @@ static int parse_cylinder(char *line, t_scene *scene)
     }
     ft_lstadd_back(scene->cylinders, ft_lstnew(cylinder));
     ft_free_split(parts);
+    cylinder->enable_intersection = 1;
     return (1);
 }
 static int parse_cone(char *line, t_scene *scene)
@@ -328,6 +331,7 @@ static int parse_cone(char *line, t_scene *scene)
     }
     ft_lstadd_back(scene->cones, ft_lstnew(cone));
     ft_free_split(parts);
+    cone->enable_intersection = 1;
     return (1);
 }
 int parse_scene(char *filename, t_scene *scene)

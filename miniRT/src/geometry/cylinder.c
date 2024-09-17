@@ -28,6 +28,8 @@ t_intersection *intersect_cylinder(t_ray *ray, t_cylinder *cyl) {
     t_vector oc = vector_subtract(ray->origin, cyl->center); // Ray origin to cylinder center
     float radius = cyl->diameter / 2;
 
+    if (cyl->enable_intersection != 1)
+        return (NULL);
     // Step 1: Cylinder body intersection
     t_vector v_dir_perpendicular = vector_subtract(ray->direction, 
                     vector_multiply(cyl->axis, vector_dot_product(ray->direction, cyl->axis)));

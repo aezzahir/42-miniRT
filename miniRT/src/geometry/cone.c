@@ -41,6 +41,8 @@ t_intersection *intersect_cone(t_ray *ray, t_cone *cone)
     float tan_theta = (cone->diameter / 2) / cone->height;
     float tan_theta_squared = tan_theta * tan_theta;
 
+    if (cone->enable_intersection != 1)
+        return (NULL);
     float a = vector_dot_product(ray->direction, ray->direction) - 
               (1 + tan_theta_squared) * pow(vector_dot_product(ray->direction, cone->axis), 2);
     float b = 2 * (vector_dot_product(ray->direction, co) - 
