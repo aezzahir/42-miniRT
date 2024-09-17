@@ -20,6 +20,8 @@ int main(int argc, char *argv[]) {
     scene.spheres = malloc(sizeof(t_list *));
     scene.planes = malloc(sizeof(t_list *));
     scene.cylinders = malloc(sizeof(t_list *));
+    scene.cones = malloc(sizeof(t_list *));
+    *(scene.cones) = NULL;
     *(scene.spheres) = NULL;
     *(scene.planes) = NULL;
     *(scene.cylinders) = NULL;

@@ -62,6 +62,7 @@ typedef struct s_scene {
     t_list **spheres;
     t_list **planes;
     t_list **cylinders;
+    t_list **cones;
 } t_scene;
 
 

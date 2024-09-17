@@ -4,7 +4,70 @@
  * Implements the main raytracing algorithm
  */
 #include "../../include/miniRT.h"
+t_intersection *ft_get_nearest_intersection(t_ray *ray, t_scene *scene)
+{
+    t_intersection *nearest_intersection = NULL;
+    float nearest_t = INFINITY;
 
+    t_intersection *sphere_intersection = intersect_lst_spheres(ray, scene);
+    t_intersection *cylinder_intersection = intersect_lst_cylinders(ray, scene);
+    t_intersection *plane_intersection = intersect_lst_planes(ray, scene);
+    t_intersection *cone_intersection = intersect_lst_cones(ray, scene);
+
+    
+
+    if (sphere_intersection && sphere_intersection->t < nearest_t) {
+        nearest_intersection = sphere_intersection;
+        nearest_t = sphere_intersection->t;
+    }
+    if (cylinder_intersection && cylinder_intersection->t < nearest_t) {
+        if (nearest_intersection) free(nearest_intersection);
+        nearest_intersection = cylinder_intersection;
+        nearest_t = cylinder_intersection->t;
+    }
+    if (plane_intersection && plane_intersection->t < nearest_t) {
+        if (nearest_intersection) free(nearest_intersection);
+        nearest_intersection = plane_intersection;
+        nearest_t = plane_intersection->t;
+    }
+    if (cone_intersection && cone_intersection->t < nearest_t) {
+        if (nearest_intersection) free(nearest_intersection);
+        nearest_intersection = cone_intersection;
+        nearest_t = cone_intersection->t;
+    }
+    return (nearest_intersection);
+}
+t_vector ft_get_surface_normal_vector(t_intersection *inter)
+{
+    t_vector normal =  (t_vector){0, 0, 0};
+    if (!inter)
+         return (normal);
+    switch (inter->object_type) {
+        case SPH: {
+            t_sphere *sphere = (t_sphere *)inter->object;
+            normal = vector_normalize(vector_subtract(inter->point, sphere->center));
+            break;
+        }
+        case CYL: {
+            t_cylinder *cylinder = (t_cylinder *)inter->object;
+            normal = calculate_cylinder_normal(cylinder, inter->point);
+            break;
+        }
+        case PLN: {
+            normal = ((t_plane *)inter->object)->normal;
+            break;
+        }
+        case CONE:
+        {
+            t_cone *cone = (t_cone *)inter->object;
+            normal = calculate_cone_normal(cone, inter->point);
+            break;
+        }
+        default:
+           break;;
+    }
+    return (normal);
+}
 t_ray ft_generate_ray(int x, int y, t_scene *scene) {
     float pixel_x = (2.0 * x / WIDTH - 1) * scene->camera.viewport_width / 2;
     float pixel_y = (1 - 2.0 * y / HEIGHT) * scene->camera.viewport_height / 2;
@@ -25,57 +88,16 @@ t_ray ft_generate_ray(int x, int y, t_scene *scene) {
 
 t_color trace_ray(t_ray *ray, t_scene *scene, int depth)
 {
-    if (depth <= 0) return scene->ambient.color;
+    t_vector normal;
+    t_intersection *nearest_intersection;
+    if (depth < 0) return scene->ambient.color;
+    nearest_intersection = ft_get_nearest_intersection(ray, scene);
+    normal = ft_get_surface_normal_vector(nearest_intersection);
 
-    t_intersection *sphere_intersection = intersect_lst_spheres(ray, scene);
-    t_intersection *cylinder_intersection = intersect_lst_cylinders(ray, scene);
-    t_intersection *plane_intersection = intersect_lst_planes(ray, scene);
-
-    t_intersection *nearest_intersection = NULL;
-    float nearest_t = INFINITY;
-
-    if (sphere_intersection && sphere_intersection->t < nearest_t) {
-        nearest_intersection = sphere_intersection;
-        nearest_t = sphere_intersection->t;
-    }
-    if (cylinder_intersection && cylinder_intersection->t < nearest_t) {
-        if (nearest_intersection) free(nearest_intersection);
-        nearest_intersection = cylinder_intersection;
-        nearest_t = cylinder_intersection->t;
-    }
-    if (plane_intersection && plane_intersection->t < nearest_t) {
-        if (nearest_intersection) free(nearest_intersection);
-        nearest_intersection = plane_intersection;
-        nearest_t = plane_intersection->t;
-    }
 
     if (!nearest_intersection) return scene->ambient.color;
 
-    t_vector normal;
-    switch (nearest_intersection->object_type) {
-        case SPH: {
-            t_sphere *sphere = (t_sphere *)nearest_intersection->object;
-            normal = vector_normalize(vector_subtract(nearest_intersection->point, sphere->center));
-            break;
-        }
-        case CYL: {
-            t_cylinder *cylinder = (t_cylinder *)nearest_intersection->object;
-            normal = calculate_cylinder_normal(cylinder, nearest_intersection->point);
-            break;
-        }
-        case PLN: {
-            normal = ((t_plane *)nearest_intersection->object)->normal;
-            break;
-        }
-        case CON:
-            // TODO: Implement cone normal calculation
-            free(nearest_intersection);
-            return scene->ambient.color;
-        default:
-            // Handle unexpected object type
-            free(nearest_intersection);
-            return scene->ambient.color;
-    }
+   
 
     t_vector light_dir = vector_normalize(vector_subtract(scene->light.position, nearest_intersection->point));
 
@@ -127,32 +149,4 @@ void render_scene(t_scene *scene, t_mlx_data *data) {
             my_pixel_put(&(data->image), x, y, color_to_int(color));
         }
     }
-}
-
-
-t_intersection *ft_find_nearest_intersection(t_ray *ray, t_scene *scene)
-{
-    t_intersection *sphere_intersection = intersect_lst_spheres(ray, scene);
-    t_intersection *cylinder_intersection = intersect_lst_cylinders(ray, scene);
-    t_intersection *plane_intersection = intersect_lst_planes(ray, scene);
-
-    t_intersection *nearest_intersection = NULL;
-    float nearest_t = INFINITY;
-
-    if (sphere_intersection && sphere_intersection->t < nearest_t) {
-        nearest_intersection = sphere_intersection;
-        nearest_t = sphere_intersection->t;
-    }
-    if (cylinder_intersection && cylinder_intersection->t < nearest_t) {
-        if (nearest_intersection) free(nearest_intersection);
-        nearest_intersection = cylinder_intersection;
-        nearest_t = cylinder_intersection->t;
-    }
-    if (plane_intersection && plane_intersection->t < nearest_t) {
-        if (nearest_intersection) free(nearest_intersection);
-        nearest_intersection = plane_intersection;
-        nearest_t = plane_intersection->t;
-    }
-
-    return (nearest_intersection);// have to be freed later 
 }

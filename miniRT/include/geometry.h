@@ -9,7 +9,7 @@ typedef enum s_object_type {
     CYL,
     PLN,
     SPH,
-    CON,
+    CONE,
     CAM,
     LIGHT
 } t_object_type;
@@ -83,5 +83,21 @@ typedef struct s_plane {
 t_plane *create_plane(t_point point, t_vector normal, t_color color);
 t_intersection *intersect_plane(t_ray *ray, t_plane *plane);
 t_intersection *intersect_lst_planes(t_ray *ray, t_scene *scene);
-t_intersection *ft_find_nearest_intersection(t_ray *ray, t_scene *scene);
+t_intersection *ft_get_nearest_intersection(t_ray *ray, t_scene *scene);
+
+
+typedef struct s_cone
+{
+    t_vector center;  // Base center of the cone
+    t_vector axis;    // Direction vector of the cone's axis
+    float diameter;  // Base diameter of the cone
+    float height;    // Height of the cone
+    t_color color;    // Color of the cone
+} t_cone;
+
+void ft_print_cone(void *content);
+t_cone *create_cone(t_point center, t_vector axis, float diameter, float height, t_color color);
+t_intersection *intersect_cone(t_ray *ray, t_cone *cone);
+t_intersection *intersect_lst_cones(t_ray *ray, t_scene *scene);
+t_vector calculate_cone_normal(t_cone *cone, t_point hit_point);
 #endif

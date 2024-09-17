@@ -302,7 +302,34 @@ static int parse_cylinder(char *line, t_scene *scene)
     ft_free_split(parts);
     return (1);
 }
-
+static int parse_cone(char *line, t_scene *scene)
+{
+    t_cone *cone = malloc(sizeof(t_cone));
+    char **parts = ft_split(line, ' ');
+    if (!parts || !parts[1] || !parts[2] || !parts[3] || !parts[4] || !parts[5] || parts[6])
+    {
+        free(cone);
+        ft_free_split(parts);
+        return (0);
+    }
+    if (!parse_vector(parts[1], &cone->center) || !parse_vector(parts[2], &cone->axis))
+    {
+        free(cone);
+        ft_free_split(parts);
+        return (0);
+    }
+    cone->diameter = ft_atof(parts[3]);
+    cone->height = ft_atof(parts[4]);
+    if (cone->diameter <= 0 || cone->height <= 0 || !parse_color(parts[5], &cone->color))
+    {
+        free(cone);
+        ft_free_split(parts);
+        return (0);
+    }
+    ft_lstadd_back(scene->cones, ft_lstnew(cone));
+    ft_free_split(parts);
+    return (1);
+}
 int parse_scene(char *filename, t_scene *scene)
 {
     int fd = open(filename, O_RDONLY);
@@ -323,6 +350,8 @@ int parse_scene(char *filename, t_scene *scene)
         else if (ft_strncmp(line, "pl ", 3) == 0 && !parse_plane(line, scene))
             return (0);
         else if (ft_strncmp(line, "cy ", 3) == 0 && !parse_cylinder(line, scene))
+            return (0);
+         else if (ft_strncmp(line, "co ", 3) == 0 && !parse_cone(line, scene))
             return (0);
         free(line);
     }

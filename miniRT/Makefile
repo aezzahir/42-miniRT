@@ -1,5 +1,5 @@
 CC = cc
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -g
 LIBFT_DIR = lib/libft
 LIBFT = $(LIBFT_DIR)/libft.a
 MLX_DIR = lib/minilibx-linux
@@ -12,6 +12,7 @@ SRC_FILES = main.c \
             geometry/vector.c   \
 			geometry/plane.c \
             geometry/sphere.c   \
+			geometry/cone.c  \
 			geometry/cylinder.c \
 			render/raytracer.c   \
             render/camera.c     \

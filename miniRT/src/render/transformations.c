@@ -62,11 +62,11 @@ void object_rotate(t_object *object, t_vector rotation) {
             ((t_cylinder *)(object->shape))->axis = rotate_y(((t_cylinder *)(object->shape))->axis, rotation.y);
             ((t_cylinder *)(object->shape))->axis = rotate_z(((t_cylinder *)(object->shape))->axis, rotation.z);
             break;
-        // case CON:
-        //     object->data.cone.axis = rotate_x(object->data.cone.axis, rotation.x);
-        //     object->data.cone.axis = rotate_y(object->data.cone.axis, rotation.y);
-        //     object->data.cone.axis = rotate_z(object->data.cone.axis, rotation.z);
-        //     break;
+        case CONE:
+            ((t_cone *)(object->shape))->axis = rotate_x(((t_cone *)(object->shape))->axis, rotation.x);
+            ((t_cone *)(object->shape))->axis = rotate_y(((t_cone *)(object->shape))->axis, rotation.y);
+            ((t_cone *)(object->shape))->axis = rotate_z(((t_cone *)(object->shape))->axis, rotation.z);
+            break;
         default:
             break;
 
@@ -84,9 +84,9 @@ void object_translate(t_object *object, t_vector translation) {
         case CYL:
             ((t_cylinder *)(object->shape))->center = vector_add(((t_cylinder *)(object->shape))->center, translation);
             break;
-        // case CONE:
-        //     object->data.cone.apex = vector_add(object->data.cone.apex, translation);
-        //     break;
+        case CONE:
+            ((t_cone *)(object->shape))->center = vector_add(((t_cone *)(object->shape))->center, translation);
+            break;
         case LIGHT:
             ((t_light*)(object->shape))->position = vector_add(((t_light*)(object->shape))->position, translation);
             break;
@@ -113,11 +113,10 @@ void ft_resize_unique_property(t_scene *scene, float d_r, float d_h) {
             ft_add_resize(&(((t_cylinder *)(object->shape))->diameter), d_r);
             ft_add_resize(&(((t_cylinder *)(object->shape))->height), d_h);
             break;
-        // case CON:
-        //     object->data.cone.axis = rotate_x(object->data.cone.axis, rotation.x);
-        //     object->data.cone.axis = rotate_y(object->data.cone.axis, rotation.y);
-        //     object->data.cone.axis = rotate_z(object->data.cone.axis, rotation.z);
-        //     break;
+        case CONE:
+            ft_add_resize(&(((t_cone *)(object->shape))->diameter), d_r);
+            ft_add_resize(&(((t_cone *)(object->shape))->height), d_h);
+            break;
         default:
             break;
 

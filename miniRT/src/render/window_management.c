@@ -97,7 +97,7 @@ int mouse_hook(int button, int x, int y, t_mlx_data *data) {
     if (button == 1)
     {
         t_ray ray = ft_generate_ray(x, y, data->scene);
-        t_intersection *inter = ft_find_nearest_intersection(&ray, data->scene);
+        t_intersection *inter = ft_get_nearest_intersection(&ray, data->scene);
         if (inter)
         {
             (data->scene->selected_object).type = inter->object_type;
