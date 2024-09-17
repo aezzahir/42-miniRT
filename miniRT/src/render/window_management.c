@@ -13,7 +13,7 @@ int expose_hook(t_mlx_data *data) {
     return 0;
 }
 int key_hook(int keycode, t_mlx_data *data) {
-    printf("key released --> %d\n", keycode);
+    // printf("key released --> %d\n", keycode);
     if (keycode == 65307) {  // ESC key
         ft_close(data);
     }
@@ -23,7 +23,7 @@ int key_hook(int keycode, t_mlx_data *data) {
     if (keycode == 'l') {
         data->scene->selected_object.type = LIGHT;
         data->scene->selected_object.shape = &(data->scene->light);
-        printf("Light's position: ");
+        // printf("Light's position: ");
         vector_print(data->scene->light.position);
     }
     if (keycode == 'r') {
@@ -40,7 +40,7 @@ int key_hook(int keycode, t_mlx_data *data) {
 }
 
 int key_press(int keycode, t_mlx_data *data) {
-    printf("Key pressed: %d\n", keycode);
+    // printf("Key pressed: %d\n", keycode);
     handle_user_input(keycode, data->scene);
     return (0);
 }
@@ -86,7 +86,7 @@ int handle_user_input(int key, t_scene *scene) {
 }
 int mouse_hook(int button, int x, int y, t_mlx_data *data) {
     float d_r = 0;
-    printf("Mouse button %d clicked at (%d, %d)\n", button, x, y);
+    // printf("Mouse button %d clicked at (%d, %d)\n", button, x, y);
     if (button == 1) data->mouse.is_left_pressed = 1;
     if (button == 3) data->mouse.is_right_pressed = 1;
     if (button == 4 || button == 5)
@@ -107,20 +107,6 @@ int mouse_hook(int button, int x, int y, t_mlx_data *data) {
         {
             (data->scene->selected_object).type = inter->object_type;
             (data->scene->selected_object).shape = inter->object;
-        }
-        if ((data->scene->selected_object).type == SPH)
-        {
-            printf("You selected a SPHERE\n");ft_print_sphere((data->scene->selected_object).shape);
-        }
-        if ((data->scene->selected_object).type == CYL)
-        {
-            printf("You selected a CYLINDER\n");ft_print_cylinder((data->scene->selected_object).shape);
-        }
-        if ((data->scene->selected_object).type == PLN)
-            printf("You selected a PLANE\n");
-        if ((data->scene->selected_object).type == CONE)
-        {
-            printf("You selected a CONE\n");ft_print_cone((data->scene->selected_object).shape);
         }
     }
     data->redraw_needed = 1;
