@@ -69,7 +69,7 @@ int mlx_data_init(t_mlx_data *data) {
     data->mlx_connection = mlx_init();
     if (!data->mlx_connection) return 0;
 
-    data->mlx_window = mlx_new_window(data->mlx_connection, data->width, data->height, "Ray Tracer");
+    data->mlx_window = mlx_new_window(data->mlx_connection, data->width, data->height, "miniRT");
     if (!data->mlx_window) {
         free(data->mlx_connection);
         return 0;
