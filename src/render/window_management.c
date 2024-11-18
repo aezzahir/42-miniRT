@@ -107,6 +107,7 @@ int mouse_hook(int button, int x, int y, t_mlx_data *data) {
         {
             (data->scene->selected_object).type = inter->object_type;
             (data->scene->selected_object).shape = inter->object;
+            free(inter);
         }
     }
     data->redraw_needed = 1;
@@ -135,9 +136,18 @@ int loop_hook(t_mlx_data *data) {
 
 int ft_close(t_mlx_data *data)
 {
-    // free all alocated memories
-    mlx_destroy_window(data->mlx_connection, data->mlx_window);
-    exit(0);
+    // Add these cleanup calls:
+    if (data->mlx_connection)
+    {
+        if (data->image.img_ptr)
+            mlx_destroy_image(data->mlx_connection, data->image.img_ptr);   
+        if (data->mlx_window)
+            mlx_destroy_window(data->mlx_connection, data->mlx_window);
+        mlx_destroy_display(data->mlx_connection);  // Add this
+        free(data->mlx_connection);                 // Add this
+    }
+    clear_scene(data->scene);
+    exit(0);  // Clean exit
     return (0);
 }
 
@@ -159,7 +169,7 @@ t_vector get_world_space_translation(t_camera *camera, int dx, int dy, float sen
 }
 
 int mouse_move(int x, int y, t_mlx_data *data) {
-    if (data->mouse.is_left_pressed || data->mouse.is_right_pressed) {
+    if (data && (data->mouse.is_left_pressed || data->mouse.is_right_pressed)) {
         int dx = x - data->mouse.last_x;
         int dy = y - data->mouse.last_y;
         

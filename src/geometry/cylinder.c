@@ -24,128 +24,71 @@ t_cylinder *create_cylinder(t_point center, t_vector axis, float diameter, float
     return (cylinder);
 }
 
-t_intersection *intersect_cylinder(t_ray *ray, t_cylinder *cyl) {
-    t_vector oc = vector_subtract(ray->origin, cyl->center); // Ray origin to cylinder center
-    float radius = cyl->diameter / 2;
 
-    if (cyl->enable_intersection != 1)
-        return (NULL);
-    // Step 1: Cylinder body intersection
+float get_cylinder_distance(t_ray *ray, t_cylinder *cyl)
+{
+    t_vector oc = vector_subtract(ray->origin, cyl->center);
+    float radius = cyl->diameter / 2;
+    
+    // Calculate body intersection
     t_vector v_dir_perpendicular = vector_subtract(ray->direction, 
-                    vector_multiply(cyl->axis, vector_dot_product(ray->direction, cyl->axis)));
+        vector_multiply(cyl->axis, vector_dot_product(ray->direction, cyl->axis)));
     t_vector oc_perpendicular = vector_subtract(oc, 
-                    vector_multiply(cyl->axis, vector_dot_product(oc, cyl->axis)));
+        vector_multiply(cyl->axis, vector_dot_product(oc, cyl->axis)));
     
     float a = vector_dot_product(v_dir_perpendicular, v_dir_perpendicular);
     float b = 2 * vector_dot_product(v_dir_perpendicular, oc_perpendicular);
     float c = vector_dot_product(oc_perpendicular, oc_perpendicular) - radius * radius;
-
     float discriminant = b * b - 4 * a * c;
-    if (discriminant < 0) return NULL;  // No intersection with cylinder body
     
-    // Solving quadratic equation for t
-    float sqrt_discriminant = sqrt(discriminant);
-    float t1 = (-b - sqrt_discriminant) / (2 * a);
-    float t2 = (-b + sqrt_discriminant) / (2 * a);
+    if (discriminant < 0)
+        return INFINITY;
 
-    // Step 2: Check if body intersection is within the height of the finite cylinder
-    float t_body = (t1 >= 0) ? t1 : t2;
-    if (t_body < 0) return NULL; // Both solutions are behind the ray
-    
-    t_point body_hit_point = vector_add(ray->origin, vector_multiply(ray->direction, t_body));
-    float body_height = vector_dot_product(vector_subtract(body_hit_point, cyl->center), cyl->axis);
-    bool is_body_hit_valid = (body_height >= 0 && body_height <= cyl->height);
+    float t_body1 = (-b - sqrt(discriminant)) / (2 * a);
+    float t_body2 = (-b + sqrt(discriminant)) / (2 * a);
+    float t_body = (t_body1 >= 0) ? t_body1 : t_body2;
 
-    // Step 3: Cap intersections
-    float t_bottom = vector_dot_product(vector_subtract(cyl->center, ray->origin), cyl->axis) /
-                     vector_dot_product(ray->direction, cyl->axis);
-    float t_top = vector_dot_product(vector_subtract(vector_add(cyl->center, vector_multiply(cyl->axis, cyl->height)), ray->origin), cyl->axis) /
-                  vector_dot_product(ray->direction, cyl->axis);
-
-    t_point bottom_cap_point = vector_add(ray->origin, vector_multiply(ray->direction, t_bottom));
-    t_point top_cap_point = vector_add(ray->origin, vector_multiply(ray->direction, t_top));
-
-    bool valid_bottom_cap = (vector_distance(bottom_cap_point, cyl->center) <= radius);
-    bool valid_top_cap = (vector_distance(top_cap_point, vector_add(cyl->center, vector_multiply(cyl->axis, cyl->height))) <= radius);
-
-    // Step 4: Choose the nearest valid intersection
-    float t = INFINITY;
-    int hit_type = 0; // 0: body, 1: bottom cap, 2: top cap
-
-    if (is_body_hit_valid) {
-        t = t_body;
-        hit_type = 0;
-    }
-
-    if (valid_bottom_cap && t_bottom > 0 && t_bottom < t) {
-        t = t_bottom;
-        hit_type = 1;
-    }
-
-    if (valid_top_cap && t_top > 0 && t_top < t) {
-        t = t_top;
-        hit_type = 2;
-    }
-
-    if (t == INFINITY) return NULL; // No intersection
-
-    // Step 5: Create the intersection object
-    t_intersection *intersection = malloc(sizeof(t_intersection));
-    if (!intersection) return NULL;
-
-    intersection->point = vector_add(ray->origin, vector_multiply(ray->direction, t));
-    intersection->t = t;
-    intersection->object = cyl;
-    intersection->color = cyl->color;
-    intersection->object_type = CYL;
-
-    // Calculate normal based on hit type
-    if (hit_type == 0) {
-        // Hit on cylinder body
-        t_vector cp = vector_subtract(intersection->point, cyl->center);
-        t_vector projection = vector_multiply(cyl->axis, vector_dot_product(cp, cyl->axis));
-        intersection->normal = vector_normalize(vector_subtract(cp, projection));
-    } else if (hit_type == 1) {
-        // Hit on bottom cap
-        intersection->normal = vector_negate(cyl->axis);
-    } else {
-        // Hit on top cap
-        intersection->normal = cyl->axis;
-    }
-
-    return intersection;
-}
-
-
-t_intersection *intersect_lst_cylinders(t_ray *ray, t_scene *scene)
-{
-    t_list *current = NULL;
-    t_cylinder *cylinder;
-    t_intersection *intersection, *nearest_intersection = NULL;
-
-    if (scene->cylinders && *(scene->cylinders))
-        current = *(scene->cylinders);
-    else
-        return (NULL);
-
-    while (current)
+    // Check if body intersection is within cylinder height
+    if (t_body >= 0)
     {
-        cylinder = (t_cylinder *)(current->content);
-        intersection = intersect_cylinder(ray, cylinder);
-        if (intersection && (!nearest_intersection || (nearest_intersection && intersection->t < nearest_intersection->t)))
-        {
-            if (nearest_intersection)
-                free(nearest_intersection);
-            nearest_intersection = intersection;
-        }
-        else if (intersection)
-        {
-            free(intersection);
-        }
-        current = current->next;
+        t_point body_hit = vector_add(ray->origin, vector_multiply(ray->direction, t_body));
+        float body_height = vector_dot_product(vector_subtract(body_hit, cyl->center), cyl->axis);
+        if (body_height >= 0 && body_height <= cyl->height)
+            return t_body;
     }
-    return (nearest_intersection);
+
+    // Calculate cap intersections
+    float t_cap = INFINITY;
+    
+    // Bottom cap
+    float denom = vector_dot_product(ray->direction, cyl->axis);
+    if (fabs(denom) > 1e-6)
+    {
+        float t = vector_dot_product(vector_subtract(cyl->center, ray->origin), cyl->axis) / denom;
+        if (t >= 0)
+        {
+            t_point hit = vector_add(ray->origin, vector_multiply(ray->direction, t));
+            if (vector_distance(hit, cyl->center) <= radius)
+                t_cap = t;
+        }
+    }
+
+    // Top cap
+    t_point top_center = vector_add(cyl->center, vector_multiply(cyl->axis, cyl->height));
+    if (fabs(denom) > 1e-6)
+    {
+        float t = vector_dot_product(vector_subtract(top_center, ray->origin), cyl->axis) / denom;
+        if (t >= 0 && t < t_cap)
+        {
+            t_point hit = vector_add(ray->origin, vector_multiply(ray->direction, t));
+            if (vector_distance(hit, top_center) <= radius)
+                t_cap = t;
+        }
+    }
+
+    return t_cap;
 }
+
 
 t_vector calculate_cylinder_normal(t_cylinder *cyl, t_point hit_point) {
     // Vector from cylinder base center to hit point
@@ -172,8 +115,6 @@ t_vector calculate_cylinder_normal(t_cylinder *cyl, t_point hit_point) {
 }
 
 
-
-
 void ft_print_cylinder(void *content)
 {
     t_cylinder *cylinder;
@@ -184,3 +125,4 @@ void ft_print_cylinder(void *content)
            cylinder->axis.x, cylinder->axis.y, cylinder->axis.z,
            cylinder->diameter, cylinder->height);
 }
+

@@ -19,7 +19,7 @@
 #include "parser.h"
 #include "geometry.h"
 #include "utils.h"
-
+#include "scene_cleanup.h"
 
 #define WIDTH 920
 #define HEIGHT 600
@@ -33,7 +33,12 @@ typedef struct s_object {
     void *shape;
     //t_material material;
 } t_object;
-
+// Scene structure
+typedef struct s_hit_info {
+    void        *object;
+    float       distance;
+    t_object_type type;
+} t_hit_info;
 // Ambient light structure
 typedef struct s_ambient {
     float ratio;  // ratio of   diffuse light to ambient light
@@ -52,9 +57,9 @@ typedef struct s_light {
 
 
 
-// Scene structure
+
+
 typedef struct s_scene {
-    
     t_object  selected_object;
     t_ambient ambient;
     t_camera camera;
@@ -84,4 +89,7 @@ float calculate_shadow(t_scene *scene, t_point hit_point, t_vector light_dir);
 t_color calculate_reflection(t_ray *ray, t_intersection *intersection, t_scene *scene, int depth);
 t_color calculate_refraction(t_ray *ray, t_intersection *intersection, t_scene *scene, int depth);
 int vector_refract(t_vector incident, t_vector normal, float eta, t_vector *refracted);
+
+
+t_intersection *create_intersection(t_ray *ray, t_hit_info *hit);
 #endif /* MINIRT_H */

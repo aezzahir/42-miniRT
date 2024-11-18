@@ -4,38 +4,143 @@
  * Implements the main raytracing algorithm
  */
 #include "../../include/miniRT.h"
+
+
+
+
+
+
+
+// Helper function to get distance for any object type
+float get_object_distance(t_ray *ray, void *object, t_object_type type)
+{
+    switch (type)
+    {
+        case SPH:
+            return get_sphere_distance(ray, (t_sphere *)object);
+        case CYL:
+            return get_cylinder_distance(ray, (t_cylinder *)object);
+        case PLN:
+            return get_plane_distance(ray, (t_plane *)object);
+        case CONE:
+            return get_cone_distance(ray, (t_cone *)object);
+        default:
+            return INFINITY;
+    }
+}
+
 t_intersection *ft_get_nearest_intersection(t_ray *ray, t_scene *scene)
 {
-    t_intersection *nearest_intersection = NULL;
-    float nearest_t = INFINITY;
+    t_hit_info nearest = {NULL, INFINITY, NONE};
+    float dist;
 
-    t_intersection *sphere_intersection = intersect_lst_spheres(ray, scene);
-    t_intersection *cylinder_intersection = intersect_lst_cylinders(ray, scene);
-    t_intersection *plane_intersection = intersect_lst_planes(ray, scene);
-    t_intersection *cone_intersection = intersect_lst_cones(ray, scene);
+    // Check spheres
+    t_list *current = *(scene->spheres);
+    while (current)
+    {
+        t_sphere *sphere = (t_sphere *)(current->content);
+        if (sphere->enable_intersection && 
+            (dist = get_sphere_distance(ray, sphere)) < nearest.distance)
+        {
+            nearest.object = sphere;
+            nearest.distance = dist;
+            nearest.type = SPH;
+        }
+        current = current->next;
+    }
 
-    
+    // Check cylinders
+    current = *(scene->cylinders);
+    while (current)
+    {
+        t_cylinder *cylinder = (t_cylinder *)(current->content);
+        if (cylinder->enable_intersection && 
+            (dist = get_cylinder_distance(ray, cylinder)) < nearest.distance)
+        {
+            nearest.object = cylinder;
+            nearest.distance = dist;
+            nearest.type = CYL;
+        }
+        current = current->next;
+    }
 
-    if (sphere_intersection && sphere_intersection->t < nearest_t) {
-        nearest_intersection = sphere_intersection;
-        nearest_t = sphere_intersection->t;
+    // Check planes
+    current = *(scene->planes);
+    while (current)
+    {
+        t_plane *plane = (t_plane *)(current->content);
+        if (plane->enable_intersection && 
+            (dist = get_plane_distance(ray, plane)) < nearest.distance)
+        {
+            nearest.object = plane;
+            nearest.distance = dist;
+            nearest.type = PLN;
+        }
+        current = current->next;
     }
-    if (cylinder_intersection && cylinder_intersection->t < nearest_t) {
-        if (nearest_intersection) free(nearest_intersection);
-        nearest_intersection = cylinder_intersection;
-        nearest_t = cylinder_intersection->t;
+
+    // Check cones
+    current = *(scene->cones);
+    while (current)
+    {
+        t_cone *cone = (t_cone *)(current->content);
+        if (cone->enable_intersection && 
+            (dist = get_cone_distance(ray, cone)) < nearest.distance)
+        {
+            nearest.object = cone;
+            nearest.distance = dist;
+            nearest.type = CONE;
+        }
+        current = current->next;
     }
-    if (plane_intersection && plane_intersection->t < nearest_t) {
-        if (nearest_intersection) free(nearest_intersection);
-        nearest_intersection = plane_intersection;
-        nearest_t = plane_intersection->t;
+
+    // If no intersection found
+    if (nearest.distance == INFINITY)
+        return NULL;
+
+    // Create intersection only for the nearest object
+    return create_intersection(ray, &nearest);
+}
+
+
+
+// Create intersection only when needed
+t_intersection *create_intersection(t_ray *ray, t_hit_info *hit)
+{
+    t_intersection *inter = malloc(sizeof(t_intersection));
+    if (!inter)
+        return NULL;
+
+    inter->t = hit->distance;
+    inter->point = vector_add(ray->origin, vector_multiply(ray->direction, hit->distance));
+    inter->object = hit->object;
+    inter->object_type = hit->type;
+
+    // Set color and normal based on object type
+    switch (hit->type)
+    {
+        case SPH:
+            inter->color = ((t_sphere *)hit->object)->color;
+            inter->normal = vector_normalize(vector_subtract(inter->point, 
+                          ((t_sphere *)hit->object)->center));
+            break;
+        case CYL:
+            inter->color = ((t_cylinder *)hit->object)->color;
+            inter->normal = calculate_cylinder_normal(hit->object, inter->point);
+            break;
+        case PLN:
+            inter->color = ((t_plane *)hit->object)->color;
+            inter->normal = ((t_plane *)hit->object)->normal;
+            break;
+        case CONE:
+            inter->color = ((t_cone *)hit->object)->color;
+            inter->normal = calculate_cone_normal(hit->object, inter->point);
+            break;
+        default:
+            break;
     }
-    if (cone_intersection && cone_intersection->t < nearest_t) {
-        if (nearest_intersection) free(nearest_intersection);
-        nearest_intersection = cone_intersection;
-        nearest_t = cone_intersection->t;
-    }
-    return (nearest_intersection);
+
+    return inter;
 }
 t_vector ft_get_surface_normal_vector(t_intersection *inter)
 {
@@ -140,19 +245,6 @@ t_color trace_ray(t_ray *ray, t_scene *scene, int depth) {
 
     // Combine basic lighting
     t_color local_color = color_add(ambient, color_scale(color_add(diffuse, specular), shadow_factor));
-
-    // // Reflection and refraction for water-like materials
-    // t_color reflection_color = {0, 0, 0};
-    // t_color refraction_color = {0, 0, 0};
-
-    // if (intersection->object_type == SPH || intersection->object_type == CYL) {  // Assume these are water-like
-    //     reflection_color = calculate_reflection(ray, intersection, scene, depth);
-    //     refraction_color = calculate_refraction(ray, intersection, scene, depth);
-
-    //     local_color = color_scale(local_color, 1 - WATER_TRANSPARENCY - WATER_REFLECTIVITY);
-    //     local_color = color_add(local_color, color_scale(reflection_color, WATER_REFLECTIVITY));
-    //     local_color = color_add(local_color, color_scale(refraction_color, WATER_TRANSPARENCY));
-    // }
 
     free(intersection);
     return local_color;

@@ -6,7 +6,6 @@
 #include "../include/miniRT.h"
 
 
-
 int main(int argc, char *argv[]) {
     t_mlx_data data;
     t_scene scene;
@@ -17,7 +16,7 @@ int main(int argc, char *argv[]) {
     }
 
     // Initialize scene
-scene.spheres = malloc(sizeof(t_list *));
+    scene.spheres = malloc(sizeof(t_list *));
     if (!scene.spheres) {
         ft_putstr_fd("Error\nMemory allocation failed for spheres\n", 2);
         return 1;
@@ -31,15 +30,15 @@ scene.spheres = malloc(sizeof(t_list *));
     scene.cylinders = malloc(sizeof(t_list *));
     if (!scene.cylinders) {
         ft_putstr_fd("Error\nMemory allocation failed for cylinders\n", 2);
-        free(scene.spheres);
         free(scene.planes);
+        free(scene.spheres);
         return 1;
     }
     scene.cones = malloc(sizeof(t_list *));
     if (!scene.cones) {
-        ft_putstr_fd("Error\nMemory allocation failed for cones\n", 2);
-        free(scene.spheres);
+        ft_putstr_fd("Error\nMemory allocation failed for cylinders\n", 2);
         free(scene.planes);
+        free(scene.spheres);
         free(scene.cylinders);
         return 1;
     }
@@ -56,6 +55,10 @@ scene.spheres = malloc(sizeof(t_list *));
     }
 
     data.scene = &scene;
+    data.mouse.is_left_pressed = 0;
+    data.mouse.is_right_pressed = 0;
+    data.mouse.last_x = 0;
+    data.mouse.last_y = 0;
     if (!mlx_data_init(&data)) {
         fprintf(stderr, "Failed to initialize MLX data\n");
         return 1;
@@ -81,6 +84,8 @@ scene.spheres = malloc(sizeof(t_list *));
     mlx_put_image_to_window(data.mlx_connection, data.mlx_window, data.image.img_ptr, 0, 0);
 
     mlx_loop(data.mlx_connection);
+   
+    clear_scene(&scene);
     return 0;
 }
 

@@ -35,82 +35,69 @@ t_cone *create_cone(t_point center, t_vector axis, float diameter, float height,
     return (cone);
 }
 
-t_intersection *intersect_cone(t_ray *ray, t_cone *cone)
+float get_cone_distance(t_ray *ray, t_cone *cone)
 {
     t_vector co = vector_subtract(ray->origin, cone->center);
     float tan_theta = (cone->diameter / 2) / cone->height;
     float tan_theta_squared = tan_theta * tan_theta;
-
-    if (cone->enable_intersection != 1)
-        return (NULL);
+    
+    // Calculate quadratic equation coefficients
     float a = vector_dot_product(ray->direction, ray->direction) - 
               (1 + tan_theta_squared) * pow(vector_dot_product(ray->direction, cone->axis), 2);
+              
     float b = 2 * (vector_dot_product(ray->direction, co) - 
-              (1 + tan_theta_squared) * vector_dot_product(ray->direction, cone->axis) * vector_dot_product(co, cone->axis));
+              (1 + tan_theta_squared) * vector_dot_product(ray->direction, cone->axis) * 
+              vector_dot_product(co, cone->axis));
+              
     float c = vector_dot_product(co, co) - 
               (1 + tan_theta_squared) * pow(vector_dot_product(co, cone->axis), 2);
 
     float discriminant = b * b - 4 * a * c;
-
     if (discriminant < 0)
-        return NULL;
+        return INFINITY;
 
+    // Find the nearest intersection point
     float t1 = (-b - sqrt(discriminant)) / (2 * a);
     float t2 = (-b + sqrt(discriminant)) / (2 * a);
-
-    float t = (t1 < t2 && t1 > 0) ? t1 : t2;
-
-    if (t < 0)
-        return NULL;
-
-    t_point hit_point = vector_add(ray->origin, vector_multiply(ray->direction, t));
-    float height_hit = vector_dot_product(vector_subtract(hit_point, cone->center), cone->axis);
-
-    if (height_hit < 0 || height_hit > cone->height)
-        return NULL;
-
-    t_intersection *intersection = malloc(sizeof(t_intersection)); // TODO: Free
-    if (!intersection) return NULL;
-
-    intersection->point = hit_point;
-    t_vector cp = vector_subtract(intersection->point, cone->center);
-    t_vector n = vector_subtract(cp, vector_multiply(cone->axis, vector_dot_product(cp, cone->axis)));
-    intersection->normal = vector_normalize(n);
-    intersection->object = cone;
-    intersection->t = t;
-    intersection->color = cone->color;
-    intersection->object_type = CONE;
-
-    return intersection;
-}
-
-t_intersection *intersect_lst_cones(t_ray *ray, t_scene *scene)
-{
-    t_list *current = NULL;
-    t_cone *cone;
-    t_intersection *intersection, *nearest_intersection = NULL;
-
-    if (scene->cones && *(scene->cones))
-        current = *(scene->cones);
-    else
-        return (NULL);
-    while (current)
-    {
-        cone = (t_cone *)(current->content);
-        intersection = intersect_cone(ray, cone);
-        if (intersection && (!nearest_intersection || (nearest_intersection && intersection->t < nearest_intersection->t)))
-        {
-            if (nearest_intersection)
-                free(nearest_intersection);
-            nearest_intersection = intersection;
-        }
-        else if (intersection)
-        {
-            free(intersection);
-        }
-        current = current->next;
+    
+    // Order intersections
+    float t_near = fmin(t1, t2);
+    float t_far = fmax(t1, t2);
+    
+    // Check both intersections for validity
+    float t = INFINITY;
+    
+    // Function to check if a intersection point is within cone height
+    float check_height(float t_check) {
+        if (t_check < 0)
+            return false;
+        t_point hit = vector_add(ray->origin, vector_multiply(ray->direction, t_check));
+        float height = vector_dot_product(vector_subtract(hit, cone->center), cone->axis);
+        return (height >= 0 && height <= cone->height);
     }
-    return (nearest_intersection);
+    
+    // Check near intersection first
+    if (check_height(t_near))
+        t = t_near;
+    // If near intersection is not valid, check far intersection
+    else if (check_height(t_far))
+        t = t_far;
+
+    // Check base cap
+    float denom = vector_dot_product(ray->direction, cone->axis);
+    if (fabs(denom) > 1e-6)
+    {
+        float t_cap = vector_dot_product(vector_subtract(cone->center, ray->origin), cone->axis) / denom;
+        if (t_cap >= 0 && t_cap < t)
+        {
+            t_point hit = vector_add(ray->origin, vector_multiply(ray->direction, t_cap));
+            float radius_at_base = cone->diameter / 2;
+            if (vector_distance(hit, cone->center) <= radius_at_base)
+                t = t_cap;
+        }
+    }
+
+    return t;
 }
 
 t_vector calculate_cone_normal(t_cone *cone, t_point hit_point) {

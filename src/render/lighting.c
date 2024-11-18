@@ -41,7 +41,7 @@ float calculate_shadow(t_scene *scene, t_point hit_point, t_vector light_dir) {
     t_ray shadow_ray = {hit_point, light_dir};
     t_intersection *shadow_intersection = ft_get_nearest_intersection(&shadow_ray, scene);
     
-    if (shadow_intersection && shadow_intersection->t < light_distance) {
+    if (shadow_intersection && shadow_intersection->t < light_distance + 0.5) {
         free(shadow_intersection);
         return 0.0;  // Full shadow
     }

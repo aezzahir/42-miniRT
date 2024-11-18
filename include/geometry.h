@@ -11,7 +11,8 @@ typedef enum s_object_type {
     SPH,
     CONE,
     CAM,
-    LIGHT
+    LIGHT,
+    NONE
 } t_object_type;
 
 typedef struct s_material {
@@ -47,8 +48,6 @@ typedef struct s_ray {
 } t_ray;
 
 t_sphere *create_sphere(t_point origin, float diameter, t_color color);
-t_intersection *intersect_sphere(t_ray *ray, t_sphere *sphere);
-t_intersection *intersect_lst_spheres(t_ray *ray, t_scene *scene);
 void ft_print_sphere(void *content);
 
 // -------------------------- Intersection With Sphere ---------------------------------------
@@ -66,8 +65,6 @@ typedef struct s_cylinder {
 
 
 t_cylinder *create_cylinder(t_point center, t_vector axis, float diameter, float height, t_color color);
-t_intersection *intersect_cylinder(t_ray *ray, t_cylinder *cylinder);
-t_intersection *intersect_lst_cylinders(t_ray *ray, t_scene *scene);
 t_vector calculate_cylinder_normal(t_cylinder *cylinder, t_point intersection_point);
 void ft_print_cylinder(void *content);
 
@@ -84,8 +81,6 @@ typedef struct s_plane {
 } t_plane;
 
 t_plane *create_plane(t_point point, t_vector normal, t_color color);
-t_intersection *intersect_plane(t_ray *ray, t_plane *plane);
-t_intersection *intersect_lst_planes(t_ray *ray, t_scene *scene);
 t_intersection *ft_get_nearest_intersection(t_ray *ray, t_scene *scene);
 
 
@@ -101,7 +96,22 @@ typedef struct s_cone
 
 void ft_print_cone(void *content);
 t_cone *create_cone(t_point center, t_vector axis, float diameter, float height, t_color color);
-t_intersection *intersect_cone(t_ray *ray, t_cone *cone);
-t_intersection *intersect_lst_cones(t_ray *ray, t_scene *scene);
 t_vector calculate_cone_normal(t_cone *cone, t_point hit_point);
+
+
+
+
+
+
+
+
+
+
+
+
+
+float get_sphere_distance(t_ray *ray, t_sphere *sphere);
+float get_plane_distance(t_ray *ray, t_plane *plane);
+float get_cylinder_distance(t_ray *ray, t_cylinder *cyl);
+float get_cone_distance(t_ray *ray, t_cone *cone);
 #endif
