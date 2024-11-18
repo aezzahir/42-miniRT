@@ -59,6 +59,8 @@ int main(int argc, char *argv[]) {
     data.mouse.is_right_pressed = 0;
     data.mouse.last_x = 0;
     data.mouse.last_y = 0;
+    (data.scene)->selected_object.type = NONE;
+    (data.scene)->selected_object.shape = NULL;
     if (!mlx_data_init(&data)) {
         fprintf(stderr, "Failed to initialize MLX data\n");
         return 1;
@@ -84,7 +86,6 @@ int main(int argc, char *argv[]) {
     mlx_put_image_to_window(data.mlx_connection, data.mlx_window, data.image.img_ptr, 0, 0);
 
     mlx_loop(data.mlx_connection);
-   
     clear_scene(&scene);
     return 0;
 }

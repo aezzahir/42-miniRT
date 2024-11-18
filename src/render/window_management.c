@@ -173,7 +173,7 @@ int mouse_move(int x, int y, t_mlx_data *data) {
         int dx = x - data->mouse.last_x;
         int dy = y - data->mouse.last_y;
         
-        float sensitivity = 0.11f; // Adjust this value to change movement speed
+        float sensitivity = 0.1f; // Adjust this value to change movement speed
         
         t_vector translation = get_world_space_translation(&data->scene->camera, dx, dy, sensitivity);
         
