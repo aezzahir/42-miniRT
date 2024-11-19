@@ -150,6 +150,7 @@ void transform_scene(t_scene *scene, t_vector rotation, t_vector translation, t_
     {
         camera_rotate(&scene->camera, rotation);
         camera_translate(&scene->camera, translation);
+        ft_setup_camera(&scene->camera); // recalculate the camera parameters
     }
     else
     {
