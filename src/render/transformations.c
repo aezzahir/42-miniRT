@@ -1,9 +1,14 @@
 #include "../../include/miniRT.h"
 
 // Utility functions for rotation
-t_vector rotate_x(t_vector v, float angle) {
-    float cos_a = cosf(angle);
-    float sin_a = sinf(angle);
+t_vector rotate_x(t_vector v, float angle)
+{
+
+    float cos_a;
+    float sin_a;
+
+    cos_a = cosf(angle);
+    sin_a = sinf(angle);
     return (t_vector){
         v.x,
         v.y * cos_a - v.z * sin_a,
@@ -11,7 +16,8 @@ t_vector rotate_x(t_vector v, float angle) {
     };
 }
 
-t_vector rotate_y(t_vector v, float angle) {
+t_vector rotate_y(t_vector v, float angle)
+{
     float cos_a = cosf(angle);
     float sin_a = sinf(angle);
     return (t_vector){
@@ -21,7 +27,8 @@ t_vector rotate_y(t_vector v, float angle) {
     };
 }
 
-t_vector rotate_z(t_vector v, float angle) {
+t_vector rotate_z(t_vector v, float angle)
+{
     float cos_a = cosf(angle);
     float sin_a = sinf(angle);
     return (t_vector){
@@ -32,7 +39,8 @@ t_vector rotate_z(t_vector v, float angle) {
 }
 
 // Camera transformation functions
-void camera_rotate(t_camera *camera, t_vector rotation) {
+void camera_rotate(t_camera *camera, t_vector rotation)
+{
     camera->orientation = rotate_x(camera->orientation, rotation.x);
     camera->orientation = rotate_y(camera->orientation, rotation.y);
     camera->orientation = rotate_z(camera->orientation, rotation.z);
@@ -50,30 +58,32 @@ void camera_translate(t_camera *camera, t_vector translation) {
 }
 
 // Object transformation functions
-void object_rotate(t_object *object, t_vector rotation) {
-    switch (object->type) {
-        case PLN:
-            ((t_plane *)(object->shape))->normal = rotate_x(((t_plane *)(object->shape))->normal, rotation.x);
-            ((t_plane *)(object->shape))->normal = rotate_y(((t_plane *)(object->shape))->normal, rotation.y);
-            ((t_plane *)(object->shape))->normal = rotate_z(((t_plane *)(object->shape))->normal, rotation.z);
-            break;
-        case CYL:
-            ((t_cylinder *)(object->shape))->axis = rotate_x(((t_cylinder *)(object->shape))->axis, rotation.x);
-            ((t_cylinder *)(object->shape))->axis = rotate_y(((t_cylinder *)(object->shape))->axis, rotation.y);
-            ((t_cylinder *)(object->shape))->axis = rotate_z(((t_cylinder *)(object->shape))->axis, rotation.z);
-            break;
-        case CONE:
-            ((t_cone *)(object->shape))->axis = rotate_x(((t_cone *)(object->shape))->axis, rotation.x);
-            ((t_cone *)(object->shape))->axis = rotate_y(((t_cone *)(object->shape))->axis, rotation.y);
-            ((t_cone *)(object->shape))->axis = rotate_z(((t_cone *)(object->shape))->axis, rotation.z);
-            break;
-        default:
-            break;
+void object_rotate(t_object *o, t_vector r)
+{
+        
+        if (o->type == PLN) 
+        {
+            ((t_plane *)(o->shape))->normal = rotate_x(((t_plane *)(o->shape))->normal, r.x);
+            ((t_plane *)(o->shape))->normal = rotate_y(((t_plane *)(o->shape))->normal, r.y);
+            ((t_plane *)(o->shape))->normal = rotate_z(((t_plane *)(o->shape))->normal, r.z);
+        }
+        else if (o->type == CYL)
+        {
+            ((t_cylinder *)(o->shape))->axis = rotate_x(((t_cylinder *)(o->shape))->axis, r.x);
+            ((t_cylinder *)(o->shape))->axis = rotate_y(((t_cylinder *)(o->shape))->axis, r.y);
+            ((t_cylinder *)(o->shape))->axis = rotate_z(((t_cylinder *)(o->shape))->axis, r.z);
+        }
+        else if (o->type == CONE)
+        {
+            ((t_cone *)(o->shape))->axis = rotate_x(((t_cone *)(o->shape))->axis, r.x);
+            ((t_cone *)(o->shape))->axis = rotate_y(((t_cone *)(o->shape))->axis, r.y);
+            ((t_cone *)(o->shape))->axis = rotate_z(((t_cone *)(o->shape))->axis, r.z);
+        }
 
-    }
 }
 
-void object_translate(t_object *object, t_vector translation) {
+void object_translate(t_object *object, t_vector translation)
+{
     switch (object->type) {
         case SPH:
             ((t_sphere *)(object->shape))->center = vector_add(((t_sphere *)(object->shape))->center, translation);

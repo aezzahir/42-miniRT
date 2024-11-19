@@ -5,7 +5,8 @@
 #include "../../include/miniRT.h"
 
 
-t_plane *create_plane(t_point point, t_vector normal, t_color color) {
+t_plane *create_plane(t_point point, t_vector normal, t_color color)
+{
     t_plane *plane = malloc(sizeof(t_plane));
     if (!plane) return NULL;
     plane->point = point;

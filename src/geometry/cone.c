@@ -128,3 +128,4 @@ t_vector calculate_cone_normal(t_cone *cone, t_point hit_point) {
     
     return vector_normalize(normal);
 }
+

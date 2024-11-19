@@ -7,7 +7,8 @@
 #include <math.h>
 #define PI 3.14159265359
 
-void ft_setup_camera(t_camera *camera) {
+void ft_setup_camera(t_camera *camera)
+{
     camera->forward = vector_normalize(camera->orientation);
     camera->right = vector_cross_product(camera->forward, (t_vector){0, 1, 0});
     camera->up = vector_cross_product(camera->right, camera->forward);
