@@ -181,13 +181,10 @@ t_vector get_object_position(t_object *object){
 }
 t_vector get_world_space_translation(t_mlx_data *data, t_camera *camera, int dx, int dy) {
    // Calculate the change in world coordinates for mouse movement
-   float view_distance = 1.0f;  // Distance to view plane
-   float view_height = 2.0f * view_distance * tanf(camera->fov * 0.5f * 3.14f / 180.0f);
-   float view_width = view_height * camera->aspect_ratio;
    
    // Convert pixel delta to world space delta
-   float world_dx = (dx * view_width) / WIDTH;  
-   float world_dy = -(dy * view_height) / HEIGHT; // Negate for correct direction
+   float world_dx = (dx * camera->viewport_width) / WIDTH;  
+   float world_dy = -(dy * camera->viewport_height) / HEIGHT; // Negate for correct direction
 
    // Transform to camera space vectors
    t_vector translation = vector_add(
@@ -203,7 +200,7 @@ t_vector get_world_space_translation(t_mlx_data *data, t_camera *camera, int dx,
            vector_subtract(obj_pos, camera->position),
            camera->forward
        ));
-       distance_scale = dist / view_distance;
+       distance_scale = dist;
    }
    
    return vector_multiply(translation, distance_scale);
