@@ -150,22 +150,63 @@ int ft_close(t_mlx_data *data)
     exit(0);  // Clean exit
     return (0);
 }
+t_vector get_object_position(t_object *object){
+     switch (object->type) {
+        case SPH: {
+            t_sphere *sphere = (t_sphere *)object->shape;
+            return(sphere->center);
+            break;
+        }
+        case CYL: {
+            t_cylinder *cylinder = (t_cylinder *)object->shape;
+            return(cylinder->center);
+            break;
+        }
+        case PLN: {
+            t_plane *plane = (t_plane *)object->shape;
+            return(plane->point);
+            break;
+        }
+        case CONE:
+        {
+            t_cone *cone = (t_cone *)object->shape;
+            return(cone->center);
+            break;
+        }
+        default:
+           break;;
+    }
+    return (t_vector){0, 0, 0};
 
-t_vector get_world_space_translation(t_camera *camera, int dx, int dy, float sensitivity) {
-    // Get the camera's right vector (perpendicular to up and direction)
-    t_vector right = vector_cross_product(camera->orientation, camera->up);
-    right = vector_normalize(right);
+}
+t_vector get_world_space_translation(t_mlx_data *data, t_camera *camera, int dx, int dy) {
+   // Calculate the change in world coordinates for mouse movement
+   float view_distance = 1.0f;  // Distance to view plane
+   float view_height = 2.0f * view_distance * tanf(camera->fov * 0.5f * 3.14f / 180.0f);
+   float view_width = view_height * camera->aspect_ratio;
+   
+   // Convert pixel delta to world space delta
+   float world_dx = (dx * view_width) / WIDTH;  
+   float world_dy = -(dy * view_height) / HEIGHT; // Negate for correct direction
 
-    // Scale the movement based on sensitivity
-    float scaled_dx = dx * sensitivity;
-    float scaled_dy = dy * sensitivity;
-
-    // Calculate the world space movement
-    t_vector horizontal_movement = vector_multiply(right, scaled_dx);
-    t_vector vertical_movement = vector_multiply(camera->up, -scaled_dy);
-
-    // Combine the movements
-    return vector_add(horizontal_movement, vertical_movement);
+   // Transform to camera space vectors
+   t_vector translation = vector_add(
+       vector_multiply(camera->right, world_dx),
+       vector_multiply(camera->up, world_dy)
+   );
+   
+   // Scale based on camera's orientation
+   float distance_scale = 1.0f;
+   if (data->scene->selected_object.type != NONE) {
+       t_vector obj_pos = get_object_position(&data->scene->selected_object);
+       float dist = fabsf(vector_dot_product(
+           vector_subtract(obj_pos, camera->position),
+           camera->forward
+       ));
+       distance_scale = dist / view_distance;
+   }
+   
+   return vector_multiply(translation, distance_scale);
 }
 
 int mouse_move(int x, int y, t_mlx_data *data) {
@@ -173,9 +214,8 @@ int mouse_move(int x, int y, t_mlx_data *data) {
         int dx = x - data->mouse.last_x;
         int dy = y - data->mouse.last_y;
         
-        float sensitivity = 0.1f; // Adjust this value to change movement speed
         
-        t_vector translation = get_world_space_translation(&data->scene->camera, dx, dy, sensitivity);
+        t_vector translation = get_world_space_translation(data, &data->scene->camera, dx, dy);
         
         // Apply translation to the selected object or camera
         if (data->mouse.is_left_pressed)
