@@ -1,9 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   geometry.h                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/20 22:07:43 by iben-haj          #+#    #+#             */
+/*   Updated: 2024/11/20 22:07:44 by iben-haj         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef GEOMETRY_H
-#define GEOMETRY_H\
+#define GEOMETRY_H
 
 typedef struct s_scene t_scene;
 #include "miniRT.h"
-// Sphere structure
 
 typedef enum s_object_type {
     CYL,
@@ -70,8 +81,6 @@ void ft_print_cylinder(void *content);
 
 
 //// --------------------- planes 
-
-
 typedef struct s_plane {
     t_point point;
     t_vector normal;
@@ -86,7 +95,7 @@ t_intersection *ft_get_nearest_intersection(t_ray *ray, t_scene *scene);
 
 typedef struct s_cone
 {
-    t_vector center;  // Base center of the cone
+    t_vector center; 
     t_vector axis;    // Direction vector of the cone's axis
     float diameter;  // Base diameter of the cone
     float height;    // Height of the cone

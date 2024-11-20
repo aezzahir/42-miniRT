@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   miniRT.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/20 22:07:49 by iben-haj          #+#    #+#             */
+/*   Updated: 2024/11/20 22:10:13 by iben-haj         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 /**
  * @file miniRT.h
  * @brief Main header file for the miniRT project
@@ -18,7 +30,6 @@
 #include "render.h"
 #include "parser.h"
 #include "geometry.h"
-#include "utils.h"
 #include "scene_cleanup.h"
 
 #define WIDTH 920

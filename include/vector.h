@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   vector.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/20 22:08:20 by iben-haj          #+#    #+#             */
+/*   Updated: 2024/11/20 22:08:41 by iben-haj         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 /**
  * @file vector.h
  * @brief Header file for vector operations
@@ -29,6 +41,6 @@ t_vector vector_reflect(t_vector incident, t_vector normal);
 float vector_length(t_vector v);
 void vector_print(t_vector v);
 
-#endif /* VECTOR_H */
+#endif 
 
 
