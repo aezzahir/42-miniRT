@@ -34,6 +34,13 @@ t_cone *create_cone(t_point center, t_vector axis, float diameter, float height,
  
     return (cone);
 }
+float check_height(float t_check, t_ray *ray, t_cone *cone) {
+    if (t_check < 0)
+        return false;
+    t_point hit = vector_add(ray->origin, vector_multiply(ray->direction, t_check));
+    float height = vector_dot_product(vector_subtract(hit, cone->center), cone->axis);
+    return (height >= 0 && height <= cone->height);
+}
 
 float get_cone_distance(t_ray *ray, t_cone *cone)
 {
@@ -68,19 +75,13 @@ float get_cone_distance(t_ray *ray, t_cone *cone)
     float t = INFINITY;
     
     // Function to check if a intersection point is within cone height
-    float check_height(float t_check) {
-        if (t_check < 0)
-            return false;
-        t_point hit = vector_add(ray->origin, vector_multiply(ray->direction, t_check));
-        float height = vector_dot_product(vector_subtract(hit, cone->center), cone->axis);
-        return (height >= 0 && height <= cone->height);
-    }
+
     
     // Check near intersection first
-    if (check_height(t_near))
+    if (check_height(t_near, ray, cone))
         t = t_near;
     // If near intersection is not valid, check far intersection
-    else if (check_height(t_far))
+    else if (check_height(t_far, ray, cone))
         t = t_far;
 
     // Check base cap

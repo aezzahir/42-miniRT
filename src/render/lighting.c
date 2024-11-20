@@ -14,26 +14,26 @@ t_color calculate_diffuse(t_scene *scene, t_vector normal, t_vector light_dir, t
     return color_multiply(color_scale(scene->light.color, diff * scene->light.brightness), object_color);
 }
 
-t_color calculate_specular(t_scene *scene, t_vector normal, t_vector light_dir, t_vector view_dir) {
-    // Material properties
-    const float ks = 0.8;           // Specular coefficient (0-1)
-    const float shininess = 32.0;   // Shininess factor (higher = sharper highlight)
-    
-    // Calculate reflection vector using R = 2(N·L)N - L
-    t_vector reflect_dir = vector_reflect(vector_negate(light_dir), normal);
-    
-    // Calculate view-reflection angle
-    float cos_alpha = fmaxf(vector_dot_product(view_dir, reflect_dir), 0.0);
-    
-    // Calculate specular intensity with physical falloff
-    float spec = ks * powf(cos_alpha, shininess);
-    
-    // Apply light properties
-    float intensity = spec * scene->light.brightness;
-    
-    // Calculate final specular color with energy conservation
+t_color calculate_specular(t_scene *scene, t_vector normal, t_vector light_dir,
+                           t_vector view_dir)
+{
+    float ks;
+    float shininess;
+    t_vector reflect_dir;
+    float cos_alpha;
+    float spec;
+    float intensity;
+
+    ks = 0.8;
+    shininess = 32.0;
+    reflect_dir = vector_reflect(vector_negate(light_dir), normal);
+    cos_alpha = fmaxf(vector_dot_product(view_dir, reflect_dir), 0.0);
+    spec = ks * powf(cos_alpha, shininess);
+    intensity = spec * scene->light.brightness;
+
     return color_scale(scene->light.color, intensity);
 }
+
 
 float calculate_shadow(t_scene *scene, t_point hit_point, t_vector light_dir) {
     float light_distance = vector_length(vector_subtract(scene->light.position, hit_point));
