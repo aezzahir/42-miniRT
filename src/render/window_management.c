@@ -6,12 +6,11 @@ void my_pixel_put(t_img *img, int x, int y, int color) {
     *((unsigned int *)(img->img_pixel_ptr + offset)) = color;
 }
 
-
-
 int expose_hook(t_mlx_data *data) {
     data->redraw_needed = 1;  // Set redraw flag
     return 0;
 }
+
 int key_hook(int keycode, t_mlx_data *data) {
     // printf("key released --> %d\n", keycode);
     if (keycode == 65307) {  // ESC key
@@ -52,30 +51,42 @@ int handle_user_input(int key, t_scene *scene) {
     float rot_speed = 0.1;
     float trans_speed = 0.5;
     float d_h = 0;
-    switch (key) {
-        // Rotation
-        case 65362: rotation.x = rot_speed; break;  // Up arrow
-        case 65364: rotation.x = -rot_speed; break; // Down arrow
-        case 65361: rotation.y = rot_speed; break;  // Left arrow
-        case 65363: rotation.y = -rot_speed; break; // Right arrow
-        case 113:   rotation.z = rot_speed; break;  // 'q' key
-        case 101:   rotation.z = -rot_speed; break; // 'e' key
-        
-        // Translation
-        case 119: translation.z = trans_speed; break;  // 'w' key
-        case 115: translation.z = -trans_speed; break; // 's' key
-        case 97:  translation.x = -trans_speed; break; // 'a' key
-        case 100: translation.x = trans_speed; break;  // 'd' key
-        case 122: translation.y = trans_speed; break;  // 'z' key
-        case 120: translation.y = -trans_speed; break; // 'x' key
 
-        case 'r': color.r++; break; // 'r' key
-        case 'g': color.g++; break; // 'g' key
-        case 'b': color.b++; break; // 'b' key
-
-        case 61: d_h = 0.5; break;
-        case '-': d_h = -0.5; break;
-    }
+    if (key == 65362)        // Up arrow
+        rotation.x = rot_speed;
+    else if (key == 65364)   // Down arrow
+        rotation.x = -rot_speed;
+    else if (key == 65361)   // Left arrow
+        rotation.y = rot_speed;
+    else if (key == 65363)   // Right arrow
+        rotation.y = -rot_speed;
+    else if (key == 113)     // 'q' key
+        rotation.z = rot_speed;
+    else if (key == 101)     // 'e' key
+        rotation.z = -rot_speed;
+    // Translation
+    else if (key == 119)     // 'w' key
+        translation.z = trans_speed;
+    else if (key == 115)     // 's' key
+        translation.z = -trans_speed;
+    else if (key == 97)      // 'a' key
+        translation.x = -trans_speed;
+    else if (key == 100)     // 'd' key
+        translation.x = trans_speed;
+    else if (key == 122)     // 'z' key
+        translation.y = trans_speed;
+    else if (key == 120)     // 'x' key
+        translation.y = -trans_speed;
+    else if (key == 'r')     // 'r' key
+        color.r++;
+    else if (key == 'g')     // 'g' key
+        color.g++;
+    else if (key == 'b')     // 'b' key
+        color.b++;
+    else if (key == 61)      // '=' key
+        d_h = 0.5;
+    else if (key == '-')     // '-' key
+        d_h = -0.5;
     if (d_h != 0)
         ft_resize_unique_property(scene, 0, d_h);
     if (rotation.x != 0 || rotation.y != 0 || rotation.z != 0 ||
@@ -84,6 +95,7 @@ int handle_user_input(int key, t_scene *scene) {
     }
     return (0);
 }
+
 int mouse_hook(int button, int x, int y, t_mlx_data *data) {
     float d_r = 0;
     // printf("Mouse button %d clicked at (%d, %d)\n", button, x, y);
@@ -151,30 +163,25 @@ int ft_close(t_mlx_data *data)
     return (0);
 }
 t_vector get_object_position(t_object *object){
-     switch (object->type) {
-        case SPH: {
-            t_sphere *sphere = (t_sphere *)object->shape;
-            return(sphere->center);
-            break;
-        }
-        case CYL: {
-            t_cylinder *cylinder = (t_cylinder *)object->shape;
-            return(cylinder->center);
-            break;
-        }
-        case PLN: {
-            t_plane *plane = (t_plane *)object->shape;
-            return(plane->point);
-            break;
-        }
-        case CONE:
-        {
-            t_cone *cone = (t_cone *)object->shape;
-            return(cone->center);
-            break;
-        }
-        default:
-           break;;
+    if (object->type == SPH)
+    {
+    t_sphere *sphere = (t_sphere *)object->shape;
+    return(sphere->center);
+    }
+    else if (object->type == CYL)
+    {
+    t_cylinder *cylinder = (t_cylinder *)object->shape;
+    return(cylinder->center);
+    }
+    else if (object->type == PLN)
+    {
+    t_plane *plane = (t_plane *)object->shape;
+    return(plane->point);
+    }
+    else if (object->type == CONE)
+    {
+    t_cone *cone = (t_cone *)object->shape;
+    return(cone->center);
     }
     return (t_vector){0, 0, 0};
 

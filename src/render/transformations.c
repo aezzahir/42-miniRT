@@ -84,25 +84,16 @@ void object_rotate(t_object *o, t_vector r)
 
 void object_translate(t_object *object, t_vector translation)
 {
-    switch (object->type) {
-        case SPH:
-            ((t_sphere *)(object->shape))->center = vector_add(((t_sphere *)(object->shape))->center, translation);
-            break;
-        case PLN:
-           ((t_plane *)(object->shape))->point = vector_add(((t_plane *)(object->shape))->point, translation);
-            break;
-        case CYL:
-            ((t_cylinder *)(object->shape))->center = vector_add(((t_cylinder *)(object->shape))->center, translation);
-            break;
-        case CONE:
-            ((t_cone *)(object->shape))->center = vector_add(((t_cone *)(object->shape))->center, translation);
-            break;
-        case LIGHT:
-            ((t_light*)(object->shape))->position = vector_add(((t_light*)(object->shape))->position, translation);
-            break;
-        default:
-            break;
-    }
+    if (object->type == SPH)
+    ((t_sphere *)(object->shape))->center = vector_add(((t_sphere *)(object->shape))->center, translation);
+    else if (object->type == PLN)
+    ((t_plane *)(object->shape))->point = vector_add(((t_plane *)(object->shape))->point, translation);
+    else if (object->type == CYL)
+    ((t_cylinder *)(object->shape))->center = vector_add(((t_cylinder *)(object->shape))->center, translation);
+    else if (object->type == CONE)
+    ((t_cone *)(object->shape))->center = vector_add(((t_cone *)(object->shape))->center, translation);
+    else if (object->type == LIGHT)
+    ((t_light*)(object->shape))->position = vector_add(((t_light*)(object->shape))->position, translation);
 }
 
 static void ft_add_resize(float *d_h, float dx)
@@ -115,43 +106,30 @@ void ft_resize_unique_property(t_scene *scene, float d_r, float d_h) {
     t_object *object;
 
     object = &(scene->selected_object);
-    switch (object->type) {
-        case SPH:
-            ft_add_resize(&(((t_sphere *)(object->shape))->diameter), d_r);
-            break;
-        case CYL:
-            ft_add_resize(&(((t_cylinder *)(object->shape))->diameter), d_r);
-            ft_add_resize(&(((t_cylinder *)(object->shape))->height), d_h);
-            break;
-        case CONE:
-            ft_add_resize(&(((t_cone *)(object->shape))->diameter), d_r);
-            ft_add_resize(&(((t_cone *)(object->shape))->height), d_h);
-            break;
-        default:
-            break;
-
+    if (object->type == SPH)
+    ft_add_resize(&(((t_sphere *)(object->shape))->diameter), d_r);
+    else if (object->type == CYL)
+    {
+    ft_add_resize(&(((t_cylinder *)(object->shape))->diameter), d_r);
+    ft_add_resize(&(((t_cylinder *)(object->shape))->height), d_h);
+    }
+    else if (object->type == CONE)
+    {
+    ft_add_resize(&(((t_cone *)(object->shape))->diameter), d_r);
+    ft_add_resize(&(((t_cone *)(object->shape))->height), d_h);
     }
 }
 void change_color(t_object *object, t_color color) {
-    switch (object->type) {
-        case SPH:
-            color_add_ptr(&(((t_sphere *)(object->shape))->color), color);
-            break;
-        case PLN:
-            color_add_ptr(&(((t_plane *)(object->shape))->color), color);
-            break;
-        case CYL:
-            color_add_ptr(&(((t_cylinder *)(object->shape))->color), color);
-            break;
-        case CONE:
-            color_add_ptr(&(((t_cone *)(object->shape))->color), color);
-            break;
-        case LIGHT:
-            color_add_ptr(&(((t_light *)(object->shape))->color), color);
-            break;
-        default:
-            break;
-    }
+    if (object->type == SPH)
+        color_add_ptr(&(((t_sphere *)(object->shape))->color), color);
+    else if (object->type == PLN)
+        color_add_ptr(&(((t_plane *)(object->shape))->color), color);
+    else if (object->type == CYL)
+        color_add_ptr(&(((t_cylinder *)(object->shape))->color), color);
+    else if (object->type == CONE)
+         color_add_ptr(&(((t_cone *)(object->shape))->color), color);
+    else if (object->type == LIGHT)
+        color_add_ptr(&(((t_light *)(object->shape))->color), color);
 }
 // Scene transformation function
 void transform_scene(t_scene *scene, t_vector rotation, t_vector translation, t_color color) {
