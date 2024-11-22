@@ -6,7 +6,7 @@
 /*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:08:02 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/20 22:08:03 by iben-haj         ###   ########.fr       */
+/*   Updated: 2024/11/22 08:03:30 by iben-haj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ void transform_scene(t_scene *scene, t_vector rotation, t_vector translation, t_
 void ft_resize_unique_property(t_scene *scene, float d_r, float d_h);
 
 
+
+
 // WINDOW MANAGEMENT 
 
 void my_pixel_put(t_img *img, int x, int y, int color);
@@ -92,5 +94,6 @@ int ft_close(t_mlx_data *data);
 int mouse_press(int button, int x, int y, t_mlx_data *data);
 int mouse_release(int button, int x, int y, t_mlx_data *data);
 int mouse_move(int x, int y, t_mlx_data *data);
+
 
 #endif  // RENDER_H

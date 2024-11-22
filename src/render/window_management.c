@@ -6,7 +6,7 @@
 /*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:13:17 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/20 22:13:18 by iben-haj         ###   ########.fr       */
+/*   Updated: 2024/11/22 08:52:18 by iben-haj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,37 +18,6 @@ void my_pixel_put(t_img *img, int x, int y, int color) {
     *((unsigned int *)(img->img_pixel_ptr + offset)) = color;
 }
 
-int expose_hook(t_mlx_data *data) {
-    data->redraw_needed = 1;  // Set redraw flag
-    return 0;
-}
-
-int key_hook(int keycode, t_mlx_data *data) {
-    // printf("key released --> %d\n", keycode);
-    if (keycode == 65307) {  // ESC key
-        ft_close(data);
-    }
-    if (keycode == 'c') {
-        data->scene->selected_object.type = CAM;
-    }
-    if (keycode == 'l') {
-        data->scene->selected_object.type = LIGHT;
-        data->scene->selected_object.shape = &(data->scene->light);
-        // printf("Light's position: ");
-        vector_print(data->scene->light.position);
-    }
-    if (keycode == 'r') {
-        data->redraw_needed = 1;
-    }
-    
-    // Handle transformations
-    handle_user_input(keycode, data->scene);
-    
-    // Set redraw flag after any transformation
-    data->redraw_needed = 1;
-    
-    return 0;
-}
 
 int key_press(int keycode, t_mlx_data *data) {
     // printf("Key pressed: %d\n", keycode);
@@ -108,72 +77,6 @@ int handle_user_input(int key, t_scene *scene) {
     return (0);
 }
 
-int mouse_hook(int button, int x, int y, t_mlx_data *data) {
-    float d_r = 0;
-    // printf("Mouse button %d clicked at (%d, %d)\n", button, x, y);
-    if (button == 1) data->mouse.is_left_pressed = 1;
-    if (button == 3) data->mouse.is_right_pressed = 1;
-    if (button == 4 || button == 5)
-    {
-        if (button == 4)
-            d_r = 0.5;
-        else
-            d_r = -0.5;
-        ft_resize_unique_property(data->scene, d_r, 0);
-    }
-    data->mouse.last_x = x;
-    data->mouse.last_y = y;
-    if (button == 1)
-    {
-        t_ray ray = ft_generate_ray(x, y, data->scene);
-        t_intersection *inter = ft_get_nearest_intersection(&ray, data->scene);
-        if (inter)
-        {
-            (data->scene->selected_object).type = inter->object_type;
-            (data->scene->selected_object).shape = inter->object;
-            free(inter);
-        }
-    }
-    data->redraw_needed = 1;
-    return 0;
-}
-
-int mouse_release(int button, int x, int y, t_mlx_data *data) {
-    (void)x;
-    (void)y;
-    if (button == 1) data->mouse.is_left_pressed = 0;
-    if (button == 3) data->mouse.is_right_pressed = 0;
-    return 0;
-}
-
-int loop_hook(t_mlx_data *data) {
-    if (data->redraw_needed) {
-        render_scene(data->scene, data);
-        mlx_put_image_to_window(data->mlx_connection, data->mlx_window, data->image.img_ptr, 0, 0);
-        data->redraw_needed = 0;  // Reset the redraw flag
-    }
-    return 0;
-}
-
-
-
-
-int ft_close(t_mlx_data *data)
-{
-    // Add these cleanup calls:
-    if (data->mlx_connection)
-    {
-        if (data->image.img_ptr)
-            mlx_destroy_image(data->mlx_connection, data->image.img_ptr);   
-        if (data->mlx_window)
-            mlx_destroy_window(data->mlx_connection, data->mlx_window);
-        mlx_destroy_display(data->mlx_connection);  // Add this
-        free(data->mlx_connection);                 // Add this
-    }
-    clear_scene(data->scene);
-    exit(0);  // Clean exit
-    return (0);
-}
 t_vector get_object_position(t_object *object){
     if (object->type == SPH)
     {
@@ -198,6 +101,7 @@ t_vector get_object_position(t_object *object){
     return (t_vector){0, 0, 0};
 
 }
+
 t_vector get_world_space_translation(t_mlx_data *data, t_camera *camera, int dx, int dy) {
    // Calculate the change in world coordinates for mouse movement
    
@@ -225,21 +129,3 @@ t_vector get_world_space_translation(t_mlx_data *data, t_camera *camera, int dx,
    return vector_multiply(translation, distance_scale);
 }
 
-int mouse_move(int x, int y, t_mlx_data *data) {
-    if (data && (data->mouse.is_left_pressed || data->mouse.is_right_pressed)) {
-        int dx = x - data->mouse.last_x;
-        int dy = y - data->mouse.last_y;
-        
-        
-        t_vector translation = get_world_space_translation(data, &data->scene->camera, dx, dy);
-        
-        // Apply translation to the selected object or camera
-        if (data->mouse.is_left_pressed)
-            transform_scene(data->scene, (t_vector){0, 0, 0}, translation, (t_color){0, 0, 0});
-        data->redraw_needed = 1;
-    }
-    
-    data->mouse.last_x = x;
-    data->mouse.last_y = y;
-    return 0;
-}

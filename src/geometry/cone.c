@@ -6,7 +6,7 @@
 /*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:08:50 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/20 22:08:51 by iben-haj         ###   ########.fr       */
+/*   Updated: 2024/11/22 05:21:24 by iben-haj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ t_cone *create_cone(t_point center, t_vector axis, float diameter, float height,
  
     return (cone);
 }
+
 float check_height(float t_check, t_ray *ray, t_cone *cone) {
     if (t_check < 0)
         return false;

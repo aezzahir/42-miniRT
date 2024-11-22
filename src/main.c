@@ -6,7 +6,7 @@
 /*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:13:28 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/20 22:13:29 by iben-haj         ###   ########.fr       */
+/*   Updated: 2024/11/22 08:59:57 by iben-haj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@
 #include "../include/miniRT.h"
 
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[]) 
+{
     t_mlx_data data;
     t_scene scene;
 
@@ -104,7 +105,8 @@ int main(int argc, char *argv[]) {
 
 
 
-int mlx_data_init(t_mlx_data *data) {
+int mlx_data_init(t_mlx_data *data) 
+{
     data->width = WIDTH;
     data->height = HEIGHT;
     data->mlx_connection = mlx_init();

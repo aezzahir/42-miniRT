@@ -6,7 +6,7 @@
 /*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:07:49 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/20 22:10:13 by iben-haj         ###   ########.fr       */
+/*   Updated: 2024/11/22 08:48:23 by iben-haj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,6 @@ typedef struct s_light {
 // Camera structure
 
 
-
-
-
-
 typedef struct s_scene {
     t_object  selected_object;
     t_ambient ambient;
@@ -82,11 +78,21 @@ typedef struct s_scene {
 } t_scene;
 
 
-
-
+// parsing
+int parse_scene(char *filename, t_scene *scene);
+double ft_atof(const char *str);
+char	*get_next_line(int fd);
+int parse_ambient(char *line, t_scene *scene);
+int parse_light(char *line, t_scene *scene);
+int parse_sphere(char *line, t_scene *scene);
+int parse_cylinder(char *line, t_scene *scene);
+int parse_cone(char *line, t_scene *scene);
+int parse_plane(char *line, t_scene *scene);
+int parse_color(char *str, t_color *color);
+void	ft_free_split(char **str);
+int parse_vector(char *str, t_vector *vec);
 
 // Function prototypes
-int parse_scene(char *filename, t_scene *scene);
 int mlx_data_init(t_mlx_data *data);
 void ft_scene_init(t_scene *scene);
 void render_scene(t_scene *scene, t_mlx_data *data);
@@ -101,6 +107,19 @@ t_color calculate_reflection(t_ray *ray, t_intersection *intersection, t_scene *
 t_color calculate_refraction(t_ray *ray, t_intersection *intersection, t_scene *scene, int depth);
 int vector_refract(t_vector incident, t_vector normal, float eta, t_vector *refracted);
 
+
+// rotate
+t_vector rotate_x(t_vector v, float angle);
+t_vector rotate_y(t_vector v, float angle);
+t_vector rotate_z(t_vector v, float angle);
+void object_rotate(t_object *o, t_vector r);
+void camera_rotate(t_camera *camera, t_vector rotation);
+
+t_color anti_alias_pixel(t_scene *scene, int x, int y);
+
+t_vector ft_get_surface_normal_vector(t_intersection *inter);
+t_ray ft_generate_ray(float x, float y, t_scene *scene);
+void ft_enable_intersecton(t_intersection *inter, int value);
 
 t_intersection *create_intersection(t_ray *ray, t_hit_info *hit);
 #endif /* MINIRT_H */

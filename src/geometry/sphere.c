@@ -6,7 +6,7 @@
 /*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:12:47 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/20 22:12:48 by iben-haj         ###   ########.fr       */
+/*   Updated: 2024/11/22 05:23:23 by iben-haj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void ft_print_sphere(void *content)
     sphere = (t_sphere *)content;
     printf("Sphere:  center (%2f, %2f, %2f) \n", sphere->center.x,sphere->center.y, sphere->center.z);
 }
+
 t_sphere *create_sphere(t_point origin, float diameter, t_color color)
 {
     t_sphere *sphere = NULL;

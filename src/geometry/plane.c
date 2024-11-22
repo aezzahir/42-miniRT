@@ -6,7 +6,7 @@
 /*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:08:59 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/20 22:09:00 by iben-haj         ###   ########.fr       */
+/*   Updated: 2024/11/22 05:23:12 by iben-haj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ float get_plane_distance(t_ray *ray, t_plane *plane)
 {
     float denom = vector_dot_product(plane->normal, ray->direction);
 
-    if (fabs(denom) < 1e-6)  // Ray is parallel to plane
+    if (fabs(denom) < 1e-6) 
         return INFINITY;
 
     t_vector v = vector_subtract(plane->point, ray->origin);

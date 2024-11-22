@@ -6,7 +6,7 @@
 /*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:08:20 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/20 22:08:41 by iben-haj         ###   ########.fr       */
+/*   Updated: 2024/11/22 05:32:35 by iben-haj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 #ifndef VECTOR_H
 #define VECTOR_H
-
+    
 typedef struct s_vector {
     float x;
     float y;

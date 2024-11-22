@@ -6,7 +6,7 @@
 /*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:07:43 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/20 22:07:44 by iben-haj         ###   ########.fr       */
+/*   Updated: 2024/11/22 08:00:42 by iben-haj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,6 @@ typedef struct s_cylinder {
 
 t_cylinder *create_cylinder(t_point center, t_vector axis, float diameter, float height, t_color color);
 t_vector calculate_cylinder_normal(t_cylinder *cylinder, t_point intersection_point);
-void ft_print_cylinder(void *content);
-
 
 //// --------------------- planes 
 typedef struct s_plane {
@@ -106,7 +104,6 @@ typedef struct s_cone
 void ft_print_cone(void *content);
 t_cone *create_cone(t_point center, t_vector axis, float diameter, float height, t_color color);
 t_vector calculate_cone_normal(t_cone *cone, t_point hit_point);
-
 
 
 

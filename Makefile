@@ -6,7 +6,7 @@
 #    By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/20 22:13:36 by iben-haj          #+#    #+#              #
-#    Updated: 2024/11/20 22:13:37 by iben-haj         ###   ########.fr        #
+#    Updated: 2024/11/22 08:40:32 by iben-haj         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,14 @@ SRC_DIR = src
 SRC_FILES = main.c \
 			clean_up.c \
 			parse/config_reader.c \
+			parse/atof.c \
+			parse/next_line.c \
+			parse/parse_light.c \
+			parse/parse_shapes.c \
             geometry/vector.c   \
+            geometry/vector1.c   \
+            geometry/vector2.c   \
+            geometry/vector3.c   \
 			geometry/plane.c \
             geometry/sphere.c   \
 			geometry/cone.c  \
@@ -31,7 +38,12 @@ SRC_FILES = main.c \
 			render/lighting.c \
 			render/transformations.c \
 			render/color.c \
-			render/window_management.c
+			render/window_management.c \
+			utils/rotate.c \
+			utils/nearest_intersection.c \
+			utils/hooks.c \
+			utils/rays.c \
+			utils/anti_alias.c \
 
 SRC = $(addprefix $(SRC_DIR)/, $(SRC_FILES))
 OBJ = $(SRC:.c=.o)

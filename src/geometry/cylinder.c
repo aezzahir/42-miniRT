@@ -6,7 +6,7 @@
 /*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:08:54 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/20 22:08:55 by iben-haj         ###   ########.fr       */
+/*   Updated: 2024/11/22 05:22:59 by iben-haj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
  * cylinder.c
  * Implements cylinder intersection and normal calculations
  */
+ 
 #include "../../include/miniRT.h"
 
 t_cylinder *create_cylinder(t_point center, t_vector axis, float diameter, float height, t_color color)
@@ -125,16 +126,3 @@ t_vector calculate_cylinder_normal(t_cylinder *cyl, t_point hit_point) {
     t_vector normal = vector_subtract(cp, projection);  // This gives the vector perpendicular to the axis
     return vector_normalize(normal);  // Normalize the result to get the normal direction
 }
-
-
-void ft_print_cylinder(void *content)
-{
-    t_cylinder *cylinder;
-
-    cylinder = (t_cylinder *)content;
-    printf("Cylinder: center (%2f, %2f, %2f), axis (%2f, %2f, %2f), diameter %2f, height %2f\n",
-           cylinder->center.x, cylinder->center.y, cylinder->center.z,
-           cylinder->axis.x, cylinder->axis.y, cylinder->axis.z,
-           cylinder->diameter, cylinder->height);
-}
-

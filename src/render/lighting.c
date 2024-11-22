@@ -6,7 +6,7 @@
 /*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:13:06 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/20 22:13:07 by iben-haj         ###   ########.fr       */
+/*   Updated: 2024/11/22 05:25:03 by iben-haj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,3 +64,7 @@ float calculate_shadow(t_scene *scene, t_point hit_point, t_vector light_dir) {
     
     return 1.0;  // No shadow
 }
+
+
+
+
