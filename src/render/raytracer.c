@@ -6,7 +6,7 @@
 /*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:13:11 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/22 08:51:46 by iben-haj         ###   ########.fr       */
+/*   Updated: 2024/11/22 16:46:05 by iben-haj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,108 +29,84 @@ float	get_object_distance(t_ray *ray, void *object, t_object_type type)
 		return (get_cone_distance(ray, (t_cone *)object));
 	return (INFINITY);
 }
+// Helper function to calculate normal based on object type
+static t_vector get_normal(void *object, t_vector point, int type)
+{
+    if (type == SPH)
+        return vector_normalize(vector_subtract(point, ((t_sphere *)object)->center));
+    if (type == CYL)
+        return calculate_cylinder_normal(object, point);
+    if (type == PLN)
+        return ((t_plane *)object)->normal;
+    if (type == CONE)
+        return calculate_cone_normal(object, point);
+    return (t_vector){0, 0, 0}; // Default if unknown type
+}
 
 // Create intersection only when needed
-t_intersection	*create_intersection(t_ray *ray, t_hit_info *hit)
+t_intersection *create_intersection(t_ray *ray, t_hit_info *hit)
 {
-	t_intersection	*inter;
+    t_intersection *inter;
 
-	inter = malloc(sizeof(t_intersection));
-	if (!inter)
-		return (NULL);
-	inter->t = hit->distance;
-	inter->point = vector_add(ray->origin, vector_multiply(ray->direction,
-				hit->distance));
-	inter->object = hit->object;
-	inter->object_type = hit->type;
-	// Set color and normal based on object type
-	if (hit->type == SPH)
-	{
-		inter->color = ((t_sphere *)hit->object)->color;
-		inter->normal = vector_normalize(vector_subtract(inter->point,
-					((t_sphere *)hit->object)->center));
-	}
-	else if (hit->type == CYL)
-	{
-		inter->color = ((t_cylinder *)hit->object)->color;
-		inter->normal = calculate_cylinder_normal(hit->object, inter->point);
-	}
-	else if (hit->type == PLN)
-	{
-		inter->color = ((t_plane *)hit->object)->color;
-		inter->normal = ((t_plane *)hit->object)->normal;
-	}
-	else if (hit->type == CONE)
-	{
-		inter->color = ((t_cone *)hit->object)->color;
-		inter->normal = calculate_cone_normal(hit->object, inter->point);
-	}
-	return (inter);
+    inter = malloc(sizeof(t_intersection));
+    if (!inter)
+        return NULL;
+
+    inter->t = hit->distance;
+    inter->point = vector_add(ray->origin, vector_multiply(ray->direction, hit->distance));
+    inter->object = hit->object;
+    inter->object_type = hit->type;
+
+    // Set color and normal based on object type
+    if (hit->type == SPH)
+        inter->color = ((t_sphere *)hit->object)->color;
+    else if (hit->type == CYL)
+        inter->color = ((t_cylinder *)hit->object)->color;
+    else if (hit->type == PLN)
+        inter->color = ((t_plane *)hit->object)->color;
+    else if (hit->type == CONE)
+        inter->color = ((t_cone *)hit->object)->color;
+
+    inter->normal = get_normal(hit->object, inter->point, hit->type);
+
+    return inter;
 }
 
-t_vector	ft_get_surface_normal_vector(t_intersection *inter)
-{
-	t_vector	normal;
-	t_sphere	*sphere;
-	t_cylinder	*cylinder;
-	t_cone		*cone;
 
-	normal = (t_vector){0, 0, 0};
-	if (!inter)
-		return (normal);
-	if (inter->object_type == SPH)
-	{
-		sphere = (t_sphere *)inter->object;
-		normal = vector_normalize(vector_subtract(inter->point,
-					sphere->center));
-	}
-	else if (inter->object_type == CYL)
-	{
-		cylinder = (t_cylinder *)inter->object;
-		normal = calculate_cylinder_normal(cylinder, inter->point);
-	}
-	else if (inter->object_type == PLN)
-	{
-		normal = ((t_plane *)inter->object)->normal;
-	}
-	else if (inter->object_type == CONE)
-	{
-		cone = (t_cone *)inter->object;
-		normal = calculate_cone_normal(cone, inter->point);
-	}
-	return (normal);
+t_vector ft_get_surface_normal_vector(t_intersection *inter)
+{
+    t_vector normal = {0, 0, 0};
+
+    if (!inter)
+        return normal;
+
+    if (inter->object_type == SPH)
+        normal = vector_normalize(vector_subtract(inter->point, ((t_sphere *)inter->object)->center));
+    else if (inter->object_type == CYL)
+        normal = calculate_cylinder_normal((t_cylinder *)inter->object, inter->point);
+    else if (inter->object_type == PLN)
+        normal = ((t_plane *)inter->object)->normal;
+    else if (inter->object_type == CONE)
+        normal = calculate_cone_normal((t_cone *)inter->object, inter->point);
+
+    return normal;
 }
+
+
 void	ft_enable_intersecton(t_intersection *inter, int value)
 {
-	t_sphere	*sphere;
-	t_cylinder	*cylinder;
-	t_plane		*plane;
-	t_cone		*cone;
-
 	if (!inter)
 		return ;
 	if (inter->object_type == SPH)
-	{
-		sphere = (t_sphere *)inter->object;
-		sphere->enable_intersection = value;
-	}
+		((t_sphere *)inter->object)->enable_intersection = value;
 	else if (inter->object_type == CYL)
-	{
-		cylinder = (t_cylinder *)inter->object;
-		cylinder->enable_intersection = value;
-	}
+		((t_cylinder *)inter->object)->enable_intersection = value;
 	else if (inter->object_type == PLN)
-	{
-		plane = (t_plane *)inter->object;
-		plane->enable_intersection = value;
-	}
+		((t_plane *)inter->object)->enable_intersection = value;
 	else if (inter->object_type == CONE)
-	{
-		cone = (t_cone *)inter->object;
-		cone->enable_intersection = value;
-	}
-	return ;
+		((t_cone *)inter->object)->enable_intersection = value;
 }
+
 
 void	render_scene(t_scene *scene, t_mlx_data *data)
 {

@@ -6,7 +6,7 @@
 #    By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/20 22:13:36 by iben-haj          #+#    #+#              #
-#    Updated: 2024/11/22 08:40:32 by iben-haj         ###   ########.fr        #
+#    Updated: 2024/11/22 10:13:32 by iben-haj         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,6 +44,7 @@ SRC_FILES = main.c \
 			utils/hooks.c \
 			utils/rays.c \
 			utils/anti_alias.c \
+			utils/mouse.c \
 
 SRC = $(addprefix $(SRC_DIR)/, $(SRC_FILES))
 OBJ = $(SRC:.c=.o)

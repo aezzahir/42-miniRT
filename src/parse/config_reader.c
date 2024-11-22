@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   config_reader.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benhajdahmaneilyes <benhajdahmaneilyes@    +#+  +:+       +#+        */
+/*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:12:55 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/22 09:31:35 by benhajdahma      ###   ########.fr       */
+/*   Updated: 2024/11/22 16:12:24 by iben-haj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,25 @@ static int	parse_camera(char *line, t_scene *scene)
 	return (1);
 }
 
+static int	parse_line(char *line, t_scene *scene)
+{
+	if (ft_strncmp(line, "A ", 2) == 0)
+		return (parse_ambient(line, scene));
+	else if (ft_strncmp(line, "C ", 2) == 0)
+		return (parse_camera(line, scene));
+	else if (ft_strncmp(line, "L ", 2) == 0)
+		return (parse_light(line, scene));
+	else if (ft_strncmp(line, "sp ", 3) == 0)
+		return (parse_sphere(line, scene));
+	else if (ft_strncmp(line, "pl ", 3) == 0)
+		return (parse_plane(line, scene));
+	else if (ft_strncmp(line, "cy ", 3) == 0)
+		return (parse_cylinder(line, scene));
+	else if (ft_strncmp(line, "co ", 3) == 0)
+		return (parse_cone(line, scene));
+	return (1);
+}
+
 int	parse_scene(char *filename, t_scene *scene)
 {
 	int		fd;
@@ -101,23 +120,14 @@ int	parse_scene(char *filename, t_scene *scene)
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
 		return (0);
-	while (line = get_next_line(fd))
+	while ((line = get_next_line(fd)))
 	{
-		if (ft_strncmp(line, "A ", 2) == 0 && !parse_ambient(line, scene))
+		if (!parse_line(line, scene))
+		{
+			free(line);
+			close(fd);
 			return (0);
-		else if (ft_strncmp(line, "C ", 2) == 0 && !parse_camera(line, scene))
-			return (0);
-		else if (ft_strncmp(line, "L ", 2) == 0 && !parse_light(line, scene))
-			return (0);
-		else if (ft_strncmp(line, "sp ", 3) == 0 && !parse_sphere(line, scene))
-			return (0);
-		else if (ft_strncmp(line, "pl ", 3) == 0 && !parse_plane(line, scene))
-			return (0);
-		else if (ft_strncmp(line, "cy ", 3) == 0 && !parse_cylinder(line,
-				scene))
-			return (0);
-		else if (ft_strncmp(line, "co ", 3) == 0 && !parse_cone(line, scene))
-			return (0);
+		}
 		free(line);
 	}
 	close(fd);

@@ -6,7 +6,7 @@
 /*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:13:06 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/22 05:25:03 by iben-haj         ###   ########.fr       */
+/*   Updated: 2024/11/22 10:05:18 by iben-haj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,21 +55,20 @@ t_color	calculate_specular(t_scene *scene, t_vector normal, t_vector light_dir,
 float	calculate_shadow(t_scene *scene, t_point hit_point, t_vector light_dir)
 {
 	float			light_distance;
-	t_ray			shadow_ray;
 	t_intersection	*shadow_intersection;
 
 	light_distance = vector_length(vector_subtract(scene->light.position,
 				hit_point));
-	shadow_ray = {hit_point, light_dir};
-	shadow_intersection = ft_get_nearest_intersection(&shadow_ray, scene);
+    t_ray shadow_ray = {hit_point, light_dir};
+    shadow_intersection = ft_get_nearest_intersection(&shadow_ray, scene);
 	if (shadow_intersection && shadow_intersection->t < 0.99 * light_distance)
 	{
 		free(shadow_intersection);
-		return (0.0); // Full shadow
+		return (0.0);
 	}
 	if (shadow_intersection)
 	{
 		free(shadow_intersection);
 	}
-	return (1.0); // No shadow
+	return (1.0);
 }

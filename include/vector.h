@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benhajdahmaneilyes <benhajdahmaneilyes@    +#+  +:+       +#+        */
+/*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:08:20 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/22 09:19:57 by benhajdahma      ###   ########.fr       */
+/*   Updated: 2024/11/22 09:58:04 by iben-haj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,7 @@ typedef struct s_vector
 	float			z;
 }					t_vector;
 typedef t_vector	t_point;
-// the point and vector have the same representation but different meaning a point is as specific location in the 3D space P(x,
-	y, z)
-							// but a vector is not he indicate a direction and a magnitude V(x,
-								y, z)
+
 // Vector operations
 t_vector			vector_create(float x, float y, float z);
 	t_vector vector_add(t_vector v1, t_vector v2);

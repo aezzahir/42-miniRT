@@ -1,40 +1,67 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   rays.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/22 17:02:31 by iben-haj          #+#    #+#             */
+/*   Updated: 2024/11/22 17:02:32 by iben-haj         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/miniRT.h"
+
+
+static t_color	handle_no_intersection(t_scene *scene)
+{
+	return (color_scale(scene->ambient.color, scene->ambient.ratio));
+}
+
+static t_color	compute_lighting(t_scene *scene, t_intersection *intersection, t_ray *ray)
+{
+	t_vector	normal;
+	t_vector	light_dir;
+	t_vector	view_dir;
+	t_color		ambient;
+	t_color		diffuse;
+	t_color		specular;
+	float		shadow_factor;
+	t_color		local_color;
+
+	normal = ft_get_surface_normal_vector(intersection);
+	light_dir = vector_normalize(vector_subtract(scene->light.position, intersection->point));
+	view_dir = vector_normalize(vector_negate(ray->direction));
+	ambient = calculate_ambient(scene, intersection->color);
+	diffuse = calculate_diffuse(scene, normal, light_dir, intersection->color);
+	specular = calculate_specular(scene, normal, light_dir, view_dir);
+	shadow_factor = calculate_shadow(scene, intersection->point, light_dir);
+	local_color = color_add(ambient, color_scale(color_add(diffuse, specular), shadow_factor));
+
+	return (local_color);
+}
+
 
 t_color	trace_ray(t_ray *ray, t_scene *scene, int depth)
 {
 	t_intersection	*intersection;
-	t_vector		normal;
-	t_vector		light_dir;
-	t_vector		view_dir;
-	t_color			ambient;
-	t_color			diffuse;
-	t_color			specular;
-	float			shadow_factor;
 	t_color			local_color;
 
 	if (depth <= 0)
 		return (scene->ambient.color);
+
 	intersection = ft_get_nearest_intersection(ray, scene);
 	if (!intersection)
-		return (color_scale(scene->ambient.color, scene->ambient.ratio));
-	normal = ft_get_surface_normal_vector(intersection);
-	light_dir = vector_normalize(vector_subtract(scene->light.position,
-				intersection->point));
-	view_dir = vector_normalize(vector_negate(ray->direction));
-	// Basic lighting components
-	ambient = calculate_ambient(scene, intersection->color);
-	diffuse = calculate_diffuse(scene, normal, light_dir, intersection->color);
-	specular = calculate_specular(scene, normal, light_dir, view_dir);
-	// Shadow calculation
+		return (handle_no_intersection(scene));
+
 	ft_enable_intersecton(intersection, 0);
-	shadow_factor = calculate_shadow(scene, intersection->point, light_dir);
+	local_color = compute_lighting(scene, intersection, ray);
 	ft_enable_intersecton(intersection, 1);
-	// Combine basic lighting
-	local_color = color_add(ambient, color_scale(color_add(diffuse, specular),
-				shadow_factor));
+
 	free(intersection);
 	return (local_color);
 }
+
 
 t_ray	ft_generate_ray(float x, float y, t_scene *scene)
 {

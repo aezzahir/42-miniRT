@@ -6,7 +6,7 @@
 /*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:07:49 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/22 08:48:23 by iben-haj         ###   ########.fr       */
+/*   Updated: 2024/11/22 22:23:00 by iben-haj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,14 @@ typedef struct s_scene {
     t_list **cones;
 } t_scene;
 
+typedef struct s_quadratic_params
+{
+    float a;
+    float b;
+    float c;
+    float discriminant;
+} t_quadratic_params;
+
 
 // parsing
 int parse_scene(char *filename, t_scene *scene);
@@ -122,4 +130,7 @@ t_ray ft_generate_ray(float x, float y, t_scene *scene);
 void ft_enable_intersecton(t_intersection *inter, int value);
 
 t_intersection *create_intersection(t_ray *ray, t_hit_info *hit);
+
+t_vector	get_world_space_translation(t_mlx_data *data, t_camera *camera,
+		int dx, int dy);
 #endif /* MINIRT_H */

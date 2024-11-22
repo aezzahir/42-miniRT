@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   window_management.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benhajdahmaneilyes <benhajdahmaneilyes@    +#+  +:+       +#+        */
+/*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:13:17 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/22 09:39:33 by benhajdahma      ###   ########.fr       */
+/*   Updated: 2024/11/22 16:56:57 by iben-haj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,97 +28,91 @@ int	key_press(int keycode, t_mlx_data *data)
 	return (0);
 }
 
+
+
+static void	handle_rotation(int key, t_vector *rotation, float rot_speed)
+{
+	if (key == 65362)
+		rotation->x = rot_speed;
+	else if (key == 65364)
+		rotation->x = -rot_speed;
+	else if (key == 65361)
+		rotation->y = rot_speed;
+	else if (key == 65363)
+		rotation->y = -rot_speed;
+	else if (key == 113)
+		rotation->z = rot_speed;
+	else if (key == 101)
+		rotation->z = -rot_speed;
+}
+
+static void	handle_translation(int key, t_vector *translation, float trans_speed)
+{
+	if (key == 119)
+		translation->z = trans_speed;
+	else if (key == 115)
+		translation->z = -trans_speed;
+	else if (key == 97)
+		translation->x = -trans_speed;
+	else if (key == 100)
+		translation->x = trans_speed;
+	else if (key == 122)
+		translation->y = trans_speed;
+	else if (key == 120)
+		translation->y = -trans_speed;
+}
+
+static void	handle_color_and_resize(int key, t_color *color, float *d_h)
+{
+	if (key == 'r')
+		color->r++;
+	else if (key == 'g')
+		color->g++;
+	else if (key == 'b')
+		color->b++;
+	else if (key == 61)
+		*d_h = 0.5;
+	else if (key == '-')
+		*d_h = -0.5;
+}
+
 int	handle_user_input(int key, t_scene *scene)
 {
-	t_vector	rotation;
-	t_vector	translation;
-	t_color		color;
-	float		rot_speed;
-	float		trans_speed;
-	float		d_h;
+	float		rot_speed = 0.1;
+	float		trans_speed = 0.5;
+	float		d_h = 0;
+	t_vector	rotation = {0, 0, 0};
+	t_vector	translation = {0, 0, 0};
+	t_color		color = {0, 0, 0};
 
-	rotation = {0, 0, 0};
-	translation = {0, 0, 0};
-	color = {0, 0, 0};
-	rot_speed = 0.1;
-	trans_speed = 0.5;
-	d_h = 0;
-	if (key == 65362)
-		rotation.x = rot_speed;
-	else if (key == 65364) /
-		rotation.x = -rot_speed;
-	else if (key == 65361)
-		rotation.y = rot_speed;
-	else if (key == 65363)
-		rotation.y = -rot_speed;
-	else if (key == 113)
-		rotation.z = rot_speed;
-	else if (key == 101)
-		rotation.z = -rot_speed;
-
-    // Translation
-	else if (key == 119)
-		translation.z = trans_speed;
-	else if (key == 115)
-		translation.z = -trans_speed;
-	else if (key == 97)
-		translation.x = -trans_speed;
-	else if (key == 100)
-		translation.x = trans_speed;
-	else if (key == 122)
-		translation.y = trans_speed;
-	else if (key == 120)
-		translation.y = -trans_speed;
-	else if (key == 'r')
-		color.r++;
-	else if (key == 'g')
-		color.g++;
-	else if (key == 'b')
-		color.b++;
-	else if (key == 61)
-		d_h = 0.5;
-	else if (key == '-')
-		d_h = -0.5;
+	handle_rotation(key, &rotation, rot_speed);
+	handle_translation(key, &translation, trans_speed);
+	handle_color_and_resize(key, &color, &d_h);
 	if (d_h != 0)
 		ft_resize_unique_property(scene, 0, d_h);
-	if (rotation.x != 0 || rotation.y != 0 || rotation.z != 0
-		|| translation.x != 0 || translation.y != 0 || translation.z != 0
-		|| color.r || color.g || color.b)
-	{
+	if (rotation.x || rotation.y || rotation.z || translation.x
+		|| translation.y || translation.z || color.r || color.g || color.b)
 		transform_scene(scene, rotation, translation, color);
-	}
+
 	return (0);
 }
 
-t_vector	get_object_position(t_object *object)
-{
-	t_sphere	*sphere;
-	t_cylinder	*cylinder;
-	t_plane		*plane;
-	t_cone		*cone;
 
-	if (object->type == SPH)
-	{
-		sphere = (t_sphere *)object->shape;
-		return (sphere->center);
-	}
-	else if (object->type == CYL)
-	{
-		cylinder = (t_cylinder *)object->shape;
-		return (cylinder->center);
-	}
-	else if (object->type == PLN)
-	{
-		plane = (t_plane *)object->shape;
-		return (plane->point);
-	}
-	else if (object->type == CONE)
-	{
-		cone = (t_cone *)object->shape;
-		return (cone->center);
-	}
-	return ((t_vector){0, 0, 0});
+
+t_vector get_object_position(t_object *object)
+{
+    if (object->type == SPH)
+        return ((t_sphere *)object->shape)->center;
+    else if (object->type == CYL)
+        return ((t_cylinder *)object->shape)->center;
+    else if (object->type == PLN)
+        return ((t_plane *)object->shape)->point;
+    else if (object->type == CONE)
+        return ((t_cone *)object->shape)->center;
+    
+    return (t_vector){0, 0, 0};
 }
+
 
 t_vector	get_world_space_translation(t_mlx_data *data, t_camera *camera,
 		int dx, int dy)

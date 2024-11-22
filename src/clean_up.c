@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean_up.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benhajdahmaneilyes <benhajdahmaneilyes@    +#+  +:+       +#+        */
+/*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:13:25 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/22 09:56:15 by benhajdahma      ###   ########.fr       */
+/*   Updated: 2024/11/22 22:23:04 by iben-haj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,44 +48,40 @@ void	free_cone(void *content)
 		free(cone);
 }
 
-// Main scene cleanup function
-void	clear_scene(t_scene *scene)
+void clear_object_list(t_list **object_list, void (*free_func)(void *))
 {
-	if (!scene)
-		return ;
-	if (scene->spheres)
-	{
-		ft_lstclear(scene->spheres, free_sphere);
-		free(scene->spheres);
-		scene->spheres = NULL;
-	}
-	if (scene->planes)
-	{
-		ft_lstclear(scene->planes, free_plane);
-		free(scene->planes);
-		scene->planes = NULL;
-	}
-	if (scene->cylinders)
-	{
-		ft_lstclear(scene->cylinders, free_cylinder);
-		free(scene->cylinders);
-		scene->cylinders = NULL;
-	}
-	if (scene->cones)
-	{
-		ft_lstclear(scene->cones, free_cone);
-		free(scene->cones);
-		scene->cones = NULL;
-	}
-	scene->camera.position = (t_vector){0, 0, 0};
-	scene->camera.orientation = (t_vector){0, 0, 0};
-	scene->camera.fov = 0;
-	scene->light.position = (t_vector){0, 0, 0};
-	scene->light.brightness = 0;
-	scene->light.color = (t_color){0, 0, 0};
-	scene->ambient.ratio = 0;
-	scene->ambient.color = (t_color){0, 0, 0};
+    if (object_list && *object_list)
+    {
+        ft_lstclear(object_list, free_func);
+        free(object_list);
+        *object_list = NULL;
+    }
 }
+
+void clear_scene(t_scene *scene)
+{
+    if (!scene)
+        return;
+    clear_object_list(scene->spheres, free_sphere);
+    clear_object_list(scene->planes, free_plane);
+    clear_object_list(scene->cylinders, free_cylinder);
+    clear_object_list(scene->cones, free_cone);
+    scene->camera = (t_camera){
+        .position = {0, 0, 0},
+        .orientation = {0, 0, 0},
+        .fov = 0
+    };
+    scene->light = (t_light){
+        .position = {0, 0, 0},
+        .brightness = 0,
+        .color = {0, 0, 0}
+    };
+    scene->ambient = (t_ambient){
+        .ratio = 0,
+        .color = {0, 0, 0}
+    };
+}
+
 
 void	reset_scene(t_scene *scene)
 {
