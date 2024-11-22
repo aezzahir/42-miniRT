@@ -17,23 +17,27 @@
 
 #include "../../include/miniRT.h"
 
+t_vector	vector_reflect(t_vector incident, t_vector normal)
+{
+	float		dot;
+	t_vector	scaled_normal;
 
-t_vector vector_reflect(t_vector incident, t_vector normal) {
-    float dot = vector_dot_product(incident, normal);
-    t_vector scaled_normal = vector_multiply(normal, 2 * dot);
-    return vector_subtract(incident, scaled_normal);
+	dot = vector_dot_product(incident, normal);
+	scaled_normal = vector_multiply(normal, 2 * dot);
+	return (vector_subtract(incident, scaled_normal));
 }
 
-float vector_length(t_vector v) {
-    return vector_magnitude(v);
+float	vector_length(t_vector v)
+{
+	return (vector_magnitude(v));
 }
 
-void vector_print(t_vector v) {
-    printf("Vector: (%.2f, %.2f, %.2f)\n", v.x, v.y, v.z);
+void	vector_print(t_vector v)
+{
+	printf("Vector: (%.2f, %.2f, %.2f)\n", v.x, v.y, v.z);
 }
 
-t_vector vector_translate(t_vector v, t_vector translation) {
-    return vector_add(v, translation);
+t_vector	vector_translate(t_vector v, t_vector translation)
+{
+	return (vector_add(v, translation));
 }
-
-

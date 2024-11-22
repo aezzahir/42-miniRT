@@ -17,26 +17,28 @@
 
 #include "../../include/miniRT.h"
 
-t_vector vector_create(float x, float y, float z) {
-    return (t_vector){x, y, z};
+t_vector	vector_create(float x, float y, float z)
+{
+	return ((t_vector){x, y, z});
 }
 
-t_vector vector_add(t_vector v1, t_vector v2) {
-    return vector_create(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
+t_vector	vector_add(t_vector v1, t_vector v2)
+{
+	return (vector_create(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z));
 }
 
-t_vector vector_subtract(t_vector v1, t_vector v2) {
-    return vector_create(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
+t_vector	vector_subtract(t_vector v1, t_vector v2)
+{
+	return (vector_create(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z));
 }
 
-float vector_dot_product(t_vector v1, t_vector v2) {
-    return (v1.x * v2.x) + (v1.y * v2.y) + (v1.z * v2.z);
+float	vector_dot_product(t_vector v1, t_vector v2)
+{
+	return (v1.x * v2.x) + (v1.y * v2.y) + (v1.z * v2.z);
 }
 
-t_vector vector_cross_product(t_vector v1, t_vector v2) {
-    return vector_create(
-        (v1.y * v2.z) - (v1.z * v2.y),
-        (v1.z * v2.x) - (v1.x * v2.z),
-        (v1.x * v2.y) - (v1.y * v2.x)
-    );
+t_vector	vector_cross_product(t_vector v1, t_vector v2)
+{
+	return (vector_create((v1.y * v2.z) - (v1.z * v2.y), (v1.z * v2.x) - (v1.x
+				* v2.z), (v1.x * v2.y) - (v1.y * v2.x)));
 }
