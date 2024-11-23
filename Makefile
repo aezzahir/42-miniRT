@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+         #
+#    By: benhajdahmaneilyes <benhajdahmaneilyes@    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/20 22:13:36 by iben-haj          #+#    #+#              #
-#    Updated: 2024/11/22 10:13:32 by iben-haj         ###   ########.fr        #
+#    Updated: 2024/11/23 09:53:51 by benhajdahma      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,7 @@ MLX = $(MLX_DIR)/libmlx.a
 SRC_DIR = src
 SRC_FILES = main.c \
 			clean_up.c \
+			clean_up_helper.c \
 			parse/config_reader.c \
 			parse/atof.c \
 			parse/next_line.c \
@@ -42,10 +43,14 @@ SRC_FILES = main.c \
 			render/window_management.c \
 			utils/rotate.c \
 			utils/nearest_intersection.c \
+			utils/nearest_intersection1.c \
 			utils/hooks.c \
+			utils/hooks_helper.c \
 			utils/rays.c \
 			utils/anti_alias.c \
 			utils/mouse.c \
+			utils/helpers.c \
+			utils/helpers1.c \
 
 SRC = $(addprefix $(SRC_DIR)/, $(SRC_FILES))
 OBJ = $(SRC:.c=.o)

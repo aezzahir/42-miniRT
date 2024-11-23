@@ -46,32 +46,35 @@ t_vector	rotate_z(t_vector v, float angle)
 }
 
 // Helper function to apply rotation to any axis
-static void apply_rotation(t_vector *axis, t_vector r)
+static void	apply_rotation(t_vector *axis, t_vector r)
 {
-    *axis = rotate_x(*axis, r.x);
-    *axis = rotate_y(*axis, r.y);
-    *axis = rotate_z(*axis, r.z);
+	*axis = rotate_x(*axis, r.x);
+	*axis = rotate_y(*axis, r.y);
+	*axis = rotate_z(*axis, r.z);
 }
 
-void object_rotate(t_object *o, t_vector r)
+void	object_rotate(t_object *o, t_vector r)
 {
-    if (o->type == PLN)
-    {
-        t_plane *plane = (t_plane *)o->shape;
-        apply_rotation(&plane->normal, r);
-    }
-    else if (o->type == CYL)
-    {
-        t_cylinder *cylinder = (t_cylinder *)o->shape;
-        apply_rotation(&cylinder->axis, r);
-    }
-    else if (o->type == CONE)
-    {
-        t_cone *cone = (t_cone *)o->shape;
-        apply_rotation(&cone->axis, r);
-    }
-}
+	t_plane		*plane;
+	t_cylinder	*cylinder;
+	t_cone		*cone;
 
+	if (o->type == PLN)
+	{
+		plane = (t_plane *)o->shape;
+		apply_rotation(&plane->normal, r);
+	}
+	else if (o->type == CYL)
+	{
+		cylinder = (t_cylinder *)o->shape;
+		apply_rotation(&cylinder->axis, r);
+	}
+	else if (o->type == CONE)
+	{
+		cone = (t_cone *)o->shape;
+		apply_rotation(&cone->axis, r);
+	}
+}
 
 void	camera_rotate(t_camera *camera, t_vector rotation)
 {

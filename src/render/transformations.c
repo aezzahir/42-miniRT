@@ -3,19 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   transformations.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benhajdahmaneilyes <benhajdahmaneilyes@    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:13:14 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/22 08:50:36 by iben-haj         ###   ########.fr       */
+/*   Updated: 2024/11/23 09:40:35 by benhajdahma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/miniRT.h"
-
-void	camera_translate(t_camera *camera, t_vector translation)
-{
-	camera->position = vector_add(camera->position, translation);
-}
 
 void	object_translate(t_object *object, t_vector translation)
 {
@@ -34,12 +29,6 @@ void	object_translate(t_object *object, t_vector translation)
 	else if (object->type == LIGHT)
 		((t_light *)(object->shape))->position = vector_add(((t_light *)(object->shape))->position,
 				translation);
-}
-
-static void	ft_add_resize(float *d_h, float dx)
-{
-	if (*d_h + dx >= 0)
-		*d_h += dx;
 }
 
 void	ft_resize_unique_property(t_scene *scene, float d_r, float d_h)
@@ -78,12 +67,11 @@ void	change_color(t_object *object, t_color color)
 void	transform_scene(t_scene *scene, t_vector rotation, t_vector translation,
 		t_color color)
 {
-	// Transform camera
 	if (scene->selected_object.type == CAM)
 	{
 		camera_rotate(&scene->camera, rotation);
 		camera_translate(&scene->camera, translation);
-		ft_setup_camera(&scene->camera); // recalculate the camera parameters
+		ft_setup_camera(&scene->camera);
 	}
 	else
 	{
