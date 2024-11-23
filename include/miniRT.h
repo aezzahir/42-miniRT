@@ -17,20 +17,19 @@
 
 #ifndef MINIRT_H
 # define MINIRT_H
-# include <X11/keysym.h>
-# include <math.h>
-# include <mlx.h>
-# include <stdbool.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include "vector.h"
 # include "../lib/libft/libft.h"
 # include "color.h"
 # include "geometry.h"
 # include "parser.h"
 # include "render.h"
 # include "scene_cleanup.h"
-
+# include "vector.h"
+# include <X11/keysym.h>
+# include <math.h>
+# include <mlx.h>
+# include <stdbool.h>
+# include <stdio.h>
+# include <stdlib.h>
 
 # define WIDTH 920
 # define HEIGHT 600
@@ -90,13 +89,13 @@ typedef struct s_quadratic_params
 
 typedef struct s_specular_data
 {
-    float       ks;
-    float       shininess;
-    float       cos_alpha;
-    float       spec;
-    float       intensity;
-    t_vector    reflect_dir;
-} t_specular_data;
+	float			ks;
+	float			shininess;
+	float			cos_alpha;
+	float			spec;
+	float			intensity;
+	t_vector		reflect_dir;
+}					t_specular_data;
 
 // parsing
 int					parse_scene(char *filename, t_scene *scene);
@@ -157,17 +156,17 @@ void				free_cone(void *content);
 void				clear_object_list(t_list **object_list,
 						void (*free_func)(void *));
 
-float	check_sphere_intersection(t_ray *ray, t_list *current,
-		t_hit_info *nearest);
-float	check_cylinder_intersection(t_ray *ray, t_list *current,
-		t_hit_info *nearest);
-float	check_plane_intersection(t_ray *ray, t_list *current,
-		t_hit_info *nearest);
-float	check_cone_intersection(t_ray *ray, t_list *current,
-		t_hit_info *nearest);
+float				check_sphere_intersection(t_ray *ray, t_list *current,
+						t_hit_info *nearest);
+float				check_cylinder_intersection(t_ray *ray, t_list *current,
+						t_hit_info *nearest);
+float				check_plane_intersection(t_ray *ray, t_list *current,
+						t_hit_info *nearest);
+float				check_cone_intersection(t_ray *ray, t_list *current,
+						t_hit_info *nearest);
 
-void	camera_translate(t_camera *camera, t_vector translation);
-void	ft_add_resize(float *d_h, float dx);
+void				camera_translate(t_camera *camera, t_vector translation);
+void				ft_add_resize(float *d_h, float dx);
 
-int	mouse_hook(int button, int x, int y, t_mlx_data *data);
+int					mouse_hook(int button, int x, int y, t_mlx_data *data);
 #endif /* MINIRT_H */
