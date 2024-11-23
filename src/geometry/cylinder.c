@@ -36,8 +36,8 @@ float	calculate_discriminant(t_vector v, t_vector oc_perp, float radius)
 
 float	solve_quadratic(float a, float b, float discriminant)
 {
-	float		t_body1;
-	float		t_body2;
+	float	t_body1;
+	float	t_body2;
 
 	t_body1 = (-b - sqrt(discriminant)) / (2 * a);
 	t_body2 = (-b + sqrt(discriminant)) / (2 * a);
@@ -48,10 +48,10 @@ float	solve_quadratic(float a, float b, float discriminant)
 
 bool	is_within_body(t_point body_hit, t_cylinder *cyl)
 {
-	float		body_height;
+	float	body_height;
 
-	body_height = vector_dot_product(vector_subtract(
-				body_hit, cyl->center), cyl->axis);
+	body_height = vector_dot_product(vector_subtract(body_hit, cyl->center),
+			cyl->axis);
 	return (body_height >= 0 && body_height <= cyl->height);
 }
 
@@ -62,8 +62,8 @@ float	get_bottom_cap_distance(t_ray *ray, t_cylinder *cyl, float denom)
 
 	if (fabs(denom) > 1e-6)
 	{
-		t = vector_dot_product(
-				vector_subtract(cyl->center, ray->origin), cyl->axis) / denom;
+		t = vector_dot_product(vector_subtract(cyl->center, ray->origin),
+				cyl->axis) / denom;
 		if (t >= 0)
 		{
 			hit = vector_add(ray->origin, vector_multiply(ray->direction, t));

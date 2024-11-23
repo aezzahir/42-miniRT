@@ -21,7 +21,7 @@ float	get_sphere_distance(t_ray *ray, t_sphere *sphere)
 {
 	t_vector	oc;
 
-	float (a), (b), (c), (discriminant), (t1), (t2);
+	float(a), (b), (c), (discriminant), (t1), (t2);
 	oc = vector_subtract(ray->origin, sphere->center);
 	a = vector_dot_product(ray->direction, ray->direction);
 	b = 2.0 * vector_dot_product(oc, ray->direction);

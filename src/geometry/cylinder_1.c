@@ -55,7 +55,7 @@ float	compute_body_distance(t_ray *ray, t_cylinder *cyl)
 	t_vector	v;
 	t_point		hit;
 
-	float (a), (b), (t_body), (discriminant);
+	float(a), (b), (t_body), (discriminant);
 	oc = vector_subtract(ray->origin, cyl->center);
 	v = get_perpendicular_vector(ray->direction, cyl->axis);
 	oc = get_perpendicular_vector(oc, cyl->axis);
