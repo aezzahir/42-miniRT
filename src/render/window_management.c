@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   window_management.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benhajdahmaneilyes <benhajdahmaneilyes@    +#+  +:+       +#+        */
+/*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:13:17 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/23 11:50:34 by benhajdahma      ###   ########.fr       */
+/*   Updated: 2024/11/23 18:46:47 by iben-haj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	handle_color_and_resize(int key, t_color *color, float *d_h)
 		*d_h = 0.5;
 	else if (key == '-')
 		*d_h = -0.5;
-}
+}	
 
 int	handle_user_input(int key, t_scene *scene)
 {
@@ -70,7 +70,7 @@ t_vector	get_world_space_translation(t_mlx_data *data, t_camera *camera,
 
 	wt.world_dx = (dx * camera->viewport_width) / WIDTH;
 	wt.world_dy = -(dy * camera->viewport_height) / HEIGHT;
-	wt.translation = vector_add(vector_multiply(camera->right, wt.world_dx),
+	wt.translation = vector_add(vector_multiply(camera->forward, wt.world_dx),
 			vector_multiply(camera->up, wt.world_dy));
 	wt.distance_scale = 1.0f;
 	if (data->scene->selected_object.type != NONE)

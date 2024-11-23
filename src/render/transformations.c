@@ -67,6 +67,8 @@ void	change_color(t_object *object, t_color color)
 void	transform_scene(t_scene *scene, t_vector rotation, t_vector translation,
 		t_color color)
 {
+	rotation = cam2world(scene->camera.camera_to_world, &rotation);
+	translation = cam2world(scene->camera.camera_to_world, &translation);
 	if (scene->selected_object.type == CAM)
 	{
 		camera_rotate(&scene->camera, rotation);

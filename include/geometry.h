@@ -15,21 +15,12 @@ typedef enum s_object_type
 	NONE
 }						t_object_type;
 
-typedef struct s_material
-{
-	float				reflectivity;
-	float				transparency;
-	float				refraction_index;
-	float				specularity;
-
-}						t_material;
 
 typedef struct s_sphere
 {
 	t_vector			center;
 	float				diameter;
 	t_color				color;
-	t_material			*material;
 	int					enable_intersection;
 }						t_sphere;
 
@@ -65,7 +56,6 @@ typedef struct s_cylinder
 	float				diameter;
 	float				height;
 	t_color				color;
-	t_material			*material;
 	int					enable_intersection;
 }						t_cylinder;
 
@@ -79,7 +69,6 @@ typedef struct s_plane {
     t_point point;
     t_vector normal;
     t_color color;
-    t_material *material;
     int enable_intersection;
 } t_plane;
 
@@ -90,8 +79,8 @@ t_intersection			*ft_get_nearest_intersection(t_ray *ray,
 
 typedef struct s_cone
 {
-    t_vector center;  // Base center of the cone
-    t_vector axis;    // Direction vector of the cone's axis
+    t_point center;  // cone tip
+    t_vector axis;    // Direction vector of the cone's axis down from the tip
     float diameter;  // Base diameter of the cone
     float height;    // Height of the cone
     t_color color;    // Color of the cone
