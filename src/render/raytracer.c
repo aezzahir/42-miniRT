@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raytracer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benhajdahmaneilyes <benhajdahmaneilyes@    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:13:11 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/23 10:10:42 by iben-haj         ###   ########.fr       */
+/*   Updated: 2024/11/23 11:45:27 by benhajdahma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,20 +28,6 @@ float	get_object_distance(t_ray *ray, void *object, t_object_type type)
 	if (type == CONE)
 		return (get_cone_distance(ray, (t_cone *)object));
 	return (INFINITY);
-}
-
-static t_vector	get_normal(void *object, t_vector point, int type)
-{
-	if (type == SPH)
-		return (vector_normalize(vector_subtract(point,
-					((t_sphere *)object)->center)));
-	if (type == CYL)
-		return (calculate_cylinder_normal(object, point));
-	if (type == PLN)
-		return (((t_plane *)object)->normal);
-	if (type == CONE)
-		return (calculate_cone_normal(object, point));
-	return ((t_vector){0, 0, 0});
 }
 
 t_intersection	*create_intersection(t_ray *ray, t_hit_info *hit)
@@ -72,7 +58,7 @@ t_vector	ft_get_surface_normal_vector(t_intersection *inter)
 {
 	t_vector	normal;
 
-	normal = vector_create(0, 0, 0);
+	normal = {0, 0, 0};
 	if (!inter)
 		return (normal);
 	if (inter->object_type == SPH)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lighting.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benhajdahmaneilyes <benhajdahmaneilyes@    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:13:06 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/23 10:13:12 by iben-haj         ###   ########.fr       */
+/*   Updated: 2024/11/23 11:51:37 by benhajdahma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,20 +36,15 @@ t_color	calculate_diffuse(t_scene *scene, t_vector normal, t_vector light_dir,
 t_color	calculate_specular(t_scene *scene, t_vector normal, t_vector light_dir,
 		t_vector view_dir)
 {
-	float		ks;
-	float		shininess;
-	t_vector	reflect_dir;
-	float		cos_alpha;
-	float		spec;
-	float		intensity;
+	t_specular_data	s;
 
-	ks = 0.8;
-	shininess = 32.0;
-	reflect_dir = vector_reflect(vector_negate(light_dir), normal);
-	cos_alpha = fmaxf(vector_dot_product(view_dir, reflect_dir), 0.0);
-	spec = ks * powf(cos_alpha, shininess);
-	intensity = spec * scene->light.brightness;
-	return (color_scale(scene->light.color, intensity));
+	s.ks = 0.8;
+	s.shininess = 32.0;
+	s.reflect_dir = vector_reflect(vector_negate(light_dir), normal);
+	s.cos_alpha = fmaxf(vector_dot_product(view_dir, s.reflect_dir), 0.0);
+	s.spec = s.ks * powf(s.cos_alpha, s.shininess);
+	s.intensity = s.spec * scene->light.brightness;
+	return (color_scale(scene->light.color, s.intensity));
 }
 
 float	calculate_shadow(t_scene *scene, t_point hit_point, t_vector light_dir)
