@@ -17,49 +17,39 @@
 
 #include "../../include/miniRT.h"
 
-t_cylinder	*create_cylinder(t_point center, t_vector axis, float diameter,
-		float height, t_color color)
-{
-	t_cylinder	*cylinder;
-
-	cylinder = NULL;
-	cylinder = (t_cylinder *)malloc(sizeof(t_cylinder));
-	if (!cylinder)
-	{
-		printf("malloc error in create_cylinder\n");
-		return (NULL);
-	}
-	cylinder->center = center;
-	cylinder->axis = vector_normalize(axis);
-	cylinder->diameter = diameter;
-	cylinder->height = height;
-	cylinder->color = color;
-	return (cylinder);
-}
-
 t_vector get_perpendicular_vector(t_vector v, t_vector axis)
 {
     return vector_subtract(v, vector_multiply(axis, vector_dot_product(v, axis)));
 }
 
-float calculate_discriminant(t_vector v_dir_perpendicular, t_vector oc_perpendicular, float radius)
+float calculate_discriminant(t_vector v_dir_perp, t_vector oc_perp, float radius)
 {
-    float a = vector_dot_product(v_dir_perpendicular, v_dir_perpendicular);
-    float b = 2 * vector_dot_product(v_dir_perpendicular, oc_perpendicular);
-    float c = vector_dot_product(oc_perpendicular, oc_perpendicular) - radius * radius;
+    float   a;
+    float   b;
+    float   c;
+
+    a = vector_dot_product(v_dir_perp, v_dir_perp);
+    b = 2 * vector_dot_product(v_dir_perp, oc_perp);
+    c = vector_dot_product(oc_perp, oc_perp) - radius * radius;
     return b * b - 4 * a * c;
 }
 
 float solve_quadratic(float a, float b, float discriminant)
 {
-    float t_body1 = (-b - sqrt(discriminant)) / (2 * a);
-    float t_body2 = (-b + sqrt(discriminant)) / (2 * a);
+    float   t_body1;
+    float   t_body2;
+
+    t_body1 = (-b - sqrt(discriminant)) / (2 * a);
+    t_body2 = (-b + sqrt(discriminant)) / (2 * a);
     return (t_body1 >= 0) ? t_body1 : t_body2;
 }
 
 bool is_within_body(t_point body_hit, t_cylinder *cyl)
 {
-    float body_height = vector_dot_product(vector_subtract(body_hit, cyl->center), cyl->axis);
+    float   body_height;
+
+    float body_height = vector_dot_product(vector_subtract(
+        body_hit, cyl->center), cyl->axis);
     return (body_height >= 0 && body_height <= cyl->height);
 }
 
