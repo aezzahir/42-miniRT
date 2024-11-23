@@ -54,6 +54,11 @@ void	clear_object_list(t_list **object_list, void (*free_func)(void *))
 	{
 		ft_lstclear(object_list, free_func);
 		free(object_list);
-		*object_list = NULL;
+		object_list = NULL;
+	}
+	else if (object_list)
+	{
+		free(object_list);
+		object_list = NULL;
 	}
 }
