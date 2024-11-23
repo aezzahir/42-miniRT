@@ -6,7 +6,7 @@
 /*   By: benhajdahmaneilyes <benhajdahmaneilyes@    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:13:14 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/23 09:40:35 by benhajdahma      ###   ########.fr       */
+/*   Updated: 2024/11/23 19:59:37 by benhajdahma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,20 @@
 void	object_translate(t_object *object, t_vector translation)
 {
 	if (object->type == SPH)
-		((t_sphere *)(object->shape))->center = vector_add(((t_sphere *)(object->shape))->center,
-				translation);
+		((t_sphere *)(object->shape))->center
+			= vector_add(((t_sphere *)(object->shape))->center, translation);
 	else if (object->type == PLN)
-		((t_plane *)(object->shape))->point = vector_add(((t_plane *)(object->shape))->point,
-				translation);
+		((t_plane *)(object->shape))->point
+			= vector_add(((t_plane *)(object->shape))->point, translation);
 	else if (object->type == CYL)
-		((t_cylinder *)(object->shape))->center = vector_add(((t_cylinder *)(object->shape))->center,
-				translation);
+		((t_cylinder *)(object->shape))->center
+			= vector_add(((t_cylinder *)(object->shape))->center, translation);
 	else if (object->type == CONE)
-		((t_cone *)(object->shape))->center = vector_add(((t_cone *)(object->shape))->center,
-				translation);
+		((t_cone *)(object->shape))->center
+			= vector_add(((t_cone *)(object->shape))->center, translation);
 	else if (object->type == LIGHT)
-		((t_light *)(object->shape))->position = vector_add(((t_light *)(object->shape))->position,
-				translation);
+		((t_light *)(object->shape))->position
+			= vector_add(((t_light *)(object->shape))->position, translation);
 }
 
 void	ft_resize_unique_property(t_scene *scene, float d_r, float d_h)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   miniRT.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benhajdahmaneilyes <benhajdahmaneilyes@    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:07:49 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/23 18:44:01 by iben-haj         ###   ########.fr       */
+/*   Updated: 2024/11/23 19:51:47 by benhajdahma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,19 @@
 
 #ifndef MINIRT_H
 # define MINIRT_H
+# include "../lib/libft/libft.h"
+# include "color.h"
+# include "geometry.h"
+# include "parser.h"
+# include "render.h"
+# include "scene_cleanup.h"
+# include "vector.h"
 # include <X11/keysym.h>
 # include <math.h>
 # include <mlx.h>
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
-# include "../lib/libft/libft.h"
-# include "vector.h"
-# include "color.h"
-# include "geometry.h"
-# include "parser.h"
-# include "render.h"
-# include "scene_cleanup.h"
 
 # define WIDTH 920
 # define HEIGHT 600
@@ -53,7 +53,7 @@ typedef struct s_hit_info
 // Ambient light structure
 typedef struct s_ambient
 {
-	float ratio; // ratio of   diffuse light to ambient light
+	float			ratio;
 	t_color			color;
 }					t_ambient;
 
@@ -168,8 +168,8 @@ float				check_cone_intersection(t_ray *ray, t_list *current,
 void				camera_translate(t_camera *camera, t_vector translation);
 void				ft_add_resize(float *d_h, float dx);
 
-int	mouse_hook(int button, int x, int y, t_mlx_data *data);
-t_vector	get_normal(void *object, t_vector point, int type);
+int					mouse_hook(int button, int x, int y, t_mlx_data *data);
+t_vector			get_normal(void *object, t_vector point, int type);
 
-t_vector	cam2world(float m[4][4], t_vector *v);
-#endif /* MINIRT_H */																																																																																																																																																																																																																																																																																		
+t_vector			cam2world(float m[4][4], t_vector *v);
+#endif /* MINIRT_H */

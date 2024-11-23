@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cone.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aezzahir <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: benhajdahmaneilyes <benhajdahmaneilyes@    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 17:58:45 by aezzahir          #+#    #+#             */
-/*   Updated: 2024/11/23 18:04:07 by aezzahir         ###   ########.fr       */
+/*   Updated: 2024/11/23 19:58:55 by benhajdahma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,12 @@ float	get_cone_distance(t_ray *ray, t_cone *cone)
 
 t_vector	calculate_cone_normal(t_cone *c, t_point hit)
 {
+	t_vector	hp;
+	t_vector	axis_point;
+	t_vector	r;
+	t_vector	n;
+
 	float (h), (c_angle);
-t_vector	(hp), (axis_point), (r), (n);
 	hp = vector_subtract(hit, c->center);
 	h = vector_dot_product(vector_negate(c->axis), vector_subtract(
 				hp, vector_multiply(c->axis, c->height)));
@@ -81,10 +85,8 @@ t_vector	(hp), (axis_point), (r), (n);
 	{
 		c_angle = atan2(c->diameter / 2.0f, c->height);
 		return (vector_normalize((t_vector){
-					c->axis.x * tan(c_angle),
-					c->axis.y * tan(c_angle),
-					1.0f
-					}));
+				c->axis.x * tan(c_angle),
+				c->axis.y * tan(c_angle), 1.0f}));
 	}
 	n = vector_normalize(vector_subtract(r,
 				vector_multiply(c->axis, vector_dot_product(r, c->axis))));

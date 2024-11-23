@@ -20,30 +20,30 @@
 
 typedef struct s_color
 {
-	int	r;
-	int	g;
-	int	b;
-}		t_color;
+	int		r;
+	int		g;
+	int		b;
+}			t_color;
 
 typedef struct s_color_sums
 {
-    float r_sum;
-    float g_sum;
-    float b_sum;
-} t_color_sums;
+	float	r_sum;
+	float	g_sum;
+	float	b_sum;
+}			t_color_sums;
 
 typedef struct s_pixel_coords
 {
-    int x;
-    int y;
-    int dx;
-    int dy;
-} t_pixel_coords;
+	int		x;
+	int		y;
+	int		dx;
+	int		dy;
+}			t_pixel_coords;
 
-t_color	color_scale(t_color color, float scalar);
-t_color	color_add(t_color c1, t_color c2);
-t_color	color_multiply(t_color c1, t_color c2);
-int		color_to_int(t_color color);
-void	color_add_ptr(t_color *c1, t_color c2);
+t_color		color_scale(t_color color, float scalar);
+t_color		color_add(t_color c1, t_color c2);
+t_color		color_multiply(t_color c1, t_color c2);
+int			color_to_int(t_color color);
+void		color_add_ptr(t_color *c1, t_color c2);
 
 #endif

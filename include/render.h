@@ -15,8 +15,8 @@
 
 # include "geometry.h"
 # include "miniRT.h"
-# include <stdbool.h>
 # include "vector.h"
+# include <stdbool.h>
 
 /*
  * render.h
@@ -66,33 +66,33 @@ typedef struct s_camera
 	t_vector		forward;
 	t_vector		up;
 	t_vector		right;
-	float camera_to_world[4][4];
+	float			camera_to_world[4][4];
 }					t_camera;
 
 typedef struct s_lighting_vectors
 {
-    t_vector normal;
-    t_vector light_dir;
-    t_vector view_dir;
-} t_lighting_vectors;
+	t_vector		normal;
+	t_vector		light_dir;
+	t_vector		view_dir;
+}					t_lighting_vectors;
 
 typedef struct s_transform
 {
-    t_vector    rotation;
-    t_vector    translation;
-    t_color     color;
-    float       d_h;
-}   t_transform;
+	t_vector		rotation;
+	t_vector		translation;
+	t_color			color;
+	float			d_h;
+}					t_transform;
 
 typedef struct s_world_transform
 {
-    float       world_dx;
-    float       world_dy;
-    float       distance_scale;
-    float       dist;
-    t_vector    translation;
-    t_vector    obj_pos;
-} t_world_transform;
+	float			world_dx;
+	float			world_dy;
+	float			distance_scale;
+	float			dist;
+	t_vector		translation;
+	t_vector		obj_pos;
+}					t_world_transform;
 
 void				ft_setup_camera(t_camera *camera);
 t_ray				ft_generate_ray(float x, float y, t_scene *scene);
@@ -118,11 +118,10 @@ int					ft_close(t_mlx_data *data);
 int					mouse_release(int button, int x, int y, t_mlx_data *data);
 int					mouse_move(int x, int y, t_mlx_data *data);
 
-t_color	handle_no_intersection(t_scene *scene);
+t_color				handle_no_intersection(t_scene *scene);
 t_lighting_vectors	calculate_vectors(t_scene *scene,
-		t_intersection *intersection, t_ray *ray);
+						t_intersection *intersection, t_ray *ray);
 
-t_vector	get_normal(void *object, t_vector point, int type);
-
+t_vector			get_normal(void *object, t_vector point, int type);
 
 #endif // RENDER_H

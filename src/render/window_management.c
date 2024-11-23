@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   window_management.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benhajdahmaneilyes <benhajdahmaneilyes@    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:13:17 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/23 18:46:47 by iben-haj         ###   ########.fr       */
+/*   Updated: 2024/11/23 19:53:57 by benhajdahma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	handle_color_and_resize(int key, t_color *color, float *d_h)
 		*d_h = 0.5;
 	else if (key == '-')
 		*d_h = -0.5;
-}	
+}
 
 int	handle_user_input(int key, t_scene *scene)
 {
