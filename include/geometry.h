@@ -66,7 +66,6 @@ float					get_bottom_cap_distance(t_ray *ray, t_cylinder *cyl,
 
 //// --------------------- planes
 
-<<<<<<< HEAD
 
 typedef struct s_plane {
     t_point point;
@@ -74,16 +73,6 @@ typedef struct s_plane {
     t_color color;
     int enable_intersection;
 } t_plane;
-=======
-typedef struct s_plane
-{
-	t_point				point;
-	t_vector			normal;
-	t_color				color;
-	t_material			*material;
-	int					enable_intersection;
-}						t_plane;
->>>>>>> f1b87228719641bbeabb00e4a6d088373c644e80
 
 t_plane					*create_plane(t_point point, t_vector normal,
 							t_color color);
@@ -92,7 +81,6 @@ t_intersection			*ft_get_nearest_intersection(t_ray *ray,
 
 typedef struct s_cone
 {
-<<<<<<< HEAD
     t_point center;  // cone tip
     t_vector axis;    // Direction vector of the cone's axis down from the tip
     float diameter;  // Base diameter of the cone
@@ -100,15 +88,6 @@ typedef struct s_cone
     t_color color;    // Color of the cone
     int enable_intersection;
 } t_cone;
-=======
-	t_vector center; // Base center of the cone
-	t_vector axis;   // Direction vector of the cone's axis
-	float diameter;  // Base diameter of the cone
-	float height;    // Height of the cone
-	t_color color;   // Color of the cone
-	int					enable_intersection;
-}						t_cone;
->>>>>>> f1b87228719641bbeabb00e4a6d088373c644e80
 
 void					ft_print_cone(void *content);
 t_cone					*create_cone(t_point center, t_vector axis,

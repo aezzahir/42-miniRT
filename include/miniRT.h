@@ -17,19 +17,20 @@
 
 #ifndef MINIRT_H
 # define MINIRT_H
-# include "../lib/libft/libft.h"
-# include "color.h"
-# include "geometry.h"
-# include "parser.h"
-# include "render.h"
-# include "scene_cleanup.h"
-# include "vector.h"
 # include <X11/keysym.h>
 # include <math.h>
 # include <mlx.h>
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include "../lib/libft/libft.h"
+# include "vector.h"
+# include "color.h"
+# include "geometry.h"
+# include "parser.h"
+# include "render.h"
+# include "scene_cleanup.h"
+
 
 # define WIDTH 920
 # define HEIGHT 600
@@ -168,21 +169,6 @@ float				check_cone_intersection(t_ray *ray, t_list *current,
 void				camera_translate(t_camera *camera, t_vector translation);
 void				ft_add_resize(float *d_h, float dx);
 
-<<<<<<< HEAD
 int	mouse_hook(int button, int x, int y, t_mlx_data *data);
-
-
-
-
-
-
-
-
-
-
-
 t_vector	cam2world(float m[4][4], t_vector *v);
-=======
-int					mouse_hook(int button, int x, int y, t_mlx_data *data);
->>>>>>> f1b87228719641bbeabb00e4a6d088373c644e80
 #endif /* MINIRT_H */

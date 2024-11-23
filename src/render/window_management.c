@@ -24,7 +24,7 @@ static void	handle_color_and_resize(int key, t_color *color, float *d_h)
 		*d_h = 0.5;
 	else if (key == '-')
 		*d_h = -0.5;
-}
+}	
 
 int	handle_user_input(int key, t_scene *scene)
 {
