@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   miniRT.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benhajdahmaneilyes <benhajdahmaneilyes@    +#+  +:+       +#+        */
+/*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:07:49 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/23 09:51:54 by benhajdahma      ###   ########.fr       */
+/*   Updated: 2024/11/23 10:03:23 by iben-haj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,13 @@
 #ifndef MINIRT_H
 # define MINIRT_H
 
+# include "vector.h"
 # include "../lib/libft/libft.h"
 # include "color.h"
 # include "geometry.h"
 # include "parser.h"
 # include "render.h"
 # include "scene_cleanup.h"
-# include "vector.h"
 # include <X11/keysym.h>
 # include <math.h>
 # include <mlx.h>
@@ -90,7 +90,6 @@ typedef struct s_quadratic_params
 
 // parsing
 int					parse_scene(char *filename, t_scene *scene);
-bool				init_scene(t_scene *scene);
 double				ft_atof(const char *str);
 char				*get_next_line(int fd);
 int					parse_ambient(char *line, t_scene *scene);

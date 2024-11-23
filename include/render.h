@@ -6,7 +6,7 @@
 /*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:08:02 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/22 08:03:30 by iben-haj         ###   ########.fr       */
+/*   Updated: 2024/11/23 10:02:20 by iben-haj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 # include "geometry.h"
 # include "miniRT.h"
+# include <stdbool.h>
+# include "vector.h"
 
 /*
  * render.h

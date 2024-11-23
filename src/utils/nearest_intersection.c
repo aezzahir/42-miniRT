@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   nearest_intersection.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benhajdahmaneilyes <benhajdahmaneilyes@    +#+  +:+       +#+        */
+/*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 17:02:27 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/23 09:36:31 by benhajdahma      ###   ########.fr       */
+/*   Updated: 2024/11/23 10:16:00 by iben-haj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,9 @@ t_intersection	*ft_get_nearest_intersection(t_ray *ray, t_scene *scene)
 {
 	t_hit_info	nearest;
 
-	nearest = {NULL, INFINITY, NONE};
+	nearest.object = NULL;
+	nearest.distance = INFINITY;
+	nearest.type = NONE;
 	check_spheres(ray, scene, &nearest);
 	check_cylinders(ray, scene, &nearest);
 	check_planes(ray, scene, &nearest);

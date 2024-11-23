@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean_up.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benhajdahmaneilyes <benhajdahmaneilyes@    +#+  +:+       +#+        */
+/*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:13:25 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/23 09:21:26 by benhajdahma      ###   ########.fr       */
+/*   Updated: 2024/11/23 10:05:10 by iben-haj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	reset_scene(t_scene *scene)
 	scene->ambient.color = (t_color){255, 255, 255};
 }
 
-ft_free_shape(t_scene *scene)
+void	ft_free_shape(t_scene *scene)
 {
 	free(scene->spheres);
 	free(scene->planes);

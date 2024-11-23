@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   window_management.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benhajdahmaneilyes <benhajdahmaneilyes@    +#+  +:+       +#+        */
+/*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:13:17 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/23 09:08:53 by benhajdahma      ###   ########.fr       */
+/*   Updated: 2024/11/23 10:14:51 by iben-haj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,11 @@ int	handle_user_input(int key, t_scene *scene)
 	t_color		color;
 	float		d_h;
 
-	rotation = {0, 0, 0};
-	translation = {0, 0, 0};
-	color = {0, 0, 0};
+	rotation = vector_create(0, 0, 0);
+	translation = vector_create(0, 0, 0);
+	color.r = 0;
+	color.g = 0;
+	color.b = 0;
 	d_h = 0;
 	handle_rotation(key, &rotation, rot_speed);
 	handle_translation(key, &translation, trans_speed);

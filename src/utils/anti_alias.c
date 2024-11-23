@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   anti_alias.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benhajdahmaneilyes <benhajdahmaneilyes@    +#+  +:+       +#+        */
+/*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 17:02:12 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/23 09:13:10 by benhajdahma      ###   ########.fr       */
+/*   Updated: 2024/11/23 10:19:26 by iben-haj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,8 @@ t_color	anti_alias_pixel(t_scene *scene, int x, int y)
 		dx++;
 	}
 	total_samples = AA_SAMPLES * AA_SAMPLES;
-	color_sum = {r_sum / total_samples, g_sum / total_samples, b_sum
-		/ total_samples};
+	color_sum.r = r_sum / total_samples;
+	color_sum.g = g_sum / total_samples;
+	color_sum.b = b_sum / total_samples;
 	return (color_sum);
 }
