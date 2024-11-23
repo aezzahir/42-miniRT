@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   helpers1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benhajdahmaneilyes <benhajdahmaneilyes@    +#+  +:+       +#+        */
+/*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 11:15:56 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/23 11:45:34 by benhajdahma      ###   ########.fr       */
+/*   Updated: 2024/11/23 12:04:02 by iben-haj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	ft_add_resize(float *d_h, float dx)
 	if (*d_h + dx >= 0)
 		*d_h += dx;
 }
+
 t_vector	get_normal(void *object, t_vector point, int type)
 {
 	if (type == SPH)
