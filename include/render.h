@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   render.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benhajdahmaneilyes <benhajdahmaneilyes@    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:08:02 by iben-haj          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/11/23 12:00:55 by iben-haj         ###   ########.fr       */
+=======
+/*   Updated: 2024/11/23 11:50:40 by benhajdahma      ###   ########.fr       */
+>>>>>>> 7dd176c941900cb5c56a3a72ab4b1ecf7cd4b832
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,12 +79,28 @@ typedef struct s_lighting_vectors
     t_vector view_dir;
 } t_lighting_vectors;
 
+typedef struct s_transform
+{
+    t_vector    rotation;
+    t_vector    translation;
+    t_color     color;
+    float       d_h;
+}   t_transform;
+
+typedef struct s_world_transform
+{
+    float       world_dx;
+    float       world_dy;
+    float       distance_scale;
+    float       dist;
+    t_vector    translation;
+    t_vector    obj_pos;
+} t_world_transform;
+
 void				ft_setup_camera(t_camera *camera);
 t_ray				ft_generate_ray(float x, float y, t_scene *scene);
 t_color				trace_ray(t_ray *ray, t_scene *scene, int depth);
 void				render_scene(t_scene *scene, t_mlx_data *data);
-bool				is_in_shadow(t_ray *shadow_ray, t_scene *scene,
-						float light_distance);
 void				transform_scene(t_scene *scene, t_vector rotation,
 						t_vector translation, t_color color);
 void				ft_resize_unique_property(t_scene *scene, float d_r,
@@ -98,8 +118,14 @@ int					loop_hook(t_mlx_data *data);
 int					ft_close(t_mlx_data *data);
 
 // --- transformation using the mouse
-int					mouse_press(int button, int x, int y, t_mlx_data *data);
 int					mouse_release(int button, int x, int y, t_mlx_data *data);
 int					mouse_move(int x, int y, t_mlx_data *data);
+
+t_color	handle_no_intersection(t_scene *scene);
+t_lighting_vectors	calculate_vectors(t_scene *scene,
+		t_intersection *intersection, t_ray *ray);
+
+t_vector	get_normal(void *object, t_vector point, int type);
+
 
 #endif // RENDER_H

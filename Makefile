@@ -6,7 +6,11 @@
 #    By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/20 22:13:36 by iben-haj          #+#    #+#              #
+<<<<<<< HEAD
 #    Updated: 2024/11/23 11:18:33 by iben-haj         ###   ########.fr        #
+=======
+#    Updated: 2024/11/23 11:43:37 by benhajdahma      ###   ########.fr        #
+>>>>>>> 7dd176c941900cb5c56a3a72ab4b1ecf7cd4b832
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,6 +52,7 @@ SRC_FILES = main.c \
 			utils/hooks.c \
 			utils/hooks_helper.c \
 			utils/rays.c \
+			utils/rays1.c \
 			utils/anti_alias.c \
 			utils/mouse.c \
 			utils/helpers.c \

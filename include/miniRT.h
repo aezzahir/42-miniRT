@@ -6,7 +6,7 @@
 /*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:07:49 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/23 12:00:56 by iben-haj         ###   ########.fr       */
+/*   Updated: 2024/11/23 12:02:17 by iben-haj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,16 @@ typedef struct s_quadratic_params
 	float			discriminant;
 }					t_quadratic_params;
 
+typedef struct s_specular_data
+{
+    float       ks;
+    float       shininess;
+    float       cos_alpha;
+    float       spec;
+    float       intensity;
+    t_vector    reflect_dir;
+} t_specular_data;
+
 // parsing
 int					parse_scene(char *filename, t_scene *scene);
 double				ft_atof(const char *str);
@@ -104,9 +114,7 @@ int					parse_vector(char *str, t_vector *vec);
 
 // Function prototypes
 int					mlx_data_init(t_mlx_data *data);
-void				ft_scene_init(t_scene *scene);
 void				render_scene(t_scene *scene, t_mlx_data *data);
-void				render_scene_with_aa(t_scene *scene, t_mlx_data *data);
 
 t_color				calculate_ambient(t_scene *scene, t_color object_color);
 t_color				calculate_diffuse(t_scene *scene, t_vector normal,
