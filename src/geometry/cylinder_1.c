@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cylinder.c                                         :+:      :+:    :+:   */
+/*   cylinder_1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benhajdahmaneilyes <benhajdahmaneilyes@    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:08:54 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/23 09:29:21 by aezzahir         ###   ########.fr       */
+/*   Updated: 2024/11/23 11:38:45 by benhajdahma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ float	compute_body_distance(t_ray *ray, t_cylinder *cyl)
 	t_vector	v;
 	t_point		hit;
 
-	float(a), (b), (t_body), (discriminant);
+	float (a), (b), (t_body), (discriminant);
 	oc = vector_subtract(ray->origin, cyl->center);
 	v = get_perpendicular_vector(ray->direction, cyl->axis);
 	oc = get_perpendicular_vector(oc, cyl->axis);

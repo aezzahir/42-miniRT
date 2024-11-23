@@ -6,7 +6,7 @@
 /*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 17:02:24 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/22 17:02:25 by iben-haj         ###   ########.fr       */
+/*   Updated: 2024/11/23 11:27:00 by iben-haj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ int	mouse_move(int x, int y, t_mlx_data *data)
 		dy = y - data->mouse.last_y;
 		translation = get_world_space_translation(data, &data->scene->camera,
 				dx, dy);
-		// Apply translation to the selected object or camera
 		if (data->mouse.is_left_pressed)
 			transform_scene(data->scene, (t_vector){0, 0, 0}, translation,
 				(t_color){0, 0, 0});

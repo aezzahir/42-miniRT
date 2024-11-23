@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean_up.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benhajdahmaneilyes <benhajdahmaneilyes@    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:13:25 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/23 10:05:10 by iben-haj         ###   ########.fr       */
+/*   Updated: 2024/11/23 11:53:27 by benhajdahma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	ft_free_shape(t_scene *scene)
 	free(scene->planes);
 }
 
-bool	init_scene(t_scene *scene)
+static bool	allocate_shapes(t_scene *scene)
 {
 	scene->spheres = malloc(sizeof(t_list *));
 	if (!scene->spheres)
@@ -82,6 +82,13 @@ bool	init_scene(t_scene *scene)
 		free(scene->cylinders);
 		return (false);
 	}
+	return (true);
+}
+
+bool	init_scene(t_scene *scene)
+{
+	if (!allocate_shapes(scene))
+		return (false);
 	*(scene->spheres) = NULL;
 	*(scene->planes) = NULL;
 	*(scene->cylinders) = NULL;

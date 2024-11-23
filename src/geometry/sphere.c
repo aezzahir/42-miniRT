@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sphere.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benhajdahmaneilyes <benhajdahmaneilyes@    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:12:47 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/22 05:23:23 by iben-haj         ###   ########.fr       */
+/*   Updated: 2024/11/23 11:38:28 by benhajdahma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ float	get_sphere_distance(t_ray *ray, t_sphere *sphere)
 {
 	t_vector	oc;
 
-	float(a), (b), (c), (discriminant), (t1), (t2);
+	float (a), (b), (c), (discriminant), (t1), (t2);
 	oc = vector_subtract(ray->origin, sphere->center);
 	a = vector_dot_product(ray->direction, ray->direction);
 	b = 2.0 * vector_dot_product(oc, ray->direction);

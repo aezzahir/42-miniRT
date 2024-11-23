@@ -3,14 +3,44 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benhajdahmaneilyes <benhajdahmaneilyes@    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:13:28 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/22 22:30:33 by iben-haj         ###   ########.fr       */
+/*   Updated: 2024/11/23 11:54:36 by benhajdahma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/miniRT.h"
+
+static void	setup_event_hooks(t_mlx_data *data)
+{
+	mlx_expose_hook(data->mlx_window, expose_hook, data);
+	mlx_key_hook(data->mlx_window, key_hook, data);
+	mlx_mouse_hook(data->mlx_window, mouse_hook, data);
+	mlx_hook(data->mlx_window, 17, 1L << 17, ft_close, data);
+	mlx_loop_hook(data->mlx_connection, loop_hook, data);
+	mlx_hook(data->mlx_window, 2, 1L << 0, key_press, data);
+	mlx_hook(data->mlx_window, 5, 1L << 3, mouse_release, data);
+	mlx_hook(data->mlx_window, 6, 1L << 6, mouse_move, data);
+}
+
+static bool	init_program_data(t_mlx_data *data, t_scene *scene)
+{
+	data->scene = scene;
+	data->mouse.is_left_pressed = 0;
+	data->mouse.is_right_pressed = 0;
+	data->mouse.last_x = 0;
+	data->mouse.last_y = 0;
+	scene->selected_object.type = NONE;
+	scene->selected_object.shape = NULL;
+	if (!mlx_data_init(data))
+	{
+		fprintf(stderr, "Failed to initialize MLX data\n");
+		return (false);
+	}
+	ft_setup_camera(&(scene->camera));
+	return (true);
+}
 
 int	main(int argc, char *argv[])
 {
@@ -28,27 +58,9 @@ int	main(int argc, char *argv[])
 		ft_putstr_fd("Error\nInvalid scene file\n", 2);
 		return (1);
 	}
-	data.scene = &scene;
-	data.mouse.is_left_pressed = 0;
-	data.mouse.is_right_pressed = 0;
-	data.mouse.last_x = 0;
-	data.mouse.last_y = 0;
-	(data.scene)->selected_object.type = NONE;
-	(data.scene)->selected_object.shape = NULL;
-	if (!mlx_data_init(&data))
-	{
-		fprintf(stderr, "Failed to initialize MLX data\n");
+	if (!init_program_data(&data, &scene))
 		return (1);
-	}
-	ft_setup_camera(&(scene.camera));
-	mlx_expose_hook(data.mlx_window, expose_hook, &data);
-	mlx_key_hook(data.mlx_window, key_hook, &data);
-	mlx_mouse_hook(data.mlx_window, mouse_hook, &data);
-	mlx_hook(data.mlx_window, 17, 1L << 17, ft_close, &data);
-	mlx_loop_hook(data.mlx_connection, loop_hook, &data);
-	mlx_hook(data.mlx_window, 2, 1L << 0, key_press, &data);
-	mlx_hook(data.mlx_window, 5, 1L << 3, mouse_release, &data);
-	mlx_hook(data.mlx_window, 6, 1L << 6, mouse_move, &data);
+	setup_event_hooks(&data);
 	render_scene(&scene, &data);
 	mlx_put_image_to_window(data.mlx_connection, data.mlx_window,
 		data.image.img_ptr, 0, 0);

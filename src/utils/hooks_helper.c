@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   hooks_helper.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/23 11:16:15 by iben-haj          #+#    #+#             */
+/*   Updated: 2024/11/23 11:16:34 by iben-haj         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/miniRT.h"
 
 void	handle_button_presses(int button, t_mlx_data *data)
@@ -41,7 +53,7 @@ void	handle_object_selection(int x, int y, t_mlx_data *data)
 	{
 		data->scene->selected_object.type = inter->object_type;
 		data->scene->selected_object.shape = inter->object;
-		free(inter); // Free only if intersection is found
+		free(inter);
 	}
 }
 

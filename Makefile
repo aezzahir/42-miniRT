@@ -6,7 +6,7 @@
 #    By: benhajdahmaneilyes <benhajdahmaneilyes@    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/20 22:13:36 by iben-haj          #+#    #+#              #
-#    Updated: 2024/11/23 09:53:51 by benhajdahma      ###   ########.fr        #
+#    Updated: 2024/11/23 11:43:37 by benhajdahma      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,6 +48,7 @@ SRC_FILES = main.c \
 			utils/hooks.c \
 			utils/hooks_helper.c \
 			utils/rays.c \
+			utils/rays1.c \
 			utils/anti_alias.c \
 			utils/mouse.c \
 			utils/helpers.c \
