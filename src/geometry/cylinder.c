@@ -48,7 +48,7 @@ bool is_within_body(t_point body_hit, t_cylinder *cyl)
 {
     float   body_height;
 
-    float body_height = vector_dot_product(vector_subtract(
+    	body_height = vector_dot_product(vector_subtract(
         body_hit, cyl->center), cyl->axis);
     return (body_height >= 0 && body_height <= cyl->height);
 }

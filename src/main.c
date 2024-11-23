@@ -22,40 +22,7 @@ int	main(int argc, char *argv[])
 		ft_putstr_fd("Error\nUsage: ./miniRT scene_file.rt\n", 2);
 		return (1);
 	}
-	scene.spheres = malloc(sizeof(t_list *));
-	if (!scene.spheres)
-	{
-		ft_putstr_fd("Error\nMemory allocation failed for spheres\n", 2);
-		return (1);
-	}
-	scene.planes = malloc(sizeof(t_list *));
-	if (!scene.planes)
-	{
-		ft_putstr_fd("Error\nMemory allocation failed for planes\n", 2);
-		free(scene.spheres);
-		return (1);
-	}
-	scene.cylinders = malloc(sizeof(t_list *));
-	if (!scene.cylinders)
-	{
-		ft_putstr_fd("Error\nMemory allocation failed for cylinders\n", 2);
-		free(scene.planes);
-		free(scene.spheres);
-		return (1);
-	}
-	scene.cones = malloc(sizeof(t_list *));
-	if (!scene.cones)
-	{
-		ft_putstr_fd("Error\nMemory allocation failed for cylinders\n", 2);
-		free(scene.planes);
-		free(scene.spheres);
-		free(scene.cylinders);
-		return (1);
-	}
-	*(scene.cones) = NULL;
-	*(scene.spheres) = NULL;
-	*(scene.planes) = NULL;
-	*(scene.cylinders) = NULL;
+	init_scene(&scene);
 	if (!parse_scene(argv[1], &scene))
 	{
 		ft_putstr_fd("Error\nInvalid scene file\n", 2);
