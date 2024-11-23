@@ -4,7 +4,6 @@
 typedef struct s_scene t_scene;
 #include "miniRT.h"
 // Sphere structure
-
 typedef enum s_object_type
 {
 	CYL,

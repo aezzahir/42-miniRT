@@ -17,7 +17,12 @@
 
 #ifndef MINIRT_H
 # define MINIRT_H
-
+# include <X11/keysym.h>
+# include <math.h>
+# include <mlx.h>
+# include <stdbool.h>
+# include <stdio.h>
+# include <stdlib.h>
 # include "vector.h"
 # include "../lib/libft/libft.h"
 # include "color.h"
@@ -25,12 +30,7 @@
 # include "parser.h"
 # include "render.h"
 # include "scene_cleanup.h"
-# include <X11/keysym.h>
-# include <math.h>
-# include <mlx.h>
-# include <stdbool.h>
-# include <stdio.h>
-# include <stdlib.h>
+
 
 # define WIDTH 920
 # define HEIGHT 600
