@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: benhajdahmaneilyes <benhajdahmaneilyes@    +#+  +:+       +#+         #
+#    By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/20 22:13:36 by iben-haj          #+#    #+#              #
-#    Updated: 2024/11/23 09:53:51 by benhajdahma      ###   ########.fr        #
+#    Updated: 2024/11/23 11:18:33 by iben-haj         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,6 +42,7 @@ SRC_FILES = main.c \
 			render/color.c \
 			render/window_management.c \
 			utils/rotate.c \
+			utils/rotate_helper.c \
 			utils/nearest_intersection.c \
 			utils/nearest_intersection1.c \
 			utils/hooks.c \

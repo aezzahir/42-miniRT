@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raytracer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: benhajdahmaneilyes <benhajdahmaneilyes@    +#+  +:+       +#+        */
+/*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:13:11 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/23 11:45:27 by benhajdahma      ###   ########.fr       */
+/*   Updated: 2024/11/23 11:57:47 by iben-haj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,9 @@ t_vector	ft_get_surface_normal_vector(t_intersection *inter)
 {
 	t_vector	normal;
 
-	normal = {0, 0, 0};
+	normal.x = 0;
+	normal.y = 0;
+	normal.z = 0;
 	if (!inter)
 		return (normal);
 	if (inter->object_type == SPH)

@@ -111,4 +111,9 @@ float					get_sphere_distance(t_ray *ray, t_sphere *sphere);
 float					get_plane_distance(t_ray *ray, t_plane *plane);
 float					get_cylinder_distance(t_ray *ray, t_cylinder *cyl);
 float					get_cone_distance(t_ray *ray, t_cone *cone);
+
+t_vector	rotate_x(t_vector v, float angle);
+t_vector	rotate_y(t_vector v, float angle);
+t_vector	rotate_z(t_vector v, float angle);
+
 #endif

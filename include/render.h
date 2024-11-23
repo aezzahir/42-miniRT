@@ -6,7 +6,7 @@
 /*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:08:02 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/23 10:02:20 by iben-haj         ###   ########.fr       */
+/*   Updated: 2024/11/23 12:00:55 by iben-haj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,13 @@ typedef struct s_camera
 	t_vector		up;
 	t_vector		right;
 }					t_camera;
+
+typedef struct s_lighting_vectors
+{
+    t_vector normal;
+    t_vector light_dir;
+    t_vector view_dir;
+} t_lighting_vectors;
 
 void				ft_setup_camera(t_camera *camera);
 t_ray				ft_generate_ray(float x, float y, t_scene *scene);
