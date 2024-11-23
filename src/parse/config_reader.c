@@ -3,32 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   config_reader.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benhajdahmaneilyes <benhajdahmaneilyes@    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:12:55 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/22 16:12:24 by iben-haj         ###   ########.fr       */
+/*   Updated: 2024/11/23 09:02:34 by benhajdahma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/miniRT.h"
 #include <fcntl.h>
 #include <unistd.h>
-
-void	ft_free_split(char **str)
-{
-	int	i;
-
-	i = 0;
-	while (str && str[i])
-	{
-		free(str[i]);
-		str[i] = NULL;
-		i++;
-	}
-	if (str)
-		free(str);
-	str = NULL;
-}
 
 int	parse_color(char *str, t_color *color)
 {
@@ -120,7 +104,8 @@ int	parse_scene(char *filename, t_scene *scene)
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
 		return (0);
-	while ((line = get_next_line(fd)))
+	line = get_next_line(fd);
+	while (line)
 	{
 		if (!parse_line(line, scene))
 		{
@@ -129,6 +114,7 @@ int	parse_scene(char *filename, t_scene *scene)
 			return (0);
 		}
 		free(line);
+		line = get_next_line(fd);
 	}
 	close(fd);
 	return (1);

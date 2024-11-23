@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   atof.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benhajdahmaneilyes <benhajdahmaneilyes@    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 09:10:35 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/22 16:09:32 by iben-haj         ###   ########.fr       */
+/*   Updated: 2024/11/23 08:59:04 by benhajdahma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,15 @@ static double	process_digits(const char **str, double *factor, int *seen_dot)
 	result = 0.0;
 	while (**str)
 	{
-		if (**str == '.')
-		{
-			if (*seen_dot)
-				break ;
+		if (**str == '.' && !(*seen_dot))
 			*seen_dot = 1;
-		}
 		else if (isdigit(**str))
 		{
 			if (*seen_dot)
-				result += (**str - '0') * (*factor /= 10.0);
+			{
+				*factor /= 10.0;
+				result += (**str - '0') * (*factor);
+			}
 			else
 				result = result * 10.0 + (**str - '0');
 		}

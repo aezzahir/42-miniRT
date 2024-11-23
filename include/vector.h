@@ -28,18 +28,18 @@ typedef t_vector	t_point;
 
 // Vector operations
 t_vector			vector_create(float x, float y, float z);
-	t_vector vector_add(t_vector v1, t_vector v2);
-	t_vector vector_subtract(t_vector v1, t_vector v2);
-	float vector_dot_product(t_vector v1, t_vector v2);
-	t_vector vector_cross_product(t_vector v1, t_vector v2);
-	float vector_magnitude(t_vector v);
-	t_vector vector_normalize(t_vector v);
-	t_vector vector_multiply(t_vector v, float scalar);
-	float vector_distance(t_vector v1, t_vector v2);
+t_vector			vector_add(t_vector v1, t_vector v2);
+t_vector			vector_subtract(t_vector v1, t_vector v2);
+float				vector_dot_product(t_vector v1, t_vector v2);
+t_vector			vector_cross_product(t_vector v1, t_vector v2);
+float				vector_magnitude(t_vector v);
+t_vector			vector_normalize(t_vector v);
+t_vector			vector_multiply(t_vector v, float scalar);
+float				vector_distance(t_vector v1, t_vector v2);
 
-	t_vector vector_negate(t_vector v);
-	t_vector vector_reflect(t_vector incident, t_vector normal);
-	float vector_length(t_vector v);
-	void vector_print(t_vector v);
+t_vector			vector_negate(t_vector v);
+t_vector			vector_reflect(t_vector incident, t_vector normal);
+float				vector_length(t_vector v);
+void				vector_print(t_vector v);
 
 #endif

@@ -56,11 +56,12 @@ float	calculate_shadow(t_scene *scene, t_point hit_point, t_vector light_dir)
 {
 	float			light_distance;
 	t_intersection	*shadow_intersection;
+	t_ray			shadow_ray;
 
 	light_distance = vector_length(vector_subtract(scene->light.position,
 				hit_point));
-    t_ray shadow_ray = {hit_point, light_dir};
-    shadow_intersection = ft_get_nearest_intersection(&shadow_ray, scene);
+	shadow_ray = {hit_point, light_dir};
+	shadow_intersection = ft_get_nearest_intersection(&shadow_ray, scene);
 	if (shadow_intersection && shadow_intersection->t < 0.99 * light_distance)
 	{
 		free(shadow_intersection);

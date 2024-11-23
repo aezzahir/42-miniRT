@@ -3,85 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   clean_up.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iben-haj <iben-haj@student.42.fr>          +#+  +:+       +#+        */
+/*   By: benhajdahmaneilyes <benhajdahmaneilyes@    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/20 22:13:25 by iben-haj          #+#    #+#             */
-/*   Updated: 2024/11/22 22:23:04 by iben-haj         ###   ########.fr       */
+/*   Updated: 2024/11/23 09:21:26 by benhajdahma      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/miniRT.h"
 
-void	free_sphere(void *content)
+void	clear_scene(t_scene *scene)
 {
-	t_sphere	*sphere;
-
-	sphere = (t_sphere *)content;
-	if (sphere)
-		free(sphere);
+	if (!scene)
+		return ;
+	clear_object_list(scene->spheres, free_sphere);
+	clear_object_list(scene->planes, free_plane);
+	clear_object_list(scene->cylinders, free_cylinder);
+	clear_object_list(scene->cones, free_cone);
+	scene->camera = (t_camera){.position = {0, 0, 0}, .orientation = {0, 0, 0},
+		.fov = 0};
+	scene->light = (t_light){.position = {0, 0, 0}, .brightness = 0,
+		.color = {0, 0, 0}};
+	scene->ambient = (t_ambient){.ratio = 0, .color = {0, 0, 0}};
 }
-
-void	free_plane(void *content)
-{
-	t_plane	*plane;
-
-	plane = (t_plane *)content;
-	if (plane)
-		free(plane);
-}
-
-void	free_cylinder(void *content)
-{
-	t_cylinder	*cylinder;
-
-	cylinder = (t_cylinder *)content;
-	if (cylinder)
-		free(cylinder);
-}
-
-void	free_cone(void *content)
-{
-	t_cone	*cone;
-
-	cone = (t_cone *)content;
-	if (cone)
-		free(cone);
-}
-
-void clear_object_list(t_list **object_list, void (*free_func)(void *))
-{
-    if (object_list && *object_list)
-    {
-        ft_lstclear(object_list, free_func);
-        free(object_list);
-        *object_list = NULL;
-    }
-}
-
-void clear_scene(t_scene *scene)
-{
-    if (!scene)
-        return;
-    clear_object_list(scene->spheres, free_sphere);
-    clear_object_list(scene->planes, free_plane);
-    clear_object_list(scene->cylinders, free_cylinder);
-    clear_object_list(scene->cones, free_cone);
-    scene->camera = (t_camera){
-        .position = {0, 0, 0},
-        .orientation = {0, 0, 0},
-        .fov = 0
-    };
-    scene->light = (t_light){
-        .position = {0, 0, 0},
-        .brightness = 0,
-        .color = {0, 0, 0}
-    };
-    scene->ambient = (t_ambient){
-        .ratio = 0,
-        .color = {0, 0, 0}
-    };
-}
-
 
 void	reset_scene(t_scene *scene)
 {
@@ -108,6 +52,12 @@ void	reset_scene(t_scene *scene)
 	scene->ambient.color = (t_color){255, 255, 255};
 }
 
+ft_free_shape(t_scene *scene)
+{
+	free(scene->spheres);
+	free(scene->planes);
+}
+
 bool	init_scene(t_scene *scene)
 {
 	scene->spheres = malloc(sizeof(t_list *));
@@ -122,15 +72,13 @@ bool	init_scene(t_scene *scene)
 	scene->cylinders = malloc(sizeof(t_list *));
 	if (!scene->cylinders)
 	{
-		free(scene->spheres);
-		free(scene->planes);
+		ft_free_shape(scene);
 		return (false);
 	}
 	scene->cones = malloc(sizeof(t_list *));
 	if (!scene->cones)
 	{
-		free(scene->spheres);
-		free(scene->planes);
+		ft_free_shape(scene);
 		free(scene->cylinders);
 		return (false);
 	}
