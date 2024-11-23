@@ -101,16 +101,6 @@ float	solve_quadratic(float a, float b, float discriminant);
 bool	is_within_body(t_point body_hit, t_cylinder *cyl);
 float	get_bottom_cap_distance(t_ray *ray, t_cylinder *cyl, float denom);
 
-
-
-
-
-
-
-
-    
-
-
 float get_sphere_distance(t_ray *ray, t_sphere *sphere);
 float get_plane_distance(t_ray *ray, t_plane *plane);
 float get_cylinder_distance(t_ray *ray, t_cylinder *cyl);

@@ -34,7 +34,7 @@ t_vector	vector_subtract(t_vector v1, t_vector v2)
 
 float	vector_dot_product(t_vector v1, t_vector v2)
 {
-	return (v1.x * v2.x) + (v1.y * v2.y) + (v1.z * v2.z);
+	return ((v1.x * v2.x) + (v1.y * v2.y) + (v1.z * v2.z));
 }
 
 t_vector	vector_cross_product(t_vector v1, t_vector v2)

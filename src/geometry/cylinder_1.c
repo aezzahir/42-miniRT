@@ -17,7 +17,7 @@
 
 #include "../../include/miniRT.h"
 
-float	get_top_cap_distance(t_ray *ray, t_cylinder *cyl, float d)		
+float	get_top_cap_distance(t_ray *ray, t_cylinder *cyl, float d)
 {
 	t_point	c;
 	t_point	hit;

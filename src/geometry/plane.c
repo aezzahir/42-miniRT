@@ -40,5 +40,7 @@ float	get_plane_distance(t_ray *ray, t_plane *plane)
 		return (INFINITY);
 	v = vector_subtract(plane->point, ray->origin);
 	t = vector_dot_product(v, plane->normal) / denom;
-	return ((t >= 0) ? t : INFINITY);
+	if (t >= 0)
+		return (t);
+	return (INFINITY);
 }
