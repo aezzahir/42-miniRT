@@ -66,6 +66,7 @@ typedef struct s_camera
 	t_vector		forward;
 	t_vector		up;
 	t_vector		right;
+	float camera_to_world[4][4];
 }					t_camera;
 
 void				ft_setup_camera(t_camera *camera);

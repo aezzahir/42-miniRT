@@ -35,6 +35,7 @@ SRC_FILES = main.c \
 			geometry/cone.c  \
 			geometry/cylinder.c \
 			geometry/cylinder_1.c \
+			geometry/camer2world.c \
 			render/raytracer.c   \
             render/camera.c     \
 			render/lighting.c \

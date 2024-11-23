@@ -77,7 +77,7 @@ t_vector	get_world_space_translation(t_mlx_data *data, t_camera *camera,
 
 	world_dx = (dx * camera->viewport_width) / WIDTH;
 	world_dy = -(dy * camera->viewport_height) / HEIGHT;
-	translation = vector_add(vector_multiply(camera->right, world_dx),
+	translation = vector_add(vector_multiply(camera->forward, world_dx),
 			vector_multiply(camera->up, world_dy));
 	distance_scale = 1.0f;
 	if (data->scene->selected_object.type != NONE)

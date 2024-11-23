@@ -162,4 +162,16 @@ void	camera_translate(t_camera *camera, t_vector translation);
 void	ft_add_resize(float *d_h, float dx);
 
 int	mouse_hook(int button, int x, int y, t_mlx_data *data);
+
+
+
+
+
+
+
+
+
+
+
+t_vector	cam2world(float m[4][4], t_vector *v);
 #endif /* MINIRT_H */
